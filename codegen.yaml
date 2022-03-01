@@ -1,0 +1,15 @@
+overwrite: true
+schema:
+    './src/graqhql/types.graphql':
+        noRequire: true
+documents: null
+generates:
+    src/generated/graphql.ts:
+        config:
+            contextType: ../index#Context
+            useTypeImports: true
+            typesPrefix: I
+        plugins:
+            - add: '/* eslint-disable */'
+            - 'typescript'
+            - 'typescript-resolvers'

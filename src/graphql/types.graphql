@@ -1,0 +1,89 @@
+type User {
+    id: ID! @id @auth(rules: [{ isAuthenticated: true }])
+    "User's email. Should be unique"
+    email: String!
+    "User's phone number. Should be unique"
+    phone: String! @auth(rules: [{ isAuthenticated: true }])
+    hash: String @private
+    salt: String @private
+    "User's IP address."
+    ip: String  @auth(rules: [{ isAuthenticated: true }])
+    "User created date."
+    createdAt: DateTime! @timestamp(operations: [CREATE]) @auth(rules: [{ isAuthenticated: true }])
+    "User updated date."
+    updatedAt: DateTime! @timestamp(operations: [CREATE, UPDATE]) @auth(rules: [{ isAuthenticated: true }])
+    "User last log-in date."
+    lastLoggedAt: DateTime @auth(rules: [{ isAuthenticated: true }])
+    "Has articles relationship"
+    wroteArticles: [Article!]! @relationship(type: "WROTE_ARTICLES", direction: OUT)
+}
+
+type Article {
+    id: ID! @id
+    "Article header."
+    header: String!
+    "Article subheader."
+    subheader: String
+    "Article content."
+    content: String!
+    "Article language."
+    language: LanguagesEnum!
+    "Publication status."
+    isPublished: Boolean! @auth(rules: [{ isAuthenticated: true }])
+    "Article created date."
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+    "Article updated date."
+    updatedAt: DateTime! @timestamp(operations: [CREATE, UPDATE])
+    "Article published date."
+    publishedAt: DateTime! @timestamp(operations: [CREATE, UPDATE]) @auth(rules: [{ isAuthenticated: true }])
+    "Article categories."
+    categories: [Category!]! @relationship(type: "HAS_CATEGORIES", direction: IN)
+    "Article tags."
+    tags: [Tag!]! @relationship(type: "HAS_TAGS", direction: IN)
+    "Article author."
+    author: User! @relationship(type: "WROTE_ARTICLES", direction: IN)
+}
+
+type Category {
+    id: ID! @id
+    "Category name."
+    name: String!
+    "Category created date."
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+    "Category updated date."
+    updatedAt: DateTime! @timestamp(operations: [CREATE, UPDATE])
+    "Categorys with this tag name"
+    articles: [Article!]! @relationship(type: "HAS_CATEGORIES", direction: OUT)
+}
+
+type Tag {
+    id: ID! @id
+    "Tag name."
+    name: String!
+    "Tag created date."
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+    "Tag updated date."
+    updatedAt: DateTime! @timestamp(operations: [CREATE, UPDATE])
+    "Articles with this tag name"
+    articles: [Article!]! @relationship(type: "HAS_TAGS", direction: OUT)
+}
+
+type Tokens @exclude {
+    accessToken: String!
+    refreshToken: String!
+}
+
+type Mutation {
+    loginUser(input: CredentialsInput): Tokens
+}
+
+input CredentialsInput {
+    email: String!
+    password: String!
+}
+
+input CredentialsExtendedInput {
+    email: String!
+    password: String!
+    phone: String!
+}

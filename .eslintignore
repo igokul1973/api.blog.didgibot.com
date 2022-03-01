@@ -1,0 +1,11 @@
+node_modules
+dist
+webpack
+.eslintrc.js
+config
+scripts
+Jenkinsfile
+Dockerfile
+codegen.js
+src/gql/types.ts
+src/**/*.generated.ts

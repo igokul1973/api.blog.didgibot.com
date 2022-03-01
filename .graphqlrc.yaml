@@ -1,0 +1,28 @@
+projects:
+    app:
+        schema: "http://localhost:4000/graphql"
+        documents: null
+        extensions:
+            endpoints:
+                default:
+                    url: "http://localhost:4000/graphql"
+    generator:
+        schema: "http://localhost:4000/graphql"
+        documents: null
+        extensions:
+            codegen:
+                generates:
+                    # Генерируем TS типы для GraphQL схемы
+                    src/generated/types.ts:
+                        # schema: "src/graphql/enums.graphql"
+                        plugins:
+                            - typescript
+                            - typescript-resolvers
+                            - add:
+                                content: "/* eslint-disable */"
+                        config:
+                            useTypeImports: true
+                            typesPrefix: I
+                            scalars:
+                                DateTime: 'string'
+                                Date: 'string'

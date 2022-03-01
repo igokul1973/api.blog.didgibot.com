@@ -1,0 +1,60 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "outDir": "dist",
+    "rootDir": "src",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "declaration": true,
+    "esModuleInterop": true,
+    "sourceMap": true, /* Generates corresponding '.map' file. */
+    /* Strict Type-Checking Options */
+    "strictNullChecks": true,
+    /* Additional Checks */
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    /* Debugging Options */
+    "traceResolution": false,
+    "listEmittedFiles": false,
+    "listFiles": false,
+    "pretty": true,
+    /* Experimental Options */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "lib": [
+      "es2021"
+    ],
+    "types": [],
+    "typeRoots": [
+      "node_modules/@types",
+      "src/generated"
+    ],
+    /* Absolute imports */
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": [
+        "./src/*"
+      ],
+      "@interfaces/*": [
+        "./src/interfaces/*"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      "@utilities/*": [
+        "./src/utilities/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "compileOnSave": false
+}
