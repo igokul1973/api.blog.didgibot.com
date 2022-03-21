@@ -81,9 +81,3 @@ input CredentialsInput {
     email: String!
     password: String!
 }
-
-input CredentialsExtendedInput {
-    email: String!
-    password: String!
-    phone: String!
-}

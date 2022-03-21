@@ -16,14 +16,14 @@ import http from 'http';
 import HttpStatus from 'http-status-codes';
 import app from './app';
 import { dbHost, dbName, dbPort, dbProtocol, webHost, webPort, webProtocol } from './constants';
-import { ICredentialsExtendedInput } from './generated/types';
+import { ICredentialsExtendedInput } from '@src/interfaces/ICredentialsExtendedInput';
 import context from './neo4j/context';
-import schema from './neo4j/neo4jGraphqlSchema';
+import neo4jGraphqlSchema from './neo4j/neo4jGraphqlSchema';
 import ogm from './neo4j/ogm';
 import { EnvError } from './utilities/errors';
 import registerAdmin from './utilities/registerAdmin';
 
-Promise.all([schema.getSchema(), ogm.init()]).then(async ([schema]) => {
+Promise.all([neo4jGraphqlSchema.getSchema(), ogm.init()]).then(async ([schema]) => {
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({

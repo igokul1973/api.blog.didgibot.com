@@ -29,28 +29,28 @@
     ],
     "types": [],
     "typeRoots": [
-      "node_modules/@types",
-      "src/generated"
+      "node_modules/@types"
     ],
     /* Absolute imports */
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "@src/*": [
-        "./src/*"
+        "./*"
       ],
       "@interfaces/*": [
-        "./src/interfaces/*"
+        "./interfaces/*"
       ],
       "@routes/*": [
-        "./src/routes/*"
+        "./routes/*"
       ],
       "@utilities/*": [
-        "./src/utilities/*"
+        "./utilities/*"
       ]
     }
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.graphql"
   ],
   "exclude": [
     "node_modules",

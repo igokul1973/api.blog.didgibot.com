@@ -1,4 +1,5 @@
-import { ICredentialsExtendedInput, IUser } from '@src/generated/types';
+import { IUser } from '@src/generated/types';
+import { ICredentialsExtendedInput } from '@src/interfaces/ICredentialsExtendedInput';
 import ogm from '@src/neo4j/ogm';
 import { gql } from 'apollo-server';
 import encryptPassword from './encryptPassword';

@@ -1,4 +1,4 @@
-import { ICredentialsExtendedInput } from '@src/generated/types';
+import { ICredentialsExtendedInput } from '@src/interfaces/ICredentialsExtendedInput';
 import { IUserExtended } from '@interfaces/IUser';
 import ogm from '../neo4j/ogm';
 import encryptPassword from './encryptPassword';
