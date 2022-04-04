@@ -18,7 +18,7 @@ export class ArgumentError extends GenericError {
 
 export class EnvError extends GenericError {
     name = 'Environment variable error';
-    code = 'missing_variable';
+    code = 'missing_environment_variable';
     status = HttpStatus.INTERNAL_SERVER_ERROR;
 }
 
@@ -36,6 +36,7 @@ export class UnauthorizedError extends GenericError {
 
 export class ForbiddenError extends GenericError {
     name = 'FORBIDDEN';
+    code = 'FORBIDDEN';
     status = HttpStatus.FORBIDDEN;
 }
 

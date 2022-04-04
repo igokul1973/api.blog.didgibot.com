@@ -20,7 +20,7 @@ import { ICredentialsExtendedInput } from '@src/interfaces/ICredentialsExtendedI
 import context from './neo4j/context';
 import neo4jGraphqlSchema from './neo4j/neo4jGraphqlSchema';
 import ogm from './neo4j/ogm';
-import { EnvError } from './utilities/errors';
+import { EnvError, UnauthorizedError } from './utilities/errors';
 import registerAdmin from './utilities/registerAdmin';
 
 Promise.all([neo4jGraphqlSchema.getSchema(), ogm.init()]).then(async ([schema]) => {
@@ -29,7 +29,13 @@ Promise.all([neo4jGraphqlSchema.getSchema(), ogm.init()]).then(async ([schema]) 
     const server = new ApolloServer({
         schema,
         context,
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
+        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        formatError: (err) => {
+            if (err.message === 'Unauthenticated') {
+                err.extensions.exception = { ...err.extensions.exception, ...new UnauthorizedError('bla') };
+            }
+            return err;
+        }
     });
 
     await server.start();

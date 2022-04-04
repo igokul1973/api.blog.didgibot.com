@@ -2,7 +2,7 @@ import { ICredentialsExtendedInput } from '@src/interfaces/ICredentialsExtendedI
 import { IUserExtended } from '@interfaces/IUser';
 import ogm from '../neo4j/ogm';
 import encryptPassword from './encryptPassword';
-import { UnauthorizedError } from './errors';
+import { ForbiddenError } from './errors';
 
 const createUser = async (input: ICredentialsExtendedInput) => {
     const { email, password, phone } = input;
@@ -12,7 +12,7 @@ const createUser = async (input: ICredentialsExtendedInput) => {
     });
     // Making user the requested user does not exist
     if (existingEmail) {
-        throw new UnauthorizedError(`User with email ${email} already exists!`);
+        throw new ForbiddenError(`User with email ${email} already exists!`);
     }
     // Making sure there are no phone duplicates
     const [existingPhone] = await User.find({
@@ -20,7 +20,7 @@ const createUser = async (input: ICredentialsExtendedInput) => {
     });
 
     if (existingPhone) {
-        throw new UnauthorizedError(`User with phone number ${phone} already exists!`);
+        throw new ForbiddenError(`User with phone number ${phone} already exists!`);
     }
     // Encrypting password. We do not save passwords in the database.
     const { hash: createdHash, salt: createdSalt } = await encryptPassword(password);
