@@ -1,13 +1,7 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { IUser } from '@src/generated/types';
 import ITokenPayload from '@interfaces/ITokenPayload';
 import { EnvError } from './errors';
-
-type Options = {
-    expiresIn: number;
-    algorithm: 'HS256' | 'HS384' | 'RS256';
-    issuer?: string;
-};
 
 const getPayload = function (user: IUser): ITokenPayload {
     return {
@@ -25,7 +19,7 @@ export default function createToken(user: IUser, type = 'access', tokenLife?: nu
         tokenLife || type === 'access'
             ? Number(process.env.ACCESS_TOKEN_LIFE) || 600
             : Number(process.env.REFRESH_TOKEN_LIFE) || 1200;
-    const options: Options = {
+    const options: SignOptions = {
         expiresIn: tokenLife,
         algorithm: 'HS256',
         issuer: process.env.REFRESH_TOKEN_ISSUER

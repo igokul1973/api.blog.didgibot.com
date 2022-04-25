@@ -1,16 +1,10 @@
 extend type User
     @auth(
         rules: [
-   # Users must be authenticated
-            {
-                operations: [CREATE, UPDATE, DELETE, CONNECT, DISCONNECT]
-                isAuthenticated: true
-            },
+            # Users must be authenticated
+            { operations: [CREATE, UPDATE, DELETE, CONNECT, DISCONNECT], isAuthenticated: true }
             # For reading no authentication is required
-            {
-                operations: [READ]
-                allowUnauthenticated: true
-            }
+            { operations: [READ], allowUnauthenticated: true }
         ]
     )
 
@@ -18,15 +12,9 @@ extend type Article
     @auth(
         rules: [
             # Users must be authenticated
-            {
-                operations: [CREATE, UPDATE, DELETE, CONNECT, DISCONNECT]
-                isAuthenticated: true
-            },
+            { operations: [CREATE, UPDATE, DELETE, CONNECT, DISCONNECT], isAuthenticated: true }
             # For reading no authentication is required
-            {
-                operations: [READ]
-                allowUnauthenticated: true
-            }
+            { operations: [READ], allowUnauthenticated: true }
         ]
     )
 
@@ -34,15 +22,9 @@ extend type Category
     @auth(
         rules: [
             # Users must be authenticated
-            {
-                operations: [CREATE, UPDATE, DELETE, CONNECT, DISCONNECT]
-                isAuthenticated: true
-            }
+            { operations: [CREATE, UPDATE, DELETE, CONNECT, DISCONNECT], isAuthenticated: true }
             # For reading no authentication is required
-            {
-                operations: [READ]
-                allowUnauthenticated: true
-            }
+            { operations: [READ], allowUnauthenticated: true }
         ]
     )
 
@@ -50,14 +32,8 @@ type Tag
     @auth(
         rules: [
             # Users must be authenticated
-            {
-                operations: [CREATE, UPDATE, DELETE, CONNECT, DISCONNECT]
-                isAuthenticated: true
-            }
+            { operations: [CREATE, UPDATE, DELETE, CONNECT, DISCONNECT], isAuthenticated: true }
             # For reading no authentication is required
-            {
-                operations: [READ]
-                allowUnauthenticated: true
-            }
+            { operations: [READ], allowUnauthenticated: true }
         ]
     )

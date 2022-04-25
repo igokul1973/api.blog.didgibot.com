@@ -1293,6 +1293,7 @@ export type IMutation = {
   deleteTags: IDeleteInfo;
   deleteUsers: IDeleteInfo;
   loginUser?: Maybe<ITokens>;
+  refreshTokens?: Maybe<ITokens>;
   updateArticles: IUpdateArticlesMutationResponse;
   updateCategories: IUpdateCategoriesMutationResponse;
   updateTags: IUpdateTagsMutationResponse;
@@ -1345,7 +1346,12 @@ export type IMutationDeleteUsersArgs = {
 
 
 export type IMutationLoginUserArgs = {
-  input?: InputMaybe<ICredentialsInput>;
+  input: ICredentialsInput;
+};
+
+
+export type IMutationRefreshTokensArgs = {
+  refreshToken: Scalars['String'];
 };
 
 
@@ -3009,7 +3015,8 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   deleteCategories?: Resolver<IResolversTypes['DeleteInfo'], ParentType, ContextType, Partial<IMutationDeleteCategoriesArgs>>;
   deleteTags?: Resolver<IResolversTypes['DeleteInfo'], ParentType, ContextType, Partial<IMutationDeleteTagsArgs>>;
   deleteUsers?: Resolver<IResolversTypes['DeleteInfo'], ParentType, ContextType, Partial<IMutationDeleteUsersArgs>>;
-  loginUser?: Resolver<Maybe<IResolversTypes['Tokens']>, ParentType, ContextType, Partial<IMutationLoginUserArgs>>;
+  loginUser?: Resolver<Maybe<IResolversTypes['Tokens']>, ParentType, ContextType, RequireFields<IMutationLoginUserArgs, 'input'>>;
+  refreshTokens?: Resolver<Maybe<IResolversTypes['Tokens']>, ParentType, ContextType, RequireFields<IMutationRefreshTokensArgs, 'refreshToken'>>;
   updateArticles?: Resolver<IResolversTypes['UpdateArticlesMutationResponse'], ParentType, ContextType, Partial<IMutationUpdateArticlesArgs>>;
   updateCategories?: Resolver<IResolversTypes['UpdateCategoriesMutationResponse'], ParentType, ContextType, Partial<IMutationUpdateCategoriesArgs>>;
   updateTags?: Resolver<IResolversTypes['UpdateTagsMutationResponse'], ParentType, ContextType, Partial<IMutationUpdateTagsArgs>>;

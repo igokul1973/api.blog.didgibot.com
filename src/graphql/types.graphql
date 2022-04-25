@@ -74,7 +74,8 @@ type Tokens @exclude {
 }
 
 type Mutation {
-    loginUser(input: CredentialsInput): Tokens
+    loginUser(input: CredentialsInput!): Tokens
+    refreshTokens(refreshToken: String!): Tokens
 }
 
 input CredentialsInput {

@@ -10,7 +10,7 @@ const createUser = async (input: ICredentialsExtendedInput) => {
     const [existingEmail] = await User.find({
         where: { email }
     });
-    // Making user the requested user does not exist
+    // Making sure the requested user exists
     if (existingEmail) {
         throw new ForbiddenError(`User with email ${email} already exists!`);
     }
