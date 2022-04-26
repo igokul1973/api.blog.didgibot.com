@@ -23,7 +23,11 @@ import ogm from './neo4j/ogm';
 import { EnvError, UnauthorizedError } from './utilities/errors';
 import registerAdmin from './utilities/registerAdmin';
 
-Promise.all([neo4jGraphqlSchema.getSchema(), ogm.init()]).then(async ([schema]) => {
+Promise.all([
+    neo4jGraphqlSchema.getSchema(),
+    neo4jGraphqlSchema.assertIndexesAndConstraints({ options: { create: true } }),
+    ogm.init()
+]).then(async ([schema]) => {
     const httpServer = http.createServer(app);
 
     const server = new ApolloServer({

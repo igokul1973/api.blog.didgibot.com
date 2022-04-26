@@ -18,7 +18,7 @@ type User {
     wroteArticles: [Article!]! @relationship(type: "WROTE_ARTICLES", direction: OUT)
 }
 
-type Article {
+type Article @fulltext(indexes: [{ name: ArticleSearch, fields: ["header", "subheader", "content"]}]) {
     id: ID! @id
     "Article header."
     header: String!
