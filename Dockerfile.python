@@ -1,0 +1,15 @@
+# Just-in-case debugging image for connecting using python
+
+# This file is needed to create a pod in Jenkins with python and git.
+FROM --platform=linux/amd64 python:3.12-alpine
+
+RUN apk update && apk add --no-cache nmap && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache git && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir python-semantic-release
+
+# docker build command for building this dockerfile (Dockerfile.python) as igk19/python-git:1.0.0 and publishing it to Docker Hub
+# docker build -t igk19/python-git:1.0.0 -f Dockerfile.python . && docker push igk19/python-git:1.0.0

@@ -35,26 +35,27 @@ if environment == "production":
 async def lifespan(app: PatchedFastAPI):
     connect_db(app)
     try:
-        await init_beanie(
-            database=app.db,
-            document_models=models
-        )
+        print("Now trying to initialize the beanie!")
+        await init_beanie(database=app.db, document_models=models)
     except OperationFailure:
         sleep_time = 3
-        logger.warning("It seems the Beanie could not initialize due to DB connection failure.")
+        logger.warning(
+            "It seems the Beanie could not initialize due to DB connection failure."
+        )
         logger.warning(f"Sleeping for {sleep_time} seconds and trying again...")
         await sleep(sleep_time)
         logger.warning("Trying again...")
         try:
+            # await init_beanie(database=app.db, document_models=models)
             await init_beanie(
-                database=app.db,
-                document_models=models
+                connection_string=settings.CONNECTION_STRING, document_models=models
             )
         except Exception as e:
+            print("Still could not initialize Beanie... Retrying...")
             logger.error(e)
     yield
     app.mongo_client.close()
-    logger.error('Closed mongo client connection to DB')
+    logger.error("Closed mongo client connection to DB")
 
 
 def create_application() -> PatchedFastAPI:
@@ -80,14 +81,12 @@ def create_application() -> PatchedFastAPI:
 app = create_application()
 event_handler_id: int = id(app)
 app.add_middleware(
-    EventHandlerASGIMiddleware,
-    handlers=[local_handler],
-    middleware_id=event_handler_id
+    EventHandlerASGIMiddleware, handlers=[local_handler], middleware_id=event_handler_id
 )
 
 
 def is_token_near_expiration(payload):
-    exp = payload['exp']
+    exp = payload["exp"]
     now = datetime.now(UTC)
     expiration_time = datetime.fromtimestamp(exp, tz=UTC)
     # Refresh token if the API his is 10 minutes or less
@@ -99,40 +98,51 @@ def is_token_near_expiration(payload):
 
 @app.middleware("http")
 async def authenticate_middleware(request: Request, call_next):
-    '''
+    """
     Middleware function to check for JWT token
-    '''
+    """
     try:
-        if request.url.path == settings.GRAPHQL_PREFIX and \
-                request.method != "OPTIONS" and \
-                request.method != "GET":
+        if (
+            request.url.path == settings.GRAPHQL_PREFIX
+            and request.method != "OPTIONS"
+            and request.method != "GET"
+        ):
             payload = await AuthorizationService.authorize(request)
             if not payload:
                 raise HTTPException(
-                    status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+                    status_code=401,
+                    detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE,
                 )
             if is_token_near_expiration(payload):
                 user = payload.get("user")
                 if not user:
                     logger.error("User not found")
                     raise HTTPException(
-                        status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+                        status_code=401,
+                        detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE,
                     )
-                user_document = await UserDocument.find_one(UserDocument.email == user.get("email"))
+                user_document = await UserDocument.find_one(
+                    UserDocument.email == user.get("email")
+                )
 
                 if not user_document:
                     logger.error("User not found")
                     raise HTTPException(
-                        status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+                        status_code=401,
+                        detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE,
                     )
-                user_document.ip = request.client.host if request.client else "not found"
+                user_document.ip = (
+                    request.client.host if request.client else "not found"
+                )
                 user_document.last_logged_at = datetime.now(UTC)
                 await user_document.save()
 
                 access_token = AuthorizationService.create_jwt(user_document)
                 token_payload = {"access_token": access_token, "token_type": "bearer"}
                 token_model = TokenModel(**token_payload)
-                dispatch('token-refresh', payload=token_model, middleware_id=event_handler_id)
+                dispatch(
+                    "token-refresh", payload=token_model, middleware_id=event_handler_id
+                )
         return await call_next(request)
     except HTTPException as e:
         logger.error("An error occured during request: {0}".format(str(e)))
@@ -140,7 +150,9 @@ async def authenticate_middleware(request: Request, call_next):
 
 
 @app.post("/api/login", response_model=TokenModel)
-async def log_in(form_data: OAuth2PasswordRequestForm = Depends(), request: Request = None):
+async def log_in(
+    form_data: OAuth2PasswordRequestForm = Depends(), request: Request = None
+):
     from app.config.settings import settings
 
     if not settings.PASSWORD or not settings.ADMIN_EMAIL:
@@ -148,7 +160,10 @@ async def log_in(form_data: OAuth2PasswordRequestForm = Depends(), request: Requ
         raise HTTPException(
             status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
         )
-    if settings.ADMIN_PASSWORD != form_data.password or settings.ADMIN_EMAIL != form_data.username:
+    if (
+        settings.ADMIN_PASSWORD != form_data.password
+        or settings.ADMIN_EMAIL != form_data.username
+    ):
         logger.error(AuthorizationService.INVALID_CREDENTIALS_MESSAGE)
         raise HTTPException(
             status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
@@ -184,7 +199,7 @@ async def log_in(form_data: OAuth2PasswordRequestForm = Depends(), request: Requ
 #         return JSONResponse(
 #             content={
 #                 "message": "Unexpected error occured during request processing. \
-    # Our team has been notified."
+# Our team has been notified."
 #             },
 #             status_code=500,
 #         )

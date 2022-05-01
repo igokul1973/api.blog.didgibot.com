@@ -1,4 +1,3 @@
-import pymongo
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.config.settings import settings
@@ -9,14 +8,17 @@ def connect_db(app: PatchedFastAPI):
     print("Connecting to database...")
     # Set the Stable API version when creating a new client
 
-    client = AsyncIOMotorClient(
-        settings.CONNECTION_STRING,
-        connectTimeoutMS=1000,
-        socketTimeoutMS=1000,
-        serverSelectionTimeoutMS=1000,
-    )
+    try:
+        client = AsyncIOMotorClient(
+            settings.CONNECTION_STRING,
+            connectTimeoutMS=2000,
+            socketTimeoutMS=2000,
+            serverSelectionTimeoutMS=2000,
+        )
+        print("Successfully connected to DB.")
+        db = client.get_database("didgibot")
 
-    db = client.get_database("didgibot")
-
-    app.mongo_client = client
-    app.db = db
+        app.mongo_client = client
+        app.db = db
+    except Exception as e:
+        print(e)

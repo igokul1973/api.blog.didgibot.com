@@ -326,8 +326,19 @@ async def watch_collection(
                     )
 
 
+def receive_signal(signal_number, frame):
+    print("Received:", signal_number)
+    sys.exit()
+
+
 @asynccontextmanager
 async def lifespan(app: PatchedFastAPI):
+    import signal
+
+    # need it to cancel app using Ctrl+C
+    # else it just hangs
+    signal.signal(signal.SIGINT, receive_signal)
+    # Connect DB
     connect_db(app)
 
     try:

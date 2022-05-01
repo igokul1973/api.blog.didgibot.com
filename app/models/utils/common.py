@@ -1,6 +1,5 @@
 import builtins
 from datetime import datetime
-from typing import Any
 
 from beanie import Document, PydanticObjectId
 from fastapi.responses import JSONResponse
