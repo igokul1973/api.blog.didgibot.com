@@ -4,13 +4,13 @@ import { IUserExtended } from '../interfaces/IUser';
 import ogm from '../neo4j/ogm';
 import createToken from './createToken';
 import { ForbiddenError, UnauthorizedError } from './errors';
-import decodeToken from './decodeToken';
+import verifyToken from './verifyToken';
 
 const refreshTokens = async (refreshToken: ITokens['refreshToken']) => {
     let email;
     try {
         // First - verifying the refresh token
-        const tokenPayload = decodeToken(refreshToken);
+        const tokenPayload = verifyToken(refreshToken);
         email = tokenPayload.email;
     } catch (error) {
         // In case the token is not valid

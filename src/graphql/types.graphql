@@ -1,13 +1,13 @@
 type User {
     id: ID! @id @auth(rules: [{ isAuthenticated: true }])
     "User's email. Should be unique"
-    email: String!
+    email: String! @unique
     "User's phone number. Should be unique"
     phone: String! @auth(rules: [{ isAuthenticated: true }])
     hash: String @private
     salt: String @private
     "User's IP address."
-    ip: String  @auth(rules: [{ isAuthenticated: true }])
+    ip: String @auth(rules: [{ isAuthenticated: true }])
     "User created date."
     createdAt: DateTime! @timestamp(operations: [CREATE]) @auth(rules: [{ isAuthenticated: true }])
     "User updated date."
@@ -18,7 +18,7 @@ type User {
     wroteArticles: [Article!]! @relationship(type: "WROTE_ARTICLES", direction: OUT)
 }
 
-type Article @fulltext(indexes: [{ name: ArticleSearch, fields: ["header", "subheader", "content"]}]) {
+type Article @fulltext(indexes: [{ name: ArticleSearch, fields: ["header", "subheader", "content"] }]) {
     id: ID! @id
     "Article header."
     header: String!
@@ -44,7 +44,7 @@ type Article @fulltext(indexes: [{ name: ArticleSearch, fields: ["header", "subh
     author: User! @relationship(type: "WROTE_ARTICLES", direction: IN)
 }
 
-type Category {
+type Category @fulltext(indexes: [{ name: CategorySearch, fields: ["name"] }]) {
     id: ID! @id
     "Category name."
     name: String!
@@ -56,7 +56,7 @@ type Category {
     articles: [Article!]! @relationship(type: "HAS_CATEGORIES", direction: OUT)
 }
 
-type Tag {
+type Tag @fulltext(indexes: [{ name: TagSearch, fields: ["name"] }]) {
     id: ID! @id
     "Tag name."
     name: String!

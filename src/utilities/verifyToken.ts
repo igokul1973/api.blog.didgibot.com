@@ -3,7 +3,7 @@ import ITokenPayload from '@src/interfaces/ITokenPayload';
 import jwt from 'jsonwebtoken';
 import { EnvError } from './errors';
 
-const decodeToken = (token: ITokens['accessToken'] | ITokens['refreshToken']): ITokenPayload => {
+const verifyToken = (token: ITokens['accessToken'] | ITokens['refreshToken']): ITokenPayload => {
     if (!process.env.JWT_SECRET) {
         throw new EnvError('No JWT secret set. Set environment variable JWT_SECRET to decode token.');
     }
@@ -12,4 +12,4 @@ const decodeToken = (token: ITokens['accessToken'] | ITokens['refreshToken']): I
     }) as ITokenPayload;
 };
 
-export default decodeToken;
+export default verifyToken;
