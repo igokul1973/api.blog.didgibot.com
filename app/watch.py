@@ -1,0 +1,418 @@
+import os
+import sys
+from asyncio import gather
+from contextlib import asynccontextmanager
+from datetime import datetime
+
+import pymongo
+import pymongo.errors
+from beanie import UpdateResponse, init_beanie
+from loguru import logger
+from motor.motor_asyncio import AsyncIOMotorCollection
+
+from app.ChangeStreamOperationTypeEnum import ChangeStreamOperationType
+from app.config.database import connect_db
+from app.config.settings import settings
+from app.main import PatchedFastAPI
+from app.models.beanie import (ArticleDocument, CategoryDocument, TagDocument,
+                               UserDocument, models)
+from app.models.pydantic import PyObjectId
+from app.models.utils.common import transform_id
+from app.schemas.mutations import clean_html_tags
+
+environment = os.getenv("ENVIRONMENT")
+
+if environment == "production":
+    sys.tracebacklimit = 0
+
+
+async def update_search_content(article: dict) -> ArticleDocument | None:
+    '''
+    This function updates search content in 'articles' table
+    '''
+    search_content: str = ''
+
+    for translation in article["translations"]:
+        tag_names = " ".join([tag["name"] for tag in translation["tags"]])
+        search_content = search_content + (
+            translation["category"]["name"]
+            + " "
+            + tag_names
+            + " "
+            + translation["content"]
+            + " "
+        )
+
+    article["search_content"] = clean_html_tags(search_content)
+    article["updated_at"] = datetime.now()
+    article_document = ArticleDocument(**article)
+    article = article_document.model_dump()
+
+    updated_article = await ArticleDocument.find_one(ArticleDocument.id == article["id"]).update({
+       "$set": {
+           "search_content": article["search_content"],
+           "updated_at": article["updated_at"]
+            }
+       },
+       response_type=UpdateResponse.NEW_DOCUMENT
+    )
+
+    return updated_article
+
+
+async def handle_article_insert(inserted_document: dict):
+    '''
+    This function updates search content in 'articles' table
+    '''
+    try:
+        inserted_article = inserted_document["fullDocument"]
+        updated_article = await update_search_content(inserted_article)
+        if not updated_article:
+            return logger.warning("Article document update failed after an Article insert")
+        logger.info("Successfully updated Article's search content after an Article insert")
+    except Exception as e:
+        logger.error(e)
+
+
+async def handle_article_update(updated_document: dict):
+    '''
+    This function updates 'users' table, but only in case
+    the author of the article did not change. Else we
+    fall into a circular dependency.
+    It also updates the article's search content.
+    '''
+    updated_fields = updated_document["updateDescription"]["updatedFields"]
+    try:
+        if ("author" in updated_fields
+            and "updated_at" in updated_fields
+            and len(updated_fields) == 2) or \
+                ("updated_at" in updated_fields
+                    and len(updated_fields) == 1):
+            pass  # NOSONAR
+        elif "search_content" in updated_fields and \
+            "updated_at" in updated_fields and \
+                len(updated_fields) == 2:
+            # Update user document with updated article
+            updated_article_document = await ArticleDocument.get(
+                updated_document["documentKey"]["_id"]
+            )
+            if not updated_article_document:
+                logger.warning("User document update failed after an Article update.")
+                return logger.warning(f"Updated article with id \
+                    {updated_document["documentKey"]["_id"]} was not found"
+                )
+
+            updated_article = updated_article_document.model_dump()
+            author = {"id": updated_article["author"]["id"]}
+            updated_article["author"] = author
+            push_query = {
+                "$set": {
+                    "articles.$[filter]": updated_article,
+                    "updated_at": datetime.now()
+                }
+            }
+            array_filters = [{"filter.id": updated_article["id"]}]
+            # Embed updated article into user document
+            updated_user = await UserDocument.find_one(
+                UserDocument.id == author["id"]
+            ).update(
+                push_query,
+                array_filters=array_filters,
+                response_type=UpdateResponse.NEW_DOCUMENT
+            )
+            if not updated_user:
+                return logger.warning('User document update failed after an Article update')
+            logger.info('Successfully updated User document after an Article update')
+        else:
+            # Update article's search content
+            updated_article_document = await ArticleDocument.get(
+                updated_document["documentKey"]["_id"]
+            )
+            if not updated_article_document:
+                logger.warning("User document update failed after an Article update.")
+                return logger.warning(f"Updated article with id \
+                    {updated_document["documentKey"]["_id"]} was not found"
+                )
+
+            updated_article = await update_search_content(updated_article_document.model_dump())
+            if not updated_article:
+                return logger.warning("Article document update failed after an Article update")
+            logger.info("Successfully updated Article's search content after an Article update")
+    except Exception as e:
+        logger.error(e)
+
+
+async def handle_article_delete(updated_document: dict):
+    '''
+    This function updates 'users' table.
+    It deletes an article from the list of articles of the author.
+    '''
+    try:
+        updated_article_id = updated_document["documentKey"]["_id"]
+        updated_user = await UserDocument.find_one(UserDocument.articles.id == updated_article_id).update(
+            {
+                "$pull": {"articles": {"id": updated_article_id}},
+                "$set": {"updated_at": datetime.now()}
+            },
+            response_type=UpdateResponse.NEW_DOCUMENT
+        )
+        if not updated_user:
+            return logger.warning('User document update failed after an Article delete')
+        logger.info('Successfully updated User document after an Article delete')
+    except Exception as e:
+        logger.error(e)
+
+
+async def handle_user_update(updated_document: dict):
+    try:
+        updated_user_id = updated_document["documentKey"]["_id"]
+        updated_user = await UserDocument.find_one(UserDocument.id == updated_user_id)
+        if not updated_user:
+            return logger.warning("Articles update failed after user update")
+        author = updated_user.model_dump()
+        articles = [{"id": article["id"]} for article in author["articles"]]
+        author["articles"] = articles
+        # Embed article ids into all embedded authors inside articles
+        # It may sound redundant, but for the sake of symmetry
+        # I'll do it. This way we can get via one article all articles
+        # written by the same author, and via one author all his or her
+        # articles.
+        set_query = {"$set": {
+            "author": author,
+            "updated_at": datetime.now()
+        }}
+        updated_articles = await ArticleDocument.find(
+            ArticleDocument.author.id == updated_user_id
+        ).update_many(set_query)
+        if not updated_articles or not updated_articles.acknowledged:
+            return logger.warning('Articles update failed after a User insert')
+        logger.info('Successfully updated Articles after a User update')
+    except Exception as e:
+        logger.error(e)
+
+
+async def handle_category_update(updated_document: dict):
+    '''
+    This function updates articles table
+    with updated category.
+    '''
+    try:
+        updated_category_id = updated_document["documentKey"]["_id"]
+        updated_category = await CategoryDocument.find_one(
+            CategoryDocument.id == updated_category_id
+        )
+        if not updated_category:
+            return logger.warning('Articles update failed after Category update')
+        category = updated_category.model_dump()
+        set_query = {
+            "$set": {
+                "translations.$[].category": category,
+                "updated_at": datetime.now()
+            }
+        }
+        updated_articles = await ArticleDocument.find(
+            filter={"translations.category.id": category.get("id", None)},
+        ).update_many(set_query)
+        if not updated_articles or not updated_articles.acknowledged:
+            return logger.warning('Articles update failed after Category update')
+        logger.info('Successfully updated Articles after a Category update')
+    except Exception as e:
+        logger.error(e)
+
+
+async def handle_tag_update(updated_document: dict):
+    '''
+    This function updates articles table
+    with updated tag.
+    '''
+    try:
+        updated_tag_id = updated_document["documentKey"]["_id"]
+        updated_tag = await TagDocument.find_one(TagDocument.id == updated_tag_id)
+        if not updated_tag:
+            return logger.warning('Articles update failed after Tag update')
+        tag = updated_tag.model_dump()
+        set_query = {
+            "$set": {
+                "translations.$[].tags.$[filter]": tag,
+                "updated_at": datetime.now()
+            }
+        }
+        array_filters = [{"filter.id": tag["id"]}]
+        updated_articles = await ArticleDocument.find(
+            filter={"translations.tags.id": tag.get("id", None)},
+        ).update_many(set_query, array_filters=array_filters)
+        if not updated_articles or not updated_articles.acknowledged:
+            return logger.warning('Articles update failed after Tag update')
+        logger.info('Successfully updated Articles after a Tag update')
+    except Exception as e:
+        logger.error(e)
+
+
+async def handle_operation(
+    collection_name: str,
+    operation: ChangeStreamOperationType,
+    change_stream: dict
+):
+    '''
+    A function handling ChangeStream events' operations.
+    It handles additional DB operations after a user made
+    changes to the database.
+    It is part of the mechanism that unblocks and accelerates
+    the main request-response cycle by responding to the user
+    right after the initial DB operation is made and triggers
+    this function to make additional DB operations related to
+    the original one.
+    It can be extended to handle other events.
+    '''
+    def get_message(collection_name, action: str):
+        return f'Document for collection {collection_name.upper()} {action}. Handling it...'
+
+    if collection_name == 'articles':
+        if operation == ChangeStreamOperationType.INSERT:
+            logger.info(get_message(collection_name, 'inserted'))
+            await handle_article_insert(change_stream)
+        if operation == ChangeStreamOperationType.UPDATE:
+            logger.info(get_message(collection_name, 'updated'))
+            await handle_article_update(change_stream)
+        if operation == ChangeStreamOperationType.DELETE:
+            logger.info(get_message(collection_name, 'updated'))
+            await handle_article_delete(change_stream)
+    elif collection_name == 'users':
+        if operation == ChangeStreamOperationType.UPDATE:
+            logger.info(get_message(collection_name, 'updated'))
+            await handle_user_update(change_stream)
+    elif collection_name == 'categories':
+        if operation == ChangeStreamOperationType.UPDATE:
+            logger.info(get_message(collection_name, 'updated'))
+            await handle_category_update(change_stream)
+    elif collection_name == 'tags':
+        if operation == ChangeStreamOperationType.UPDATE:
+            logger.info(get_message(collection_name, 'updated'))
+            await handle_tag_update(change_stream)
+    elif operation == ChangeStreamOperationType.DELETE:
+        logger.info(get_message(collection_name, 'deleted'))
+    else:
+        logger.info('Not supported operation. Not handling...')
+
+
+async def watch_collection(
+    collection: AsyncIOMotorCollection,
+    operation_type: ChangeStreamOperationType
+):
+    resume_token = None
+    pipeline = [{'$match': {'operationType': operation_type.value}}]
+    try:
+        async with collection.watch(pipeline) as stream:
+            async for change_stream in stream:
+                logger.info(change_stream)
+                resume_token = stream.resume_token
+
+                await handle_operation(collection.name, operation_type, change_stream)
+    # except pymongo.errors.PyMongoError:
+    except pymongo.errors.PyMongoError as e:
+        # The ChangeStream encountered an unrecoverable error or the
+        # resume attempt failed to recreate the cursor.
+        logger.warning(e)
+        if resume_token is None:
+            message = "A failure during ChangeStream initialization."
+            logger.error(message)
+        else:
+            # Use the interrupted ChangeStream's resume token to create
+            # a new ChangeStream. The new stream will continue from the
+            # last seen insert change without missing any events.
+
+            async with collection.watch(pipeline, resume_after=resume_token) as stream:
+                async for change_stream in stream:
+                    logger.info(change_stream)
+                    await handle_operation(collection.name, operation_type, change_stream)
+
+
+@asynccontextmanager
+async def lifespan(app: PatchedFastAPI):
+    await connect_db(app)
+
+    await init_beanie(
+        database=app.db,
+        document_models=models
+    )
+
+    article_collection = ArticleDocument.get_motor_collection()
+    user_collection = UserDocument.get_motor_collection()
+    category_collection = CategoryDocument.get_motor_collection()
+    tag_collection = TagDocument.get_motor_collection()
+
+    try:
+        article_insert_watch = watch_collection(
+            article_collection,
+            ChangeStreamOperationType.INSERT
+        )
+        article_update_watch = watch_collection(
+            article_collection,
+            ChangeStreamOperationType.UPDATE
+        )
+        article_delete_watch = watch_collection(
+            article_collection,
+            ChangeStreamOperationType.DELETE
+        )
+
+        user_insert_watch = watch_collection(user_collection, ChangeStreamOperationType.INSERT)
+        user_update_watch = watch_collection(user_collection, ChangeStreamOperationType.UPDATE)
+        user_delete_watch = watch_collection(user_collection, ChangeStreamOperationType.DELETE)
+
+        category_insert_watch = watch_collection(
+            category_collection,
+            ChangeStreamOperationType.INSERT
+        )
+        category_update_watch = watch_collection(
+            category_collection,
+            ChangeStreamOperationType.UPDATE
+        )
+        category_delete_watch = watch_collection(
+            category_collection,
+            ChangeStreamOperationType.DELETE
+        )
+
+        tag_insert_watch = watch_collection(tag_collection, ChangeStreamOperationType.INSERT)
+        tag_update_watch = watch_collection(tag_collection, ChangeStreamOperationType.UPDATE)
+        tag_delete_watch = watch_collection(tag_collection, ChangeStreamOperationType.DELETE)
+
+        await gather(
+            article_insert_watch,
+            article_update_watch,
+            article_delete_watch,
+            user_insert_watch,
+            user_update_watch,
+            user_delete_watch,
+            category_insert_watch,
+            category_update_watch,
+            category_delete_watch,
+            tag_insert_watch,
+            tag_update_watch,
+            tag_delete_watch
+        )
+    except Exception as e:
+        logger.error('Could not initialize ChangeStream:', e)
+
+    yield
+    app.mongo_client.close()
+
+
+def create_application() -> PatchedFastAPI:
+    """Create the FastAPI application.
+
+    Returns:
+        FastAPI: created app.
+    """
+    logger.info("Creating app...")
+    app = PatchedFastAPI(
+        title=settings.TITLE,
+        version=settings.VERSION,
+        description=settings.DESCRIPTION,
+        docs_url="/api/docs",
+        lifespan=lifespan,
+    )
+
+    return app
+
+
+app = create_application()

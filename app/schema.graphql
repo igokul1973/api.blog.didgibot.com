@@ -1,0 +1,238 @@
+input ArticleCreateInputType {
+  translation: TranslationCreateInputType!
+  category: CategoryInputType!
+  tags: [TagInputType]! = []
+  author: UserInputType = null
+}
+
+type ArticleType {
+  id: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  translations: [TranslationType!]!
+  author: UserTypePartial!
+}
+
+type ArticleTypePartial {
+  id: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  translations: [TranslationType!]!
+  author: IdType!
+}
+
+input ArticleUpdateInputType {
+  id: String!
+  translation: TranslationUpdateInputType!
+  category: CategoryInputType = null
+  tags: [TagInputType] = []
+}
+
+input ArticlesFilterInputType {
+  created_at: DateTime = null
+  updated_at: DateTime = null
+  ids: [String!] = null
+  search: String = null
+  header: String = null
+  content: String = null
+  language: LanguageEnum = null
+  is_published: Boolean = null
+  published_at: DateTime = null
+  user_id: String = null
+}
+
+input CategoriesFilterInputType {
+  created_at: DateTime = null
+  updated_at: DateTime = null
+  ids: [String!] = null
+  name: String = null
+}
+
+input CategoryCreateInputType {
+  name: String!
+}
+
+input CategoryInputType {
+  id: String = null
+  name: String = null
+}
+
+type CategoryType {
+  id: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  name: String!
+}
+
+input CategoryUpdateInputType {
+  id: String!
+  name: String!
+}
+
+type CountType {
+  count: Int!
+  entity: EntityEnum!
+}
+
+"""Date with time (isoformat)"""
+scalar DateTime
+
+type DeleteResultType {
+  acknowledged: Boolean!
+  deleted_count: Int!
+}
+
+enum EntityEnum {
+  article
+  user
+  category
+  tag
+}
+
+input IdInputType {
+  id: String!
+}
+
+type IdType {
+  id: String!
+}
+
+enum LanguageEnum {
+  ru
+  en
+}
+
+type Mutation {
+  set_article(data: ArticleCreateInputType!): ArticleType!
+  update_article(data: ArticleUpdateInputType!): ArticleType!
+  delete_article(data: IdInputType!): DeleteResultType!
+  set_category(data: CategoryCreateInputType!): CategoryType!
+  update_user(data: UserUpdateFilterInputType!): UserType!
+  update_category(data: CategoryUpdateInputType!): CategoryType!
+  delete_category(data: IdInputType!): DeleteResultType!
+  set_tag(data: TagCreateInputType!): TagType!
+  update_tag(data: TagUpdateInputType!): TagType!
+  delete_tag(data: IdInputType!): DeleteResultType!
+  add_tag_to_article(article_id: String!, data: TagCreateInputType!): ArticleType!
+}
+
+type Query {
+  count(entity: EntityEnum! = article): CountType!
+  articles(filter_input: ArticlesFilterInputType = null, sort_input: [SortInputType!] = null, limit: Int = 10, skip: Int = 0): [ArticleType]!
+  users(filter_input: UsersFilterInputType = null, sort_input: [SortInputType!] = null, limit: Int = 10, skip: Int = 0): [UserType]!
+  categories(filter_input: CategoriesFilterInputType = null, sort_input: [SortInputType!] = null, limit: Int = 10, skip: Int = 0): [CategoryType]!
+  tags(filter_input: TagsFilterInputType = null, sort_input: [SortInputType!] = null, limit: Int = 10, skip: Int = 0): [TagType]!
+}
+
+enum SortDirEnum {
+  asc
+  desc
+}
+
+input SortInputType {
+  field: String!
+  dir: SortDirEnum!
+}
+
+input TagCreateInputType {
+  name: String!
+}
+
+input TagInputType {
+  id: String = null
+  name: String = null
+}
+
+type TagType {
+  id: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  name: String!
+}
+
+input TagUpdateInputType {
+  id: String!
+  name: String!
+}
+
+input TagsFilterInputType {
+  created_at: DateTime = null
+  updated_at: DateTime = null
+  ids: [String!] = null
+  name: String = null
+}
+
+input TranslationCreateInputType {
+  language: LanguageEnum!
+  header: String!
+  content: String!
+  is_published: Boolean!
+  published_at: DateTime = null
+}
+
+type TranslationType {
+  language: LanguageEnum!
+  header: String!
+  content: String!
+  is_published: Boolean!
+  published_at: DateTime
+  category: CategoryType!
+  tags: [TagType]!
+}
+
+input TranslationUpdateInputType {
+  language: LanguageEnum!
+  header: String = null
+  content: String = null
+  is_published: Boolean
+  published_at: DateTime = null
+}
+
+input UserInputType {
+  id: String = null
+  email: String!
+}
+
+type UserType {
+  id: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  email: String!
+  phone: String!
+  first_name: String!
+  last_name: String!
+  ip: String!
+  last_logged_at: DateTime
+  articles: [ArticleTypePartial]!
+}
+
+type UserTypePartial {
+  id: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  email: String!
+  phone: String!
+  first_name: String!
+  last_name: String!
+  ip: String!
+  last_logged_at: DateTime
+  articles: [IdType]!
+}
+
+input UserUpdateFilterInputType {
+  id: String!
+  email: String = null
+  phone: String = null
+  first_name: String = null
+  last_name: String = null
+}
+
+input UsersFilterInputType {
+  created_at: DateTime = null
+  updated_at: DateTime = null
+  ids: [String!] = null
+  email: String = null
+  phone: String = null
+  ip: String = null
+  last_logged_at: DateTime = null
+}

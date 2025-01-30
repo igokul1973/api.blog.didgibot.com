@@ -1,45 +1,40 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# Blog backend
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+Backend for blog.didgibot.com
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+**Prerequisites: _(Also see requirements.txt in the project's root)_:**
 
----
+1. Python >= 3.12
+2. FastAPI
+3. MongoDB
+4. Strawberry (GraphQL)
+5. Docker and Docker Compose (optional)
 
-## Edit a file
+## Development
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+### Installation
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+Docker and docker compose are recommended for development purposes.
 
----
+1. Open your terminal and clone repository.
+1. In the root of the cloned project copy `cicd/.env.dist` to `cicd/.env`.
+1. Set up your own env vars in the `cicd/.env` file and/or accept defaults.
+1. Run `docker build --progress=plain --no-cache -t <your tag here> -f cicd/Dockerfile .`. It will build FastAPI docker container.
+1. Switch to `cicd` directory.
+1. Run `docker compose up` and wait until application starts.
+1. Run `docker compose ps` to make sure all containers have started.
+1. Run `docker compose logs -f` and make sure all is running as expected.
+1. Open browser at `http://localhost:<your mongo express port from .env>` and see if you successfully connected to MongoDB.
+1. Open browser at `http://localhost:<your backend port from .env>/docs` and see if it serves you the API documentation (OAS 3.1).
+1. Check if the `data` folder in the root of the project now contains the MongoDB files.
+1. You should be all set.
 
-## Create a file
+### Development procedures
 
-Next, you’ll add a new file to this repository.
+The app starts in Docker and you're now able to change the code which reloads automatically with every saved change thanks to **uvicorn's** `--reload` flag.
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+### Debugging
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+The codebase ships with `.vscode` folder that contains the `launch.json` file. The file contains the "Python Debugger: Remote Attach" configuration that would allow to set breakpoints and debug the application inside VSCode. For any other IDE's - please find an appropriate documentation.
 
----
-
-## Clone a repository
-
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
-
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+Please note that docker has opened a debug port (which you should have set up in the `.env` file) - please consult `.env`, `docker-compose.yml`. If you accepted defaults while setting up the `.env`, the debug port should be `5690`.

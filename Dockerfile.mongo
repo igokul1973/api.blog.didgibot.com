@@ -1,0 +1,40 @@
+ARG MONGO_VERSION=8
+
+FROM mongo:${MONGO_VERSION}
+
+# Copy the generate-keyfile.sh script to the container
+COPY generate-keyfile.sh /generate-keyfile.sh
+
+# Create the keyfile directory and generate the keyfile during the image build
+RUN mkdir -p /opt/keyfile && \
+    /bin/bash /generate-keyfile.sh
+
+# Copy the custom mongod.conf to the container's configuration directory
+COPY mongod.conf /etc/mongod.conf
+
+COPY ./db-scripts/* /docker-entrypoint-initdb.d/
+
+CMD mongod -f /etc/mongod.conf & MONGOD_PID=$!; \
+    # we prepare the replica set with a single node and prepare the root user config
+    INIT_REPL_CMD="rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: '$MONGO_REPLICA_HOST:$MONGO_REPLICA_PORT' }] })"; \
+    # we wait for the replica set to be ready and then submit the command just above
+    until (mongosh admin --port $MONGO_REPLICA_PORT --eval "$INIT_REPL_CMD"); do sleep 1; done; \
+    # Now we need create a user for authentication
+    CREATE_USER_CMD="db.createUser({ user: '$MONGO_INITDB_ROOT_USERNAME', pwd: '$MONGO_INITDB_ROOT_PASSWORD', \
+    roles: [ \
+    { role: 'dbOwner', db: 'admin' }, \
+    { role: 'userAdminAnyDatabase', db: 'admin' }, \
+    { role: 'readWriteAnyDatabase', db: 'admin' }, \
+    { role: 'root', db: 'admin' }, \
+    ]})"; \
+    mongosh admin --port $MONGO_REPLICA_PORT --eval "$CREATE_USER_CMD"; \
+    # Stop the mongo task...
+    mongod stop; \
+    # ...in order to restart in authenticated mode
+    mongod -f /etc/mongod.conf --auth --keyFile /opt/keyfile/mongo-keyfile & MONGOD_PID=$!; \
+    # start mongo-init.sh script in /docker-entrypoint-initdb.d directory as the last step
+    /docker-entrypoint-initdb.d/mongo-init.sh; \
+    # we are done but we keep the container by waiting on signals from the mongo task
+    echo "REPLICA SET ONLINE"; wait $MONGOD_PID;
+
+# CMD ["mongod", "-f", "/etc/mongod.conf"]

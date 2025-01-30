@@ -1,0 +1,276 @@
+mutation Set_Article {
+    set_article(
+        data: {
+            translation: {
+                header: "First article"
+                content: "<html><span>More</span> и third another <br/> collect <br /> примеры</html>"
+                is_published: true
+                language: en
+            }
+            category: {
+                # id: "67c4c96c3fb9bd6d19d6bf3c"
+                name: "Cat 1"
+            }
+            tags: [
+                { name: "Some tag 1" }
+                { name: "Some tag 2" }
+                # { id: "67c4c96c3fb9bd6d19d6bf3d" }
+            ]
+        }
+    ) {
+        id
+        translations {
+            header
+            content
+            category {
+                id
+                name
+                created_at
+                updated_at
+            }
+            tags {
+                id
+                name
+            }
+        }
+        author {
+            id
+            email
+            ip
+            articles {
+                id
+            }
+        }
+    }
+}
+
+mutation Update_Article {
+    update_article(
+        data: {
+            id: "67e49add5bc6a89b62061c44"
+            translation: {
+                language: en
+                # header: "Fourty fifth article"
+                content: "<html><span>More</span> и third another <br/> collect <br /> примеры</html>"
+                is_published: false
+            }
+            # category: {
+            #     # id: "67c4c96c3fb9bd6d19d6bf3c"
+            #     name: "Cat 89"
+            # }
+            # tags: [
+            #     { name: "Some tag 29" }
+            #     # { id: "67da00d2baae7f2ad9d0314a" }
+            # ]
+        }
+    ) {
+        id
+        translations {
+            header
+            content
+            is_published
+            published_at
+            category {
+                id
+                name
+                created_at
+                updated_at
+            }
+            tags {
+                id
+                name
+            }
+        }
+        author {
+            id
+            email
+            ip
+            articles {
+                id
+            }
+        }
+    }
+}
+
+mutation Delete_Article {
+    delete_article(data: { id: "67e46fe0d2c419441c140468" }) {
+        acknowledged
+        deleted_count
+    }
+}
+
+query Get_Articles {
+    articles(
+        filter_input: { search: "third" }
+        sort_input: [{ field: "header", dir: desc }]
+        limit: 3
+    ) {
+        id
+        translations {
+            header
+            content
+            is_published
+            published_at
+            category {
+                id
+                name
+                created_at
+                updated_at
+            }
+            tags {
+                id
+                name
+                created_at
+                updated_at
+            }
+        }
+        author {
+            id
+            email
+            phone
+            created_at
+            updated_at
+            ip
+            articles {
+                id
+            }
+        }
+    }
+}
+
+query users {
+    users(limit: 2) {
+        id
+        email
+        phone
+        created_at
+        updated_at
+        ip
+        articles {
+            id
+            translations {
+                header
+                content
+                category {
+                    id
+                    name
+                }
+                tags {
+                    id
+                    name
+                }
+            }
+            author {
+                id
+            }
+        }
+    }
+}
+
+query Get_Categories {
+    # categories(filter: { ids: ["67b0ee542e8c8ed360e7a3f0"] }) {
+    categories(filter_input: { name: "cat" }) {
+        id
+        name
+        created_at
+        updated_at
+    }
+}
+
+query Get_Tags {
+    # tags(filter: { ids: ["67b0ee542e8c8ed360e7a3f2"] }) {
+    tags(
+        # filter_input: { name: "some" },
+        sort_input: [{ field: "name", dir: desc }]
+    ) {
+        # tags(filter: { created_at: "2025-02-15T19:43:16.835000" }) {
+        id
+        name
+        created_at
+        updated_at
+    }
+}
+
+query Get_Count {
+    count(entity: category) {
+        count
+        entity
+    }
+}
+
+mutation Set_Category {
+    set_category(data: { name: "Cat 6" }) {
+        id
+        name
+        created_at
+        updated_at
+    }
+}
+
+mutation Update_Category {
+    update_category(
+        data: { id: "67d1cb746d4ae10e1dcda148", name: "Category 500" }
+    ) {
+        id
+        name
+        created_at
+        updated_at
+    }
+}
+
+mutation Delete_Category {
+    delete_category(data: { id: "67e46fe0d2c419441c140467" }) {
+        acknowledged
+        deleted_count
+    }
+}
+
+mutation Set_Tag {
+    set_tag(data: { name: "Tag 20" }) {
+        id
+        name
+        created_at
+        updated_at
+    }
+}
+
+mutation Update_Tag {
+    update_tag(data: { id: "67d8a215230debcd4337ed1a", name: "Tag 404" }) {
+        id
+        name
+        created_at
+        updated_at
+    }
+}
+
+mutation Add_Tag_To_Article {
+    add_tag_to_article(
+        article_id: "67c4c9eb3fb9bd6d19d6bf40"
+        data: { name: "Some tag 3" }
+    ) {
+        id
+        translations {
+            language
+            content
+        }
+    }
+}
+
+mutation Delete_Tag {
+    delete_tag(data: { id: "67e46fe0d2c419441c140468" }) {
+        acknowledged
+        deleted_count
+    }
+}
+
+mutation Update_User {
+    update_user(data: { id: "67d8a4f8fdb05ef7544c8bd9", first_name: "Igor" }) {
+        id
+        email
+        phone
+        first_name
+        last_name
+        created_at
+        updated_at
+    }
+}

@@ -1,0 +1,13 @@
+Dockerfile
+.dockerignore
+README.md
+.vscode
+.venv
+docker
+.git
+# .env
+.env.dist
+.env.production
+mongoKeyfile
+.stop.sh
+remove_env_vars.sh

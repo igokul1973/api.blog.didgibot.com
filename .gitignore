@@ -3,11 +3,8 @@
 # Learn more about .gitignore:
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
-# Node artifact files
-node_modules/
-dist/
-tmp/
-build/
+# Docker
+data/
 
 # Compiled Java class files
 *.class
@@ -55,3 +52,9 @@ Thumbs.db
 
 # Env variables
 .env
+.venv
+
+# GraphQL
+graphql-config
+
+mongoKeyfile

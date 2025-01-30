@@ -1,0 +1,149 @@
+services:
+    dgb-blog-backend:
+        container_name: dgb-blog-backend
+        image: igk19/dgb-blog-backend
+        build:
+            context: .
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        expose:
+            - ${BACKEND_PORT}
+            - ${DEBUG_PORT}
+        ports:
+            - ${BACKEND_PORT}:${BACKEND_PORT}
+            # Debugging ports
+            - "${DEBUG_PORT}:${DEBUG_PORT}"
+        depends_on:
+            - dgb-blog-mongo
+        # command: ["python", "../app/main.py"]
+        command:
+            - python
+            - "-m"
+            - "debugpy"
+            - "--listen"
+            - "0.0.0.0:${DEBUG_PORT}"
+            - "-m"
+            - "uvicorn"
+            - "app.main:app"
+            - "--reload"
+            - "--host"
+            - "0.0.0.0"
+            - "--port"
+            - "${BACKEND_PORT}"
+
+        restart: always
+        volumes:
+            - ./app:/code/app
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "50k"
+                max-file: "3"
+        networks:
+            - dgb_blog_network
+
+    dgb-blog-backend-watch:
+        container_name: dgb-blog-backend-watch
+        image: igk19/dgb-blog-backend
+        build:
+            context: .
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        expose:
+            - ${BACKEND_PORT}
+            - ${DEBUG_PORT}
+        ports:
+            - ${BACKEND_WATCH_PORT}:${BACKEND_PORT}
+            # Debugging ports
+            - "${DEBUG_PORT_WATCH}:${DEBUG_PORT}"
+        depends_on:
+            - dgb-blog-mongo
+            - dgb-blog-backend
+        command:
+            - python
+            - "-m"
+            - "debugpy"
+            - "--listen"
+            - "0.0.0.0:${DEBUG_PORT}"
+            - "-m"
+            - "uvicorn"
+            - "app.watch:app"
+            - "--reload"
+            - "--host"
+            - "0.0.0.0"
+            - "--port"
+            - "${BACKEND_PORT}"
+        restart: always
+        volumes:
+            - ./app:/code/app
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "50k"
+                max-file: "3"
+        networks:
+            - dgb_blog_network
+
+    dgb-blog-mongo:
+        build:
+            context: .
+            args:
+                MONGO_VERSION: ${MONGO_VERSION}
+            dockerfile: Dockerfile.mongo
+        image: igk19/mongo8:1.0.0
+        container_name: dgb-blog-mongo
+        env_file:
+            - .env
+        restart: unless-stopped
+        ports:
+            - "${MONGO_REPLICA_PORT}:${MONGO_REPLICA_PORT}"
+        # command: ["-f", "/etc/mongod.conf"]
+        healthcheck:
+            # Use "mongo" instead of "mongosh" before v5.0
+            test:
+                [
+                    "CMD",
+                    "mongosh",
+                    "admin",
+                    "--port",
+                    "${MONGO_REPLICA_PORT}",
+                    "--eval",
+                    "db.adminCommand('ping').ok",
+                ]
+            interval: 5s
+            timeout: 2s
+            retries: 20
+        volumes:
+            - ./data/db:/data/db
+            - ./db-scripts:/docker-entrypoint-initdb.d
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "50k"
+                max-file: "3"
+        networks:
+            - dgb_blog_network
+
+    dgb-blog-mongo-express:
+        image: mongo-express
+        container_name: dgb-blog-mongo-express
+        restart: always
+        ports:
+            - ${MONGO_EXPRESS_PORT}:8081
+        env_file:
+            - .env
+        depends_on:
+            - dgb-blog-mongo
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "50k"
+                max-file: "3"
+        networks:
+            - dgb_blog_network
+
+networks:
+    dgb_blog_network:
+        driver: bridge
