@@ -85,7 +85,9 @@ async def authenticate_middleware(request: Request, call_next):
     Middleware function to check for JWT token
     '''
     try:
-        if request.url.path == settings.GRAPHQL_PREFIX:
+        if request.url.path == settings.GRAPHQL_PREFIX and \
+                request.method != "OPTIONS" and \
+                request.method != "GET":
             await AuthorizationService.authorize(request)
         return await call_next(request)
     except HTTPException as e:
