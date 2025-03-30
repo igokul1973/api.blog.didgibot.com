@@ -66,8 +66,11 @@ class AuthorizationService:
     def get_token_payload(cls, request: Request, settings: Settings = settings):
         if not settings.SECRET_KEY or not settings.TOKEN_LIFE:
             raise ConfigException(cls.INVALID_CREDENTIALS_MESSAGE)
-        token = request.headers["Authorization"].split(" ")[1]
-        return jwt.decode(token, settings.SECRET_KEY, algorithms=[cls.ALGORITM])
+        token = request.headers["Authorization"].split(" ")
+        # check if token has element number 1
+        if len(token) < 2:
+            raise ConfigException(cls.INVALID_TOKEN_MESSAGE)
+        return jwt.decode(token[1], settings.SECRET_KEY, algorithms=[cls.ALGORITM])
 
     @classmethod
     async def authorize(cls, request: Request):
