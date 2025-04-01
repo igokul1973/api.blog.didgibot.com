@@ -13,7 +13,7 @@ mutation Set_Article {
             }
             tags: [
                 { name: "Some tag 1" }
-                { name: "Some tag 2" }
+                # { name: "Some tag 4" }
                 # { id: "67c4c96c3fb9bd6d19d6bf3d" }
             ]
         }
@@ -47,21 +47,21 @@ mutation Set_Article {
 mutation Update_Article {
     update_article(
         data: {
-            id: "67e49add5bc6a89b62061c44"
+            id: "67ec0f891a686aea8725913b"
             translation: {
                 language: en
                 # header: "Fourty fifth article"
-                content: "<html><span>More</span> и third another <br/> collect <br /> примеры</html>"
-                is_published: false
+                content: "<html><span>More</span> и first another <br/> collect <br /> примеры</html>"
+                is_published: true
             }
             # category: {
             #     # id: "67c4c96c3fb9bd6d19d6bf3c"
             #     name: "Cat 89"
             # }
-            # tags: [
-            #     { name: "Some tag 29" }
-            #     # { id: "67da00d2baae7f2ad9d0314a" }
-            # ]
+            tags: [
+                { name: "Some tag 226" }
+                # { id: "67da00d2baae7f2ad9d0314a" }
+            ]
         }
     ) {
         id
@@ -93,7 +93,7 @@ mutation Update_Article {
 }
 
 mutation Delete_Article {
-    delete_article(data: { id: "67e46fe0d2c419441c140468" }) {
+    delete_article(data: { id: "67eae3bb91ba8d52485ea2fd" }) {
         acknowledged
         deleted_count
     }

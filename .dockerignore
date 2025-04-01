@@ -11,3 +11,5 @@ docker
 mongoKeyfile
 .stop.sh
 remove_env_vars.sh
+playground.mongodb.js
+test.graphql

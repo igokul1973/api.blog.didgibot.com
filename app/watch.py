@@ -7,6 +7,7 @@ from datetime import datetime
 import pymongo
 import pymongo.errors
 from beanie import UpdateResponse, init_beanie
+from bson import ObjectId
 from loguru import logger
 from motor.motor_asyncio import AsyncIOMotorCollection
 
@@ -16,8 +17,6 @@ from app.config.settings import settings
 from app.main import PatchedFastAPI
 from app.models.beanie import (ArticleDocument, CategoryDocument, TagDocument,
                                UserDocument, models)
-from app.models.pydantic import PyObjectId
-from app.models.utils.common import transform_id
 from app.schemas.mutations import clean_html_tags
 
 environment = os.getenv("ENVIRONMENT")
@@ -105,21 +104,87 @@ async def handle_article_update(updated_document: dict):
             updated_article = updated_article_document.model_dump()
             author = {"id": updated_article["author"]["id"]}
             updated_article["author"] = author
-            push_query = {
-                "$set": {
-                    "articles.$[filter]": updated_article,
-                    "updated_at": datetime.now()
-                }
-            }
-            array_filters = [{"filter.id": updated_article["id"]}]
-            # Embed updated article into user document
-            updated_user = await UserDocument.find_one(
+
+            user_to_update = await UserDocument.find_one(
                 UserDocument.id == author["id"]
-            ).update(
-                push_query,
-                array_filters=array_filters,
-                response_type=UpdateResponse.NEW_DOCUMENT
             )
+            if not user_to_update:
+                logger.warning("User document update failed after an Article update.")
+                return logger.warning(f"User with id \
+                    {author["id"]} was not found"
+                )
+
+            # If the user to update contains the article
+            # we need to update it. Else we need to add it.
+            # query = {
+            #     "articles.id": updated_article["id"]
+            # }
+
+            # push_query = {
+            #     "$push": {
+            #         # "articles.$[filter]": updated_article,
+            #         "articles": updated_article,
+            #         # "updated_at": datetime.now()
+            #     },
+            #     "$set": {
+            #         "updated_at": datetime.now()
+            #     }
+            # }
+            # array_filters = [{"filter.id": updated_article["id"]}]
+            # Embed updated article into user document
+            # updated_user = await UserDocument.find_one(
+            #     UserDocument.id == author["id"]
+            # )
+
+            # updated_user = UserDocument.find_one(
+            #     UserDocument.id == author["id"]
+            # )
+            # updated_user = await updated_user.update(
+            #     push_query,
+            #     # array_filters=array_filters,
+            #     response_type=UpdateResponse.NEW_DOCUMENT
+            # )
+
+
+            # updated_user = await user_to_update.update_one(
+            #     {
+            #         "$set": {
+            #             "articles": {
+            #                 "$cond": [
+            #                     {"$in": [updated_article["id"], "$articles.id"]},
+            #                     {"$map": {
+            #                         "input": "$articles",
+            #                         "as": "article",
+            #                         "in": {
+            #                             "$cond": [
+            #                                 {"$eq": ["$$article.id", updated_article["id"]]},
+            #                                 updated_article,
+            #                                 "$$article"
+            #                             ]
+            #                         }
+            #                     }},
+            #                     {"$concatArrays": ["$articles", [updated_article]]}
+            #                 ]
+            #             }
+            #         }
+            #     }
+            # )
+            user_to_update_model = user_to_update.model_dump()
+
+            if updated_article["id"] in [article["id"] for article in user_to_update_model["articles"]]:
+                updated_user = await user_to_update.update(
+                    {
+                        "$set": {"articles.$[article]": updated_article}
+                    },
+                    array_filters=[{"article.id": updated_article["id"]}],
+                )
+            else:
+                updated_user = await user_to_update.update(
+                    {
+                        "$push": {"articles": updated_article}
+                    }
+                )
+
             if not updated_user:
                 return logger.warning('User document update failed after an Article update')
             logger.info('Successfully updated User document after an Article update')
@@ -148,17 +213,23 @@ async def handle_article_delete(updated_document: dict):
     It deletes an article from the list of articles of the author.
     '''
     try:
-        updated_article_id = updated_document["documentKey"]["_id"]
-        updated_user = await UserDocument.find_one(UserDocument.articles.id == updated_article_id).update(
+        deleted_article_id = updated_document["documentKey"]["_id"]
+        updated_user = await UserDocument.find_one(
+            UserDocument.articles.id == deleted_article_id
+        )
+        updated_user = UserDocument.find_one(
+            UserDocument.articles.id == deleted_article_id
+        )
+        updated_user = await updated_user.update(
             {
-                "$pull": {"articles": {"id": updated_article_id}},
+                "$pull": {"articles": {"id": deleted_article_id}},
                 "$set": {"updated_at": datetime.now()}
             },
             response_type=UpdateResponse.NEW_DOCUMENT
         )
         if not updated_user:
             return logger.warning('User document update failed after an Article delete')
-        logger.info('Successfully updated User document after an Article delete')
+        logger.info('Successfully updated User document after an Article delete.')
     except Exception as e:
         logger.error(e)
 
@@ -186,7 +257,7 @@ async def handle_user_update(updated_document: dict):
         ).update_many(set_query)
         if not updated_articles or not updated_articles.acknowledged:
             return logger.warning('Articles update failed after a User insert')
-        logger.info('Successfully updated Articles after a User update')
+        logger.info('Successfully updated Articles after a User update.')
     except Exception as e:
         logger.error(e)
 
@@ -211,11 +282,13 @@ async def handle_category_update(updated_document: dict):
             }
         }
         updated_articles = await ArticleDocument.find(
-            filter={"translations.category.id": category.get("id", None)},
+            {"translations.category.id": category.get("id", None)},
         ).update_many(set_query)
+
         if not updated_articles or not updated_articles.acknowledged:
-            return logger.warning('Articles update failed after Category update')
-        logger.info('Successfully updated Articles after a Category update')
+            return logger.warning('Articles update failed after Category update. \
+            The category either has no articles, or something went wrong.')
+        logger.info('Successfully updated Articles after a Category update.')
     except Exception as e:
         logger.error(e)
 
@@ -239,11 +312,12 @@ async def handle_tag_update(updated_document: dict):
         }
         array_filters = [{"filter.id": tag["id"]}]
         updated_articles = await ArticleDocument.find(
-            filter={"translations.tags.id": tag.get("id", None)},
+            {"translations.tags.id": tag.get("id", None)},
         ).update_many(set_query, array_filters=array_filters)
         if not updated_articles or not updated_articles.acknowledged:
-            return logger.warning('Articles update failed after Tag update')
-        logger.info('Successfully updated Articles after a Tag update')
+            return logger.warning('Articles update failed after Tag update. \
+                The tag either has no articles, or something went wrong.')
+        logger.info('Successfully updated Articles after a Tag update.')
     except Exception as e:
         logger.error(e)
 
