@@ -2,18 +2,18 @@ mutation Set_Article {
     set_article(
         data: {
             translation: {
-                header: "First article"
-                content: "<html><span>More</span> и third another <br/> collect <br /> примеры</html>"
+                header: " article"
+                content: "<html><span>More</span> и fifth another <br/> collect <br /> примеры</html>"
                 is_published: true
                 language: en
             }
             category: {
                 # id: "67c4c96c3fb9bd6d19d6bf3c"
-                name: "Cat 1"
+                name: "Cat 990"
             }
             tags: [
-                { name: "Some tag 1" }
-                # { name: "Some tag 4" }
+                { name: "Some tag 989" }
+                { name: "Some tag i98" }
                 # { id: "67c4c96c3fb9bd6d19d6bf3d" }
             ]
         }
@@ -22,6 +22,8 @@ mutation Set_Article {
         translations {
             header
             content
+            is_published
+            published_at
             category {
                 id
                 name

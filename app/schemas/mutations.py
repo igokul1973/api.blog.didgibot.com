@@ -129,7 +129,15 @@ class Mutation:
             raise ValueError("Author not found")
 
         article_to_insert["author"] = inserted_author.model_dump()
+
+        if article_input_dict["translation"]["is_published"] is True and not \
+                article_input_dict["translation"]["published_at"]:
+            article_input_dict["translation"]["published_at"] = datetime.now()
+        elif article_input_dict["translation"]["is_published"] is False:
+            article_input_dict["translation"]["published_at"] = None
+
         article_to_insert["translations"].append(article_input_dict["translation"])
+
 
         # Category
         cat = await get_category(article_input_model.category.model_dump())

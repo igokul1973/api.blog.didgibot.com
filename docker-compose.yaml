@@ -32,7 +32,7 @@ services:
             - "--port"
             - "${BACKEND_PORT}"
             - "--log-level"
-            - "debug"
+            - "trace"
             - "--timeout-graceful-shutdown"
             - "0"
 
@@ -80,7 +80,7 @@ services:
             - "--port"
             - "${BACKEND_PORT}"
             - "--log-level"
-            - "debug"
+            - "trace"
             - "--timeout-graceful-shutdown"
             - "0"
         restart: always
