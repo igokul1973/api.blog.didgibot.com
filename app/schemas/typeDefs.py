@@ -12,7 +12,7 @@ from app.models.pydantic import (ArticleCreateInputModel, ArticleModel,
                                  CountInputModel, CountModel, IdModel,
                                  PyObjectId, SortModel, TagCreateInputModel,
                                  TagInputModel, TagModel, TagsFilterInputModel,
-                                 TagUpdateInputModel,
+                                 TagUpdateInputModel, TokenModel,
                                  TranslationCreateInputModel, TranslationModel,
                                  TranslationUpdateInputModel, UserModel,
                                  UserModelPartial, UsersFilterInputModel,
@@ -38,6 +38,13 @@ class CountType: ...
 class DeleteResultType:
     acknowledged: bool = strawberry.field(default=False)
     deleted_count: int = strawberry.field(default=0)
+
+
+@strawberry.experimental.pydantic.type(
+    model=TokenModel,
+    all_fields=True
+)
+class TokenType: ...
 
 
 @strawberry.experimental.pydantic.type(

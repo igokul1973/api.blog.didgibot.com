@@ -5,7 +5,7 @@ from app.config.settings import settings
 from app.PatchedApi import PatchedFastAPI
 
 
-async def connect_db(app: PatchedFastAPI):
+def connect_db(app: PatchedFastAPI):
     print("Connecting to database...")
     # Set the Stable API version when creating a new client
 

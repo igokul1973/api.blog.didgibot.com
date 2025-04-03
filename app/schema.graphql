@@ -134,6 +134,10 @@ input SortInputType {
   dir: SortDirEnum!
 }
 
+type Subscription {
+  jwt: String!
+}
+
 input TagCreateInputType {
   name: String!
 }

@@ -15,16 +15,19 @@ from strawberry import Schema
 from strawberry.fastapi import BaseContext, GraphQLRouter
 from strawberry.http import GraphQLHTTPResponse
 from strawberry.schema.config import StrawberryConfig
+from strawberry.subscriptions import (GRAPHQL_TRANSPORT_WS_PROTOCOL,
+                                      GRAPHQL_WS_PROTOCOL)
 from strawberry.types import ExecutionResult
 
 from app.config.settings import Settings, settings
 from app.models.beanie import UserDocument
 from app.models.pydantic import UserModel
 from app.models.utils.common import transform_object_to_serializable
-from app.models.utils.errors import ConfigException, GeneralException
+from app.models.utils.errors import ConfigException
 from app.models.utils.requests import get_users
 from app.schemas.mutations import Mutation
 from app.schemas.query import Query
+from app.schemas.subscriptions import Subscription
 from app.schemas.typeDefs import UsersFilterInputType
 
 env = Env()
@@ -63,10 +66,10 @@ class AuthorizationService:
     INVALID_CREDENTIALS_MESSAGE = "Invalid username or password."
 
     @classmethod
-    def get_token_payload(cls, request: Request, settings: Settings = settings):
+    def get_token_payload(cls, bearer_token: str, settings: Settings = settings):
         if not settings.SECRET_KEY or not settings.TOKEN_LIFE:
             raise ConfigException(cls.INVALID_CREDENTIALS_MESSAGE)
-        token = request.headers["Authorization"].split(" ")
+        token = bearer_token.split(" ")
         # check if token has element number 1
         if len(token) < 2:
             raise ConfigException(cls.INVALID_TOKEN_MESSAGE)
@@ -94,7 +97,9 @@ class AuthorizationService:
             graphql_query = await request.json()
             if graphql_query["operationName"].lower() in cls.PROTECTED_ENDPOINTS \
                     or "Authorization" in request.headers:
-                return cls.get_token_payload(request)
+
+                token = request.headers["Authorization"]
+                return cls.get_token_payload(token)
         except ConfigException as e:
             raise HTTPException(status_code=401, detail=str(e))
         except (KeyError, JWTError):
@@ -126,8 +131,21 @@ class AuthorizationService:
 # 1. When request arrives, make sure if it is a protected endpoint
 # then check if the token exists and is valid and return the user.
 # 2. If it is not a protected endpoint, then make sure that if it
-# has a token, make sure it is valid.
+# has a token - it is valid.
 class Context(BaseContext):
+    @cached_property
+    async def token(self) -> Optional[str]:
+        if not self.request:
+            return None
+        assert type(self.request) is Request
+
+        token = None
+        if "Authorization" in self.request.headers:
+            token = self.request.headers["Authorization"]
+        elif "authorization" in self.request.headers:
+            token = self.request.headers["authorization"]
+        return token
+
     @cached_property
     async def user(self) -> Optional[UserModel]:
         if not self.request or type(self.request) is WebSocket:
@@ -193,9 +211,16 @@ class MyGraphQLRouter(GraphQLRouter):
 schema = Schema(
     query=Query,
     mutation=Mutation,
+    subscription=Subscription,
     config=StrawberryConfig(auto_camel_case=False)
 )
 
 graphql_router = MyGraphQLRouter(
-    schema, context_getter=get_context, graphql_ide="apollo-sandbox"
+    schema,
+    context_getter=get_context,
+    graphql_ide="apollo-sandbox",
+    subscription_protocols=[
+        GRAPHQL_TRANSPORT_WS_PROTOCOL,
+        GRAPHQL_WS_PROTOCOL,
+    ],
 )

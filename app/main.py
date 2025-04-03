@@ -2,23 +2,23 @@ import os
 import sys
 from asyncio import sleep
 from contextlib import asynccontextmanager
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from beanie import init_beanie
 from fastapi import Depends, HTTPException, Request
-from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
-from graphql import GraphQLError, GraphQLFormattedError
+from fastapi_events.dispatcher import dispatch
+from fastapi_events.handlers.local import local_handler
+from fastapi_events.middleware import EventHandlerASGIMiddleware
+from fastapi_events.typing import Event
 from loguru import logger
 from pymongo.errors import OperationFailure
-from strawberry.types import ExecutionResult
 
 from app.config.database import connect_db
 from app.config.settings import settings
 from app.models.beanie import UserDocument, models
 from app.models.pydantic import TokenModel
 from app.models.utils.common import get_graphql_error_response
-from app.models.utils.errors import GeneralException
 from app.PatchedApi import PatchedFastAPI
 from app.schemas.schema import AuthorizationService, graphql_router
 
@@ -34,7 +34,7 @@ if environment == "production":
 
 @asynccontextmanager
 async def lifespan(app: PatchedFastAPI):
-    await connect_db(app)
+    connect_db(app)
     try:
         await init_beanie(
             database=app.db,
@@ -55,12 +55,14 @@ async def lifespan(app: PatchedFastAPI):
             logger.error(e)
     yield
     app.mongo_client.close()
+    logger.error('Closed mongo client connection to DB')
 
 
 def create_application() -> PatchedFastAPI:
     """Create the FastAPI application.
 
     Returns:
+        FastAPI: created app.
         FastAPI: created app.
     """
     logger.info("Creating app...")
@@ -77,6 +79,21 @@ def create_application() -> PatchedFastAPI:
 
 
 app = create_application()
+event_handler_id: int = id(app)
+app.add_middleware(
+    EventHandlerASGIMiddleware,
+    handlers=[local_handler],
+    middleware_id=event_handler_id
+)
+
+
+def is_token_near_expiration(payload):
+    exp = payload['exp']
+    now = datetime.now(UTC)
+    expiration_time = datetime.fromtimestamp(exp, tz=UTC)
+    td = timedelta(minutes=10)
+    five_minutes_before_expiration = expiration_time - td
+    return now >= five_minutes_before_expiration
 
 
 @app.middleware("http")
@@ -88,7 +105,33 @@ async def authenticate_middleware(request: Request, call_next):
         if request.url.path == settings.GRAPHQL_PREFIX and \
                 request.method != "OPTIONS" and \
                 request.method != "GET":
-            await AuthorizationService.authorize(request)
+            payload = await AuthorizationService.authorize(request)
+            if not payload:
+                raise HTTPException(
+                    status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+                )
+            if is_token_near_expiration(payload):
+                user = payload.get("user")
+                if not user:
+                    logger.error("User not found")
+                    raise HTTPException(
+                        status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+                    )
+                user_document = await UserDocument.find_one(UserDocument.email == user.get("email"))
+
+                if not user_document:
+                    logger.error("User not found")
+                    raise HTTPException(
+                        status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+                    )
+                user_document.ip = request.client.host if request.client else "not found"
+                user_document.last_logged_at = datetime.now(UTC)
+                await user_document.save()
+
+                access_token = AuthorizationService.create_jwt(user_document)
+                token_payload = {"access_token": access_token, "token_type": "bearer"}
+                token_model = TokenModel(**token_payload)
+                dispatch('token-refresh', payload=token_model, middleware_id=event_handler_id)
         return await call_next(request)
     except HTTPException as e:
         logger.error("An error occured during request: {0}".format(str(e)))
@@ -121,25 +164,9 @@ async def log_in(form_data: OAuth2PasswordRequestForm = Depends(), request: Requ
     await user.save()
 
     access_token = AuthorizationService.create_jwt(user)
-    return {"access_token": access_token, "token_type": "bearer"}
 
-# Middleware function to check for JWT token
-# async def authenticate_request(request: Request):
-#     if not PASSWORD or not ADMIN_EMAIL or not SECRET_KEY or not TOKEN_LIFE:
-#         raise HTTPException(status_code=401, detail="Invalid system configuration")
-#     if request.url.path == GRAPHQL_PREFIX:
-#         graphql_query = await request.json()
-#         if graphql_query["operationName"] in PROTECTED_ENDPOINTS:
-#             try:
-#                 token = request.headers["Authorization"].split(" ")[1]
-#                 payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITM])
-#                 return payload
-#             except (KeyError, JWTError):
-#                 raise HTTPException(
-#                     status_code=401, detail="Invalid or missing JWT token"
-#                 )
-#     else:
-#         return None
+    token_payload = {"access_token": access_token, "token_type": "bearer"}
+    return token_payload
 
 
 # # Install middleware to catch all exceptions
@@ -155,21 +182,8 @@ async def log_in(form_data: OAuth2PasswordRequestForm = Depends(), request: Requ
 
 #         return JSONResponse(
 #             content={
-#                 "message": "Unexpected error occured during request processing. Our team has been notified."
+#                 "message": "Unexpected error occured during request processing. \
+    # Our team has been notified."
 #             },
 #             status_code=500,
 #         )
-
-
-# @app.exception_handler(GeneralException)
-# async def validation_exception_handler(request: Request, exc: Exception):
-#     # Change here to Logger
-#     return JSONResponse(
-#         status_code=500,
-#         content={
-#             "message": (
-#                 f"Failed method {request.method} at URL {request.url}."
-#                 f" Exception message is {exc!r}."
-#             )
-#         },
-#     )

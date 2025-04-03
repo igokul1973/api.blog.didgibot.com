@@ -31,6 +31,10 @@ services:
             - "0.0.0.0"
             - "--port"
             - "${BACKEND_PORT}"
+            - "--log-level"
+            - "debug"
+            - "--timeout-graceful-shutdown"
+            - "0"
 
         restart: always
         volumes:
@@ -75,6 +79,10 @@ services:
             - "0.0.0.0"
             - "--port"
             - "${BACKEND_PORT}"
+            - "--log-level"
+            - "debug"
+            - "--timeout-graceful-shutdown"
+            - "0"
         restart: always
         volumes:
             - ./app:/code/app

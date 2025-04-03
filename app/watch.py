@@ -403,7 +403,7 @@ async def watch_collection(
 
 @asynccontextmanager
 async def lifespan(app: PatchedFastAPI):
-    await connect_db(app)
+    connect_db(app)
 
     await init_beanie(
         database=app.db,
