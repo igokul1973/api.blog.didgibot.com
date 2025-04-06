@@ -10,7 +10,6 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_events.dispatcher import dispatch
 from fastapi_events.handlers.local import local_handler
 from fastapi_events.middleware import EventHandlerASGIMiddleware
-from fastapi_events.typing import Event
 from loguru import logger
 from pymongo.errors import OperationFailure
 

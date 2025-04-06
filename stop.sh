@@ -19,6 +19,9 @@ fi
 docker compose stop;
 
 docker container rm dgb-blog-mongo || true;
+docker container rm dgb-blog-backend || true;
+docker container rm dgb-blog-backend-watch || true;
 docker image rm igk19/mongo8:1.0.0 || true;
+docker image rm igk19/dgb-blog-backend || true;
 rm -rf ./data/db/.* || true;
 rm -rf  ./data/db/*;

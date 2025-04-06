@@ -1,15 +1,15 @@
 import os
 import sys
-from asyncio import gather
+from asyncio import gather, sleep
 from contextlib import asynccontextmanager
 from datetime import datetime
 
 import pymongo
 import pymongo.errors
 from beanie import UpdateResponse, init_beanie
-from bson import ObjectId
 from loguru import logger
 from motor.motor_asyncio import AsyncIOMotorCollection
+from pymongo.errors import OperationFailure
 
 from app.ChangeStreamOperationTypeEnum import ChangeStreamOperationType
 from app.config.database import connect_db
@@ -47,7 +47,9 @@ async def update_search_content(article: dict) -> ArticleDocument | None:
     article_document = ArticleDocument(**article)
     article = article_document.model_dump()
 
-    updated_article = await ArticleDocument.find_one(ArticleDocument.id == article["id"]).update({
+    updated_article = await ArticleDocument.find_one(
+        ArticleDocument.id == article["id"]
+    ).update({
        "$set": {
            "search_content": article["search_content"],
            "updated_at": article["updated_at"]
@@ -113,62 +115,6 @@ async def handle_article_update(updated_document: dict):
                 return logger.warning(f"User with id \
                     {author["id"]} was not found"
                 )
-
-            # If the user to update contains the article
-            # we need to update it. Else we need to add it.
-            # query = {
-            #     "articles.id": updated_article["id"]
-            # }
-
-            # push_query = {
-            #     "$push": {
-            #         # "articles.$[filter]": updated_article,
-            #         "articles": updated_article,
-            #         # "updated_at": datetime.now()
-            #     },
-            #     "$set": {
-            #         "updated_at": datetime.now()
-            #     }
-            # }
-            # array_filters = [{"filter.id": updated_article["id"]}]
-            # Embed updated article into user document
-            # updated_user = await UserDocument.find_one(
-            #     UserDocument.id == author["id"]
-            # )
-
-            # updated_user = UserDocument.find_one(
-            #     UserDocument.id == author["id"]
-            # )
-            # updated_user = await updated_user.update(
-            #     push_query,
-            #     # array_filters=array_filters,
-            #     response_type=UpdateResponse.NEW_DOCUMENT
-            # )
-
-
-            # updated_user = await user_to_update.update_one(
-            #     {
-            #         "$set": {
-            #             "articles": {
-            #                 "$cond": [
-            #                     {"$in": [updated_article["id"], "$articles.id"]},
-            #                     {"$map": {
-            #                         "input": "$articles",
-            #                         "as": "article",
-            #                         "in": {
-            #                             "$cond": [
-            #                                 {"$eq": ["$$article.id", updated_article["id"]]},
-            #                                 updated_article,
-            #                                 "$$article"
-            #                             ]
-            #                         }
-            #                     }},
-            #                     {"$concatArrays": ["$articles", [updated_article]]}
-            #                 ]
-            #             }
-            #         }
-            #     }
-            # )
             user_to_update_model = user_to_update.model_dump()
 
             if updated_article["id"] in [article["id"] for article in user_to_update_model["articles"]]:
@@ -405,10 +351,24 @@ async def watch_collection(
 async def lifespan(app: PatchedFastAPI):
     connect_db(app)
 
-    await init_beanie(
-        database=app.db,
-        document_models=models
-    )
+    try:
+        await init_beanie(
+            database=app.db,
+            document_models=models
+        )
+    except OperationFailure:
+        sleep_time = 3
+        logger.warning("It seems the Beanie could not initialize due to DB connection failure.")
+        logger.warning(f"Sleeping for {sleep_time} seconds and trying again...")
+        await sleep(sleep_time)
+        logger.warning("Trying again...")
+        try:
+            await init_beanie(
+                database=app.db,
+                document_models=models
+            )
+        except Exception as e:
+            logger.error(e)
 
     article_collection = ArticleDocument.get_motor_collection()
     user_collection = UserDocument.get_motor_collection()

@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from typing import TYPE_CHECKING, Annotated, List, Optional
+from typing import Annotated, List, Optional
 
 import pymongo
 from beanie import PydanticObjectId
