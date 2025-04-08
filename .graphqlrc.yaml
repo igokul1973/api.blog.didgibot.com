@@ -5,5 +5,5 @@ extensions:
             url: "http://localhost:8888/graphql"
             headers:
                 {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJpZ2sxOUBtZS5jb20iLCJleHAiOjE3NDM4NzYwOTAsInVzZXIiOnsiaWQiOiI2N2YwMzhkYzZiODU4NzkzY2EzMDA1ODkiLCJjcmVhdGVkX2F0IjoiMjAyNS0wNC0wNCAxOTo1NDowNC4zMDIwMDAiLCJ1cGRhdGVkX2F0IjoiMjAyNS0wNC0wNSAxNzoyMTozMC4yMDIzNzgiLCJlbWFpbCI6ImlnazE5QG1lLmNvbSIsInBob25lIjoiKzEtXHUyMDJhNTAzNzY1NTY4NFx1MjAyYyIsImZpcnN0X25hbWUiOiJJZ29yIiwibGFzdF9uYW1lIjoiS3VsZWJ5YWtpbiIsImlwIjoiMTcyLjE4LjAuMSIsImxhc3RfbG9nZ2VkX2F0IjoiMjAyNS0wNC0wNSAxNzoyMTozMC4xOTcwMDAifX0._LDXBxuo-DIdz04AMbtd8C_UMGYZ3GOoPnLX26Q3Bqc",
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJpZ2sxOUBtZS5jb20iLCJleHAiOjE3NDM5NTc4MDgsInVzZXIiOnsiaWQiOiI2N2YxY2JkYzRjZThhOWZmYTYzMDA1ODkiLCJjcmVhdGVkX2F0IjoiMjAyNS0wNC0wNiAwMDozMzozMi4yNjMwMDAiLCJ1cGRhdGVkX2F0IjoiMjAyNS0wNC0wNiAxNjowMzoyOC41MjU5OTAiLCJlbWFpbCI6ImlnazE5QG1lLmNvbSIsInBob25lIjoiKzEtXHUyMDJhNTAzNzY1NTY4NFx1MjAyYyIsImZpcnN0X25hbWUiOiJJZ29yIiwibGFzdF9uYW1lIjoiS3VsZWJ5YWtpbiIsImlwIjoiMTcyLjE5LjAuMSIsImxhc3RfbG9nZ2VkX2F0IjoiMjAyNS0wNC0wNiAxNjowMzoyOC41MTgwMDAifX0.QPOUsL0yhrN0DVrXWRm4w63JkUeYmNXqNZfsFuz0wag",
                 }

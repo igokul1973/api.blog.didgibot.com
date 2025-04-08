@@ -90,7 +90,9 @@ def is_token_near_expiration(payload):
     exp = payload['exp']
     now = datetime.now(UTC)
     expiration_time = datetime.fromtimestamp(exp, tz=UTC)
-    td = timedelta(minutes=10)
+    # Refresh token if the API his is 10 minutes or less
+    # before the token expiration
+    td = timedelta(seconds=600)
     five_minutes_before_expiration = expiration_time - td
     return now >= five_minutes_before_expiration
 
