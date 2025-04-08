@@ -36,14 +36,13 @@ async def get_articles(
     :param sort: Optional[List[SortInputType]], the sort to apply
     :return: List[ArticleType], the list of articles
     """
-    from app.main import app
     from app.models.utils.common import transform_entity_to_type
 
     is_search = False
     filter_dict = {}
     filter_input_dict = filter_input.to_pydantic().model_dump()
     if filter_input_dict["ids"]:
-        id_objects = [PyObjectId(id) for id in filter_input_dict["ids"]]
+        id_objects = [PydanticObjectId(id) for id in filter_input_dict["ids"]]
         ids_filter = {"_id": {"$in": id_objects}}
         filter_dict.update(ids_filter)
         filter_input_dict.pop("ids")
@@ -163,7 +162,7 @@ async def get_users(
     filter_dict: dict[str, Any] = {}
     filter_input_dict = filter_input.to_pydantic().model_dump()
     if filter_input_dict["ids"]:
-        id_objects = [PyObjectId(id) for id in filter_input_dict["ids"]]
+        id_objects = [PydanticObjectId(id) for id in filter_input_dict["ids"]]
         filter_dict = {"_id": {"$in": id_objects}}
         filter_input_dict.pop("ids")
     if filter_input_dict["email"]:
@@ -272,7 +271,7 @@ async def get_tags(
     filter_dict = {}
     filter_input_dict = filter_input.to_pydantic().model_dump()
     if filter_input_dict["ids"]:
-        id_objects = [PyObjectId(id) for id in filter_input_dict["ids"]]
+        id_objects = [PydanticObjectId(id) for id in filter_input_dict["ids"]]
         filter_dict = {"_id": {"$in": id_objects}}
         filter_input_dict.pop("ids")
     if "name" in filter_input_dict:

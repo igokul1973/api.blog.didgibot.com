@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Annotated, List, Tuple
 
 import strawberry
-from beanie import UpdateResponse
+from beanie import PydanticObjectId, UpdateResponse
 from fastapi import HTTPException
 
 from app.models.beanie import (ArticleDocument, CategoryDocument, TagDocument,
@@ -176,7 +176,7 @@ class Mutation:
         article_input = article_input_model.model_dump()
 
         current_article = await ArticleDocument.get(
-            PyObjectId(article_input["id"])
+            PydanticObjectId(article_input["id"])
         )
         if not current_article:
             raise ValueError("Article cannot be updated as it was not found")
@@ -418,7 +418,7 @@ class Mutation:
         }
 
         updated_article = await ArticleDocument.find_one(
-            ArticleDocument.id == PyObjectId(article_id)
+            ArticleDocument.id == PydanticObjectId(article_id)
         ).update(update)
 
         if not updated_article:
@@ -434,7 +434,7 @@ class Mutation:
         }
 
         updated_article = await ArticleDocument.find_one(
-            ArticleDocument.id == PyObjectId(article_id)
+            ArticleDocument.id == PydanticObjectId(article_id)
         ).update(update)
 
         if not updated_article:
