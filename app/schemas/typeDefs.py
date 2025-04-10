@@ -160,11 +160,15 @@ class TagUpdateInputType: ...
 
 
 @strawberry.experimental.pydantic.input(model=TranslationCreateInputModel, all_fields=True)
-class TranslationCreateInputType: ...
+class TranslationCreateInputType:
+    category: CategoryInputType
+    tags: List[Optional[TagInputType]]
 
 
 @strawberry.experimental.pydantic.input(model=TranslationUpdateInputModel, all_fields=True)
-class TranslationUpdateInputType: ...
+class TranslationUpdateInputType:
+    category: Optional[CategoryInputType]
+    tags: Optional[List[Optional[TagInputType]]]
 
 
 @strawberry.experimental.pydantic.input(
@@ -172,9 +176,7 @@ class TranslationUpdateInputType: ...
     fields=None,
 )
 class ArticleCreateInputType:
-    translation: TranslationCreateInputType
-    category: CategoryInputType
-    tags: List[Optional[TagInputType]]
+    translations: List[TranslationCreateInputType]
     author: Optional[
         Annotated["UserInputType", strawberry.lazy("app.schemas.typeDefs")]
     ]
@@ -185,9 +187,7 @@ class ArticleCreateInputType:
     fields=["id"],
 )
 class ArticleUpdateInputType:
-    translation: TranslationUpdateInputType
-    category: Optional[CategoryInputType]
-    tags: Optional[List[Optional[TagInputType]]]
+    translations: List[TranslationUpdateInputType]
 
 
 @strawberry.experimental.pydantic.input(

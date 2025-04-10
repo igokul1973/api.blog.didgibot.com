@@ -133,12 +133,17 @@ class TagUpdateInputModel(IdModel):
     name: str = Field(min_length=3, max_length=40)
 
 
-class TranslationCreateInputModel(BaseModel):
+class BaseTranslationCreateInputModel(BaseModel):
     language: LanguageEnum = Field(..., min_length=2, max_length=40)
     header: str = Field(..., min_length=3, max_length=40)
     content: str = Field(..., min_length=30, max_length=50000)
     is_published: bool
     published_at: Optional[datetime] = Field(default=None)
+
+
+class TranslationCreateInputModel(BaseTranslationCreateInputModel):
+    category: CategoryInputModel
+    tags: List[Optional[TagInputModel]] = Field(default=[])
 
 
 class TranslationUpdateInputModel(BaseModel):
@@ -147,11 +152,16 @@ class TranslationUpdateInputModel(BaseModel):
     content: Optional[str] = Field(min_length=30, max_length=50000, default=None)
     is_published: Optional[bool]
     published_at: Optional[datetime] = Field(default=None)
+    category: Optional[CategoryInputModel] = Field(default=None)
+    tags: List[Optional[TagInputModel]] = Field(default=[])
 
 
-class TranslationModel(TranslationCreateInputModel):
+class TranslationModel(BaseTranslationCreateInputModel):
     category: CategoryModel
     tags: List[Optional[TagModel]] = Field(default=[])
+
+
+baseArticleModelDescription = "Article's headers and content from all translations stripped of html tags for search index. Filled on each header/content update. Must be supported in code."
 
 
 class BaseArticleModel(CreatedUpdatedAtModel, OptionalIdModel):
@@ -159,7 +169,11 @@ class BaseArticleModel(CreatedUpdatedAtModel, OptionalIdModel):
     # stripped of html tags for search index.
     # Filled on each header/content update.
     # Must be supported in code.
-    search_content: str = Field(..., min_length=30)
+    search_content: str = Field(
+        ...,
+        min_length=30,
+        description=baseArticleModelDescription
+    )
     translations: List[TranslationModel] = Field(default=[])
 
 
@@ -177,16 +191,12 @@ class ArticleModel(BaseArticleModel):
 
 
 class ArticleCreateInputModel(BaseModel):
-    translation: TranslationCreateInputModel
-    category: CategoryInputModel
-    tags: List[Optional[TagInputModel]] = Field(default=[])
+    translations: List[TranslationCreateInputModel]
     author: Optional[UserModelPartial] = Field(default=None)
 
 
 class ArticleUpdateInputModel(IdModel):
-    translation: TranslationUpdateInputModel
-    category: Optional[CategoryInputModel] = Field(default=None)
-    tags: List[Optional[TagInputModel]] = Field(default=[])
+    translations: List[TranslationUpdateInputModel]
 
 
 class TokensModel(BaseModel):

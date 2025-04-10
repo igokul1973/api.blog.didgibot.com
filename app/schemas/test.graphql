@@ -1,20 +1,37 @@
 mutation Set_Article {
     set_article(
         data: {
-            translation: {
-                header: "First article"
-                content: "<html><span>More</span> и fifth another <br/> collect <br /> примеры</html>"
-                is_published: true
-                language: en
-            }
-            category: {
-                # id: "67c4c96c3fb9bd6d19d6bf3c"
-                name: "Cat 1"
-            }
-            tags: [
-                { name: "Some tag 1" }
-                { name: "Some tag 2" }
-                # { id: "67c4c96c3fb9bd6d19d6bf3d" }
+            translations: [
+                {
+                    header: "Первая статья"
+                    content: "<html><span>Рюсский</span> и пятая содержимое <br/> collect <br /> примеры</html>"
+                    is_published: true
+                    language: ru
+                    category: {
+                        # id: "67c4c96c3fb9bd6d19d6bf3c"
+                        name: "Категория 1"
+                    }
+                    tags: [
+                        { name: "Тэг 1" }
+                        { name: "Тэг  2" }
+                        # { id: "67c4c96c3fb9bd6d19d6bf3d" }
+                    ]
+                }
+                {
+                    header: "First article"
+                    content: "<html><span>More</span> и fifth another <br/> collect <br /> примеры</html>"
+                    is_published: false
+                    language: en
+                    category: {
+                        # id: "67c4c96c3fb9bd6d19d6bf3c"
+                        name: "Cat 1"
+                    }
+                    tags: [
+                        { name: "Some tag 1" }
+                        { name: "Some tag 2" }
+                        # { id: "67c4c96c3fb9bd6d19d6bf3d" }
+                    ]
+                }
             ]
         }
     ) {

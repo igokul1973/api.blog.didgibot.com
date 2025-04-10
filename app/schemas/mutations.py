@@ -130,32 +130,33 @@ class Mutation:
 
         article_to_insert["author"] = inserted_author.model_dump()
 
-        if article_input_dict["translation"]["is_published"] is True and not \
-                article_input_dict["translation"]["published_at"]:
-            article_input_dict["translation"]["published_at"] = datetime.now()
-        elif article_input_dict["translation"]["is_published"] is False:
-            article_input_dict["translation"]["published_at"] = None
+        for index, t in enumerate(article_input_dict["translations"]):
+            if t["is_published"] is True and not \
+                    t["published_at"]:
+                t["published_at"] = datetime.now()
+            elif t["is_published"] is False:
+                t["published_at"] = None
 
-        article_to_insert["translations"].append(article_input_dict["translation"])
+            article_to_insert["translations"].append(t)
 
+            # Category
+            input_model_translation = article_input_model.translations[index]
+            cat = await get_category(input_model_translation.category.model_dump())
+            article_to_insert["translations"][index]["category"] = cat.model_dump()
 
-        # Category
-        cat = await get_category(article_input_model.category.model_dump())
-        article_to_insert["translations"][0]["category"] = cat.model_dump()
+            # Tags
+            tags = input_model_translation.tags
+            if len(tags) > 0:
+                existing_tags, inserted_tags = await get_tags(tags)
+                article_to_insert["translations"][index]["tags"] = \
+                    [tag.model_dump() for tag in inserted_tags] + existing_tags
 
-        # Tags
-        tags = article_input_model.tags
-        if len(tags) > 0:
-            existing_tags, inserted_tags = await get_tags(tags)
-            article_to_insert["translations"][0]["tags"] = \
-                [tag.model_dump() for tag in inserted_tags] + existing_tags
+            # Search content
+            # Inserting article content only as it will be
+            # properly updated in the watch script
+            article_to_insert["search_content"] = article_to_insert["translations"][0]["content"]
 
-        # Search content
-        # Inserting article content only as it will be
-        # properly updated in the watch script
-        article_to_insert["search_content"] = article_to_insert["translations"][0]["content"]
         article_document = ArticleDocument(**article_to_insert)
-
         inserted_article = await ArticleDocument.insert_one(article_document)
 
         if not inserted_article:

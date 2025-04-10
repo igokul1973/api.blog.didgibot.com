@@ -1,7 +1,5 @@
 input ArticleCreateInputType {
-  translation: TranslationCreateInputType!
-  category: CategoryInputType!
-  tags: [TagInputType]! = []
+  translations: [TranslationCreateInputType!]!
   author: UserInputType = null
 }
 
@@ -23,9 +21,7 @@ type ArticleTypePartial {
 
 input ArticleUpdateInputType {
   id: String!
-  translation: TranslationUpdateInputType!
-  category: CategoryInputType = null
-  tags: [TagInputType] = []
+  translations: [TranslationUpdateInputType!]!
 }
 
 input ArticlesFilterInputType {
@@ -172,6 +168,8 @@ input TranslationCreateInputType {
   content: String!
   is_published: Boolean!
   published_at: DateTime = null
+  category: CategoryInputType!
+  tags: [TagInputType]! = []
 }
 
 type TranslationType {
@@ -190,6 +188,8 @@ input TranslationUpdateInputType {
   content: String = null
   is_published: Boolean
   published_at: DateTime = null
+  category: CategoryInputType = null
+  tags: [TagInputType]! = []
 }
 
 input UserInputType {
