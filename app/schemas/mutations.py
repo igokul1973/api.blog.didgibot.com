@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from operator import itemgetter
 from typing import TYPE_CHECKING, Annotated, List, Tuple
 
 import strawberry
@@ -36,7 +37,18 @@ def clean_html_tags(raw_html: str):
 
 
 async def get_category(category_data: dict) -> CategoryDocument:
-    # category
+    """
+    Gets a category by either id or creates a new one if it doesn't exist.
+
+    Args:
+    - category_data (dict): A dictionary containing the category data.
+        If id is present, it will be used to retrieve a category,
+        otherwise a new category will be created with the given data.
+
+    Returns:
+    - CategoryDocument: The category document.
+    """
+
     category_id = category_data.get("id")
     category = None
     if not category_id:
@@ -54,6 +66,23 @@ async def get_tags(tags: List[TagModel | None] | List[TagInputModel | None]) -> 
     List[TagDocument],
     List[TagDocument]
 ]:
+    """
+    Processes a list of tags, distinguishing between existing and new tags.
+
+    This function iterates over the provided list of tags, determines whether
+    each tag is an existing tag or needs to be inserted as a new tag, and
+    performs the necessary database operations.
+
+    Args:
+    - tags: A list of TagModel or TagInputModel objects (or None). Tags with
+      no id are considered new and will be inserted into the database.
+
+    Returns:
+    - A tuple containing two lists:
+      - The first list contains existing TagDocument objects found in the database.
+      - The second list contains newly inserted TagDocument objects.
+    """
+
     tags_to_insert: List[TagDocument] = []
     inserted_tags = []
     existing_tags = []
@@ -173,65 +202,62 @@ class Mutation:
         :return: The created article.
         :raises: Exception if validation error occurs.
         """
-        article_input_model = data.to_pydantic()
-        article_input = article_input_model.model_dump()
 
+        # 1. Get the article input model
+        article_input_model = data.to_pydantic()
+        article_input_dict = article_input_model.model_dump()
+        # 2. Get the current article document with input id
         current_article_document = await ArticleDocument.get(
-            PydanticObjectId(article_input["id"])
+            PydanticObjectId(article_input_model.id)
         )
         if not current_article_document:
             raise ValueError("Article cannot be updated as it was not found")
+        # 3. Make sure each translation is up-to-date
+        for i, t in enumerate(current_article_document.translations) :
+            # header, content, is_published, published_at
+            header, content, is_published = itemgetter(
+                "header", "content", "is_published"
+            )(article_input_dict["translations"][i])
 
-        # TODO: continue here...
+            if header:
+                t.header = header
+            if content:
+                t.content = content
+            if is_published is not None:
+                t.is_published = is_published
+
+            if t.is_published and t.published_at is not True:
+                t.published_at = \
+                    datetime.now()
+            elif not t.is_published and t.published_at is not None:
+                t.published_at = None
+
+            # 4. Make sure the category is created if it doesn't exist
+            category_input_dict = article_input_dict["translations"][i].get("category")
+            if category_input_dict:
+                cat = await get_category(category_input_dict)
+                t.category = CategoryModel(**cat.model_dump())
+
+            # 5
+            # 5. Make sure the tags are created if they don't exist
+            tags = article_input_model.translations[i].tags
+            if tags is not None:
+                if len(tags) > 0:
+                    existing_tags, inserted_tags = await get_tags(tags)
+                    new_tags = [
+                        TagModel(
+                            **tag.model_dump()
+                        ) if tag else None for tag in inserted_tags + existing_tags
+                    ]
+                    t.tags = new_tags
+                else:
+                    t.tags = []
+
+        # 6. Update the current article document with above categories and tags
+        # and update the updated_at field
         current_article_document.updated_at = datetime.now()
-        article_to_update = current_article_document.model_dump()
-        article_to_update["updated_at"] = datetime.now()
 
-        # find the translation index that needs to be updated
-        current_updated_translation_index = [
-            i for i, translation in enumerate(article_to_update["translations"])
-            if translation['language'] == article_input["translation"]["language"]
-        ][0]
-
-        article_to_update["translations"][current_updated_translation_index] = \
-            article_to_update["translations"][current_updated_translation_index] \
-            | article_input["translation"]
-
-        current_article_document.translations[current_updated_translation_index] = \
-            TranslationModel(**(
-                current_article_document.translations[current_updated_translation_index].model_dump()
-                | {k: v for (k, v) in article_input["translation"].items() if v is not None}
-            ))
-
-        if article_input["translation"]["is_published"] is True:
-            current_article_document.translations[current_updated_translation_index].published_at = \
-                datetime.now()
-        elif article_input["translation"]["is_published"] is False:
-            current_article_document.translations[current_updated_translation_index].published_at = None
-
-        # category
-        category_input_data = article_input_model.category.model_dump() \
-            if article_input_model.category else None
-        if category_input_data:
-            cat = await get_category(category_input_data)
-            article_to_update["translations"][current_updated_translation_index]["category"] \
-                = cat.model_dump()
-            current_article_document.translations[current_updated_translation_index].category = cat
-
-        # tags
-        tags = article_input_model.tags
-        if tags and len(tags) > 0:
-            existing_tags, inserted_tags = await get_tags(tags)
-            article_to_update["translations"][current_updated_translation_index]["tags"] =  \
-                [tag.model_dump() for tag in inserted_tags] + existing_tags
-            new_tags = [
-                TagModel(
-                    **tag.model_dump()
-                ) if tag else None for tag in inserted_tags + existing_tags
-            ]
-            current_article_document.translations[current_updated_translation_index].tags = \
-                new_tags
-
+        # 7. Save the updated article document.
         updated_article = await current_article_document.save()
 
         if not updated_article:
