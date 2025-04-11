@@ -149,7 +149,8 @@ class Mutation:
             if len(tags) > 0:
                 existing_tags, inserted_tags = await get_tags(tags)
                 article_to_insert["translations"][index]["tags"] = \
-                    [tag.model_dump() for tag in inserted_tags] + existing_tags
+                    [tag.model_dump() for tag in inserted_tags] + \
+                    [tag.model_dump() for tag in existing_tags]
 
             # Search content
             # Inserting article content only as it will be
@@ -172,20 +173,18 @@ class Mutation:
         :return: The created article.
         :raises: Exception if validation error occurs.
         """
-        # try:
         article_input_model = data.to_pydantic()
         article_input = article_input_model.model_dump()
 
-        current_article = await ArticleDocument.get(
+        current_article_document = await ArticleDocument.get(
             PydanticObjectId(article_input["id"])
         )
-        if not current_article:
+        if not current_article_document:
             raise ValueError("Article cannot be updated as it was not found")
 
-        current_article.updated_at = datetime.now()
-
-        article_to_update = current_article.model_dump()
-
+        # TODO: continue here...
+        current_article_document.updated_at = datetime.now()
+        article_to_update = current_article_document.model_dump()
         article_to_update["updated_at"] = datetime.now()
 
         # find the translation index that needs to be updated
@@ -193,19 +192,22 @@ class Mutation:
             i for i, translation in enumerate(article_to_update["translations"])
             if translation['language'] == article_input["translation"]["language"]
         ][0]
+
         article_to_update["translations"][current_updated_translation_index] = \
             article_to_update["translations"][current_updated_translation_index] \
             | article_input["translation"]
-        current_article.translations[current_updated_translation_index] = \
+
+        current_article_document.translations[current_updated_translation_index] = \
             TranslationModel(**(
-                current_article.translations[current_updated_translation_index].model_dump()
+                current_article_document.translations[current_updated_translation_index].model_dump()
                 | {k: v for (k, v) in article_input["translation"].items() if v is not None}
             ))
+
         if article_input["translation"]["is_published"] is True:
-            current_article.translations[current_updated_translation_index].published_at = \
+            current_article_document.translations[current_updated_translation_index].published_at = \
                 datetime.now()
         elif article_input["translation"]["is_published"] is False:
-            current_article.translations[current_updated_translation_index].published_at = None
+            current_article_document.translations[current_updated_translation_index].published_at = None
 
         # category
         category_input_data = article_input_model.category.model_dump() \
@@ -214,7 +216,7 @@ class Mutation:
             cat = await get_category(category_input_data)
             article_to_update["translations"][current_updated_translation_index]["category"] \
                 = cat.model_dump()
-            current_article.translations[current_updated_translation_index].category = cat
+            current_article_document.translations[current_updated_translation_index].category = cat
 
         # tags
         tags = article_input_model.tags
@@ -227,10 +229,10 @@ class Mutation:
                     **tag.model_dump()
                 ) if tag else None for tag in inserted_tags + existing_tags
             ]
-            current_article.translations[current_updated_translation_index].tags = \
+            current_article_document.translations[current_updated_translation_index].tags = \
                 new_tags
 
-        updated_article = await current_article.save()
+        updated_article = await current_article_document.save()
 
         if not updated_article:
             raise ValueError("Article not updated")
