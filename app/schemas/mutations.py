@@ -247,7 +247,7 @@ class Mutation:
                     new_tags = [
                         TagModel(
                             **tag.model_dump()
-                        ) if tag else None for tag in inserted_tags + existing_tags
+                        ) if tag else None for tag in (inserted_tags + existing_tags)
                     ]
                     t.tags = new_tags
                 else:
