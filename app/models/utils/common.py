@@ -7,11 +7,15 @@ from fastapi.responses import JSONResponse
 from graphql import GraphQLFormattedError
 from pydantic.v1.utils import deep_update
 from strawberry.experimental.pydantic.conversion_types import (
-    PydanticModel, StrawberryTypeFromPydantic)
+    PydanticModel,
+    StrawberryTypeFromPydantic,
+)
 from strawberry.http import GraphQLHTTPResponse
 
 
-def get_graphql_error_response(message: str, error_code: str | int | None = None) -> JSONResponse:
+def get_graphql_error_response(
+    message: str, error_code: str | int | None = None
+) -> JSONResponse:
     if not message:
         message = "Error occurred"
     data: GraphQLHTTPResponse = {"data": None}
@@ -119,3 +123,7 @@ def truncate_object(obj, depth):
         return [truncate_object(item, depth - 1) for item in obj]
     else:
         return obj
+
+
+def now_factory() -> datetime:
+    return datetime.now()

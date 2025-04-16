@@ -12,4 +12,5 @@ mongoKeyfile
 .stop.sh
 remove_env_vars.sh
 playground.mongodb.js
+playground2.mongodb.js
 test.graphql

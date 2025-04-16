@@ -5,16 +5,16 @@ input ArticleCreateInputType {
 
 type ArticleType {
   id: String
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: EpochDateTime!
+  updated_at: EpochDateTime!
   translations: [TranslationType!]!
   author: UserTypePartial!
 }
 
 type ArticleTypePartial {
   id: String
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: EpochDateTime!
+  updated_at: EpochDateTime!
   translations: [TranslationType!]!
   author: IdType!
 }
@@ -25,21 +25,21 @@ input ArticleUpdateInputType {
 }
 
 input ArticlesFilterInputType {
-  created_at: DateTime = null
-  updated_at: DateTime = null
+  content: ContentInputType = null
+  created_at: EpochDateTime = null
+  updated_at: EpochDateTime = null
   ids: [String!] = null
   search: String = null
   header: String = null
-  content: String = null
   language: LanguageEnum = null
   is_published: Boolean = null
-  published_at: DateTime = null
+  published_at: EpochDateTime = null
   user_id: String = null
 }
 
 input CategoriesFilterInputType {
-  created_at: DateTime = null
-  updated_at: DateTime = null
+  created_at: EpochDateTime = null
+  updated_at: EpochDateTime = null
   ids: [String!] = null
   name: String = null
 }
@@ -55,8 +55,8 @@ input CategoryInputType {
 
 type CategoryType {
   id: String
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: EpochDateTime!
+  updated_at: EpochDateTime!
   name: String!
 }
 
@@ -65,13 +65,34 @@ input CategoryUpdateInputType {
   name: String!
 }
 
+input ContentBlockInput {
+  id: String!
+  type: String!
+  data: JSON!
+}
+
+type ContentBlockType {
+  id: String!
+  type: String!
+  data: JSON!
+}
+
+input ContentInputType {
+  version: String = null
+  time: Union = null
+  blocks: [ContentBlockInput]!
+}
+
+type ContentType {
+  version: String
+  time: Union
+  blocks: [ContentBlockType]!
+}
+
 type CountType {
   count: Int!
   entity: EntityEnum!
 }
-
-"""Date with time (isoformat)"""
-scalar DateTime
 
 type DeleteResultType {
   acknowledged: Boolean!
@@ -85,6 +106,9 @@ enum EntityEnum {
   tag
 }
 
+"""A date and time"""
+scalar EpochDateTime
+
 input IdInputType {
   id: String!
 }
@@ -92,6 +116,11 @@ input IdInputType {
 type IdType {
   id: String!
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](https://ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf).
+"""
+scalar JSON @specifiedBy(url: "https://ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf")
 
 enum LanguageEnum {
   ru
@@ -145,8 +174,8 @@ input TagInputType {
 
 type TagType {
   id: String
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: EpochDateTime!
+  updated_at: EpochDateTime!
   name: String!
 }
 
@@ -156,41 +185,44 @@ input TagUpdateInputType {
 }
 
 input TagsFilterInputType {
-  created_at: DateTime = null
-  updated_at: DateTime = null
+  created_at: EpochDateTime = null
+  updated_at: EpochDateTime = null
   ids: [String!] = null
   name: String = null
 }
 
 input TranslationCreateInputType {
+  content: ContentInputType!
   language: LanguageEnum!
   header: String!
-  content: String!
   is_published: Boolean!
-  published_at: DateTime = null
+  published_at: EpochDateTime = null
   category: CategoryInputType!
   tags: [TagInputType]! = []
 }
 
 type TranslationType {
+  content: ContentType!
   language: LanguageEnum!
   header: String!
-  content: String!
   is_published: Boolean!
-  published_at: DateTime
+  published_at: EpochDateTime
   category: CategoryType!
   tags: [TagType]!
 }
 
 input TranslationUpdateInputType {
+  content: ContentInputType
   language: LanguageEnum!
   header: String = null
-  content: String = null
   is_published: Boolean
-  published_at: DateTime = null
+  published_at: EpochDateTime = null
   category: CategoryInputType = null
-  tags: [TagInputType]! = []
+  tags: [TagInputType] = []
 }
+
+"""Timestamp and BigInt field"""
+scalar Union
 
 input UserInputType {
   id: String = null
@@ -199,27 +231,27 @@ input UserInputType {
 
 type UserType {
   id: String
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: EpochDateTime!
+  updated_at: EpochDateTime!
   email: String!
   phone: String!
   first_name: String!
   last_name: String!
   ip: String!
-  last_logged_at: DateTime
+  last_logged_at: EpochDateTime
   articles: [ArticleTypePartial]!
 }
 
 type UserTypePartial {
   id: String
-  created_at: DateTime!
-  updated_at: DateTime!
+  created_at: EpochDateTime!
+  updated_at: EpochDateTime!
   email: String!
   phone: String!
   first_name: String!
   last_name: String!
   ip: String!
-  last_logged_at: DateTime
+  last_logged_at: EpochDateTime
   articles: [IdType]!
 }
 
@@ -232,11 +264,11 @@ input UserUpdateFilterInputType {
 }
 
 input UsersFilterInputType {
-  created_at: DateTime = null
-  updated_at: DateTime = null
+  created_at: EpochDateTime = null
+  updated_at: EpochDateTime = null
   ids: [String!] = null
   email: String = null
   phone: String = null
   ip: String = null
-  last_logged_at: DateTime = null
+  last_logged_at: EpochDateTime = null
 }

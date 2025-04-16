@@ -1,22 +1,81 @@
-from typing import Annotated, Any, List, Optional
+from datetime import datetime
+from typing import Annotated, List, Optional, Union
 
 import strawberry
-from pydantic import Field
+from strawberry.scalars import JSON
 
-from app.models.pydantic import (ArticleCreateInputModel, ArticleModel,
-                                 ArticleModelPartial, ArticlesFilterInputModel,
-                                 ArticleUpdateInputModel,
-                                 CategoriesFilterInputModel,
-                                 CategoryCreateInputModel, CategoryInputModel,
-                                 CategoryModel, CategoryUpdateInputModel,
-                                 CountInputModel, CountModel, IdModel,
-                                 PyObjectId, SortModel, TagCreateInputModel,
-                                 TagInputModel, TagModel, TagsFilterInputModel,
-                                 TagUpdateInputModel, TokenModel,
-                                 TranslationCreateInputModel, TranslationModel,
-                                 TranslationUpdateInputModel, UserModel,
-                                 UserModelPartial, UsersFilterInputModel,
-                                 UserUpdateFilterInputModel)
+from app.models.pydantic import (
+    ArticleCreateInputModel,
+    ArticleModel,
+    ArticleModelPartial,
+    ArticlesFilterInputModel,
+    ArticleUpdateInputModel,
+    CategoriesFilterInputModel,
+    CategoryCreateInputModel,
+    CategoryInputModel,
+    CategoryModel,
+    CategoryUpdateInputModel,
+    ContentBlockModel,
+    ContentModel,
+    CountInputModel,
+    CountModel,
+    IdModel,
+    PyObjectId,
+    SortModel,
+    TagCreateInputModel,
+    TagInputModel,
+    TagModel,
+    TagsFilterInputModel,
+    TagUpdateInputModel,
+    TokenModel,
+    TranslationCreateInputModel,
+    TranslationModel,
+    TranslationUpdateInputModel,
+    UserModel,
+    UserModelPartial,
+    UsersFilterInputModel,
+    UserUpdateFilterInputModel,
+)
+from app.models.utils.common import now_factory
+
+
+class DateTime:
+    """
+    This class is used to convert the pendulum.DateTime type to a string
+    and back to a pendulum.DateTime type
+    """
+
+    @staticmethod
+    def serialize(dt: datetime) -> str:
+        return dt.isoformat(timespec="milliseconds")
+
+    @staticmethod
+    def parse_value(value: str) -> datetime:
+        return datetime.fromisoformat(value)
+
+
+EpochDateTime = strawberry.scalar(
+    datetime,
+    name="EpochDateTime",
+    description="A date and time",
+    serialize=DateTime.serialize,
+    parse_value=DateTime.parse_value,
+)
+
+# This is needed because GraphQL does not support 64 bit integers
+BigInt = strawberry.scalar(
+    # NewType("BigInt", Union[int, str]),
+    Union[int, str],  # type: ignore
+    serialize=lambda v: int(v),
+    parse_value=lambda v: str(v),
+    description="Timestamp and BigInt field",
+)
+
+
+@strawberry.type
+class CreatedUpdatedAtType:
+    created_at: datetime = strawberry.field(default_factory=now_factory)  # type: ignore
+    updated_at: datetime = strawberry.field(default_factory=now_factory)  # type: ignore
 
 
 @strawberry.input
@@ -40,10 +99,7 @@ class DeleteResultType:
     deleted_count: int = strawberry.field(default=0)
 
 
-@strawberry.experimental.pydantic.type(
-    model=TokenModel,
-    all_fields=True
-)
+@strawberry.experimental.pydantic.type(model=TokenModel, all_fields=True)
 class TokenType: ...
 
 
@@ -95,11 +151,29 @@ class CategoryType: ...
 class TagType: ...
 
 
+# @strawberry.experimental.pydantic.type(model=ContentBlockInputModel, all_fields=True)
+@strawberry.experimental.pydantic.type(model=ContentBlockModel, fields=["id", "type"])
+class ContentBlockType:
+    data: JSON
+
+
+@strawberry.experimental.pydantic.input(model=ContentBlockModel, fields=["id", "type"])
+class ContentBlockInput:
+    data: JSON
+
+
+@strawberry.experimental.pydantic.type(model=ContentModel, fields=["version"])
+class ContentType:
+    time: Optional[BigInt] = strawberry.field(default=None)  # type: ignore
+    blocks: List[Optional[ContentBlockType]]
+
+
 @strawberry.experimental.pydantic.type(
     model=TranslationModel,
-    fields=["language", "header", "content", "is_published", "published_at"],
+    fields=["language", "header", "is_published", "published_at"],
 )
 class TranslationType:
+    content: ContentType
     category: CategoryType
     tags: List[Optional[TagType]]
 
@@ -143,7 +217,9 @@ class CategoryInputType: ...
 class CategoryCreateInputType: ...
 
 
-@strawberry.experimental.pydantic.input(model=CategoryUpdateInputModel, fields=["id", "name"])
+@strawberry.experimental.pydantic.input(
+    model=CategoryUpdateInputModel, fields=["id", "name"]
+)
 class CategoryUpdateInputType: ...
 
 
@@ -155,18 +231,34 @@ class TagInputType: ...
 class TagCreateInputType: ...
 
 
-@strawberry.experimental.pydantic.input(model=TagUpdateInputModel, fields=["id", "name"])
+@strawberry.experimental.pydantic.input(
+    model=TagUpdateInputModel, fields=["id", "name"]
+)
 class TagUpdateInputType: ...
 
 
-@strawberry.experimental.pydantic.input(model=TranslationCreateInputModel, all_fields=True)
+@strawberry.experimental.pydantic.input(model=ContentModel, fields=["version"])
+class ContentInputType:
+    time: Optional[BigInt]  # type: ignore
+    blocks: List[Optional[ContentBlockInput]]
+
+
+@strawberry.experimental.pydantic.input(
+    model=TranslationCreateInputModel,
+    fields=["language", "header", "is_published", "published_at"],
+)
 class TranslationCreateInputType:
+    content: ContentInputType
     category: CategoryInputType
     tags: List[Optional[TagInputType]]
 
 
-@strawberry.experimental.pydantic.input(model=TranslationUpdateInputModel, all_fields=True)
+@strawberry.experimental.pydantic.input(
+    model=TranslationUpdateInputModel,
+    fields=["language", "header", "is_published", "published_at"],
+)
 class TranslationUpdateInputType:
+    content: Optional[ContentInputType]
     category: Optional[CategoryInputType]
     tags: Optional[List[Optional[TagInputType]]]
 
@@ -208,7 +300,9 @@ class ArticlesFilterInputType: ...
 class UsersFilterInputType: ...
 
 
-@strawberry.experimental.pydantic.input(model=UserUpdateFilterInputModel, all_fields=True)
+@strawberry.experimental.pydantic.input(
+    model=UserUpdateFilterInputModel, all_fields=True
+)
 class UserUpdateFilterInputType: ...
 
 

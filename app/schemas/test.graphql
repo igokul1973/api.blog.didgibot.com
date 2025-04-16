@@ -3,23 +3,17 @@ mutation Set_Article {
         data: {
             translations: [
                 {
-                    header: "Первая статья"
-                    content: "<html><span>Рюсский</span> и пятая содержимое <br/> collect <br /> примеры</html>"
-                    is_published: true
-                    language: ru
-                    category: {
-                        # id: "67c4c96c3fb9bd6d19d6bf3c"
-                        name: "Категория 1"
-                    }
-                    tags: [
-                        { name: "Тэг 1" }
-                        { name: "Тэг  2" }
-                        # { id: "67c4c96c3fb9bd6d19d6bf3d" }
-                    ]
-                }
-                {
                     header: "First article"
-                    content: "<html><span>More</span> и fifth another <br/> collect <br /> примеры</html>"
+                    content: {
+                        time: 1744679189846
+                        blocks: [
+                            {
+                                id: "_hKUbtV4xz"
+                                type: "paragraph"
+                                data: { text: "Fifth Necessary description" }
+                            }
+                        ]
+                    }
                     is_published: false
                     language: en
                     category: {
@@ -27,8 +21,32 @@ mutation Set_Article {
                         name: "Cat 1"
                     }
                     tags: [
-                        { name: "Some tag 1" }
-                        { name: "Some tag 2" }
+                        # { name: "Some tag 1" }
+                        # { name: "Some tag 2" }
+                        # { id: "67c4c96c3fb9bd6d19d6bf3d" }
+                    ]
+                }
+                {
+                    header: "Первая статья"
+                    content: {
+                        time: 1744679189846
+                        blocks: [
+                            {
+                                id: "_hKUb6V4zt"
+                                type: "paragraph"
+                                data: { text: "Очень Пятая длинное описание" }
+                            }
+                        ]
+                    }
+                    is_published: true
+                    language: ru
+                    category: {
+                        # id: "67c4c96c3fb9bd6d19d6bf3c"
+                        name: "Категория 1"
+                    }
+                    tags: [
+                        # { name: "Тэг 1" }
+                        { name: "Тэг 1" }
                         # { id: "67c4c96c3fb9bd6d19d6bf3d" }
                     ]
                 }
@@ -38,7 +56,15 @@ mutation Set_Article {
         id
         translations {
             header
-            content
+            content {
+                version
+                time
+                blocks {
+                    id
+                    type
+                    data
+                }
+            }
             is_published
             published_at
             category {
@@ -71,7 +97,16 @@ mutation Update_Article {
                 {
                     language: en
                     # header: "Fourty fifth article"
-                    content: "<html><span>More</span> и first another <br/> collect <br /> примеры</html>"
+                    content: {
+                        time: 1744679189846
+                        blocks: [
+                            {
+                                id: "_hKUb6V4xy"
+                                type: "paragraph"
+                                data: { text: "Bla" }
+                            }
+                        ]
+                    }
                     is_published: true
                     # category: {
                     #     # id: "67c4c96c3fb9bd6d19d6bf3c"
@@ -88,7 +123,15 @@ mutation Update_Article {
         id
         translations {
             header
-            content
+            content {
+                version
+                time
+                blocks {
+                    id
+                    type
+                    data
+                }
+            }
             is_published
             published_at
             category {
@@ -127,7 +170,15 @@ query Get_Articles {
         id
         translations {
             header
-            content
+            content {
+                version
+                time
+                blocks {
+                    id
+                    type
+                    data
+                }
+            }
             is_published
             published_at
             category {
@@ -169,7 +220,15 @@ query users {
             id
             translations {
                 header
-                content
+                content {
+                    version
+                    time
+                    blocks {
+                        id
+                        type
+                        data
+                    }
+                }
                 category {
                     id
                     name
@@ -270,7 +329,15 @@ mutation Add_Tag_To_Article {
         id
         translations {
             language
-            content
+            content {
+                version
+                time
+                blocks {
+                    id
+                    type
+                    data
+                }
+            }
         }
     }
 }

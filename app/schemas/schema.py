@@ -15,8 +15,7 @@ from strawberry import Schema
 from strawberry.fastapi import BaseContext, GraphQLRouter
 from strawberry.http import GraphQLHTTPResponse
 from strawberry.schema.config import StrawberryConfig
-from strawberry.subscriptions import (GRAPHQL_TRANSPORT_WS_PROTOCOL,
-                                      GRAPHQL_WS_PROTOCOL)
+from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL, GRAPHQL_WS_PROTOCOL
 from strawberry.types import ExecutionResult
 
 from app.config.settings import Settings, settings
@@ -28,7 +27,7 @@ from app.models.utils.requests import get_users
 from app.schemas.mutations import Mutation
 from app.schemas.query import Query
 from app.schemas.subscriptions import Subscription
-from app.schemas.typeDefs import UsersFilterInputType
+from app.schemas.typeDefs import EpochDateTime, UsersFilterInputType
 
 env = Env()
 
@@ -58,11 +57,13 @@ class AuthorizationService:
         "delete_category",
         "set_tag",
         "update_tag",
-        "delete_tag"
+        "delete_tag",
     ]
     ALGORITM: str = "HS256"
     INVALID_TOKEN_MESSAGE = "Invalid or missing JWT token."
-    INVALID_TOKEN_CONFIG_MESSAGE = "Invalid or missing secret key or token life configuration."
+    INVALID_TOKEN_CONFIG_MESSAGE = (
+        "Invalid or missing secret key or token life configuration."
+    )
     INVALID_CREDENTIALS_MESSAGE = "Invalid username or password."
 
     @classmethod
@@ -77,7 +78,7 @@ class AuthorizationService:
 
     @classmethod
     async def authorize(cls, request: Request):
-        '''
+        """
         This method checks if the request is a protected endpoint
         or if the token exists. If it does, then return the payload.
         The logic behind it:
@@ -89,14 +90,16 @@ class AuthorizationService:
             # frontend requests.
             # This covers protected frontends (e.g. admin panels)
             # as well as the public ones.
-        '''
+        """
         # TODO: Make sure only allowed hosts can make requests.
         # This'll probably be done in the middleware or on the
         # web server level.
         try:
             graphql_query = await request.json()
-            if graphql_query["operationName"].lower() in cls.PROTECTED_ENDPOINTS \
-                    or "Authorization" in request.headers:
+            if (
+                graphql_query["operationName"].lower() in cls.PROTECTED_ENDPOINTS
+                or "Authorization" in request.headers
+            ):
 
                 token = request.headers["Authorization"]
                 return cls.get_token_payload(token)
@@ -110,7 +113,9 @@ class AuthorizationService:
         if not settings.SECRET_KEY or not settings.TOKEN_LIFE:
             raise HTTPException(status_code=401, detail=cls.INVALID_CREDENTIALS_MESSAGE)
 
-        access_token_expires = datetime.now(UTC) + timedelta(seconds=settings.TOKEN_LIFE)
+        access_token_expires = datetime.now(UTC) + timedelta(
+            seconds=settings.TOKEN_LIFE
+        )
 
         u = user.model_dump()
         u = transform_object_to_serializable(u)
@@ -163,7 +168,7 @@ class Context(BaseContext):
             if not users or not users[0]:
                 raise HTTPException(
                     status_code=401,
-                    detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+                    detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE,
                 )
 
             return users[0].to_pydantic()
@@ -212,7 +217,8 @@ schema = Schema(
     query=Query,
     mutation=Mutation,
     subscription=Subscription,
-    config=StrawberryConfig(auto_camel_case=False)
+    config=StrawberryConfig(auto_camel_case=False),
+    scalar_overrides={datetime: EpochDateTime},
 )
 
 graphql_router = MyGraphQLRouter(

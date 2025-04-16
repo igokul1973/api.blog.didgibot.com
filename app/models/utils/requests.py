@@ -5,15 +5,32 @@ from bson import ObjectId
 from pydantic import BaseModel
 from strawberry import lazy
 
-from app.models.beanie import (ArticleDocument, CategoryDocument, TagDocument,
-                               UserDocument)
-from app.models.pydantic import (ArticleModel, CategoryModel, EntityEnum,
-                                 PyObjectId, TagModel, UserModel,
-                                 UserModelPartial)
-from app.schemas.typeDefs import (ArticlesFilterInputType, ArticleType,
-                                  CategoriesFilterInputType, CategoryType,
-                                  SortInputType, TagsFilterInputType, TagType,
-                                  UsersFilterInputType, UserType)
+from app.models.beanie import (
+    ArticleDocument,
+    CategoryDocument,
+    TagDocument,
+    UserDocument,
+)
+from app.models.pydantic import (
+    ArticleModel,
+    CategoryModel,
+    EntityEnum,
+    PyObjectId,
+    TagModel,
+    UserModel,
+    UserModelPartial,
+)
+from app.schemas.typeDefs import (
+    ArticlesFilterInputType,
+    ArticleType,
+    CategoriesFilterInputType,
+    CategoryType,
+    SortInputType,
+    TagsFilterInputType,
+    TagType,
+    UsersFilterInputType,
+    UserType,
+)
 
 
 def wrap_search_query(query):
@@ -22,6 +39,7 @@ def wrap_search_query(query):
         return f'"{query}"'
     else:
         return query
+
 
 async def get_articles(
     filter_input: ArticlesFilterInputType = ArticlesFilterInputType(),
@@ -48,13 +66,19 @@ async def get_articles(
         filter_input_dict.pop("ids")
     if filter_input_dict["header"]:
         header_filter = {
-            "translations.header": {"$regex": filter_input_dict["header"], "$options": "i"}
+            "translations.header": {
+                "$regex": filter_input_dict["header"],
+                "$options": "i",
+            }
         }
         filter_dict.update(header_filter)
         filter_input_dict.pop("header")
     if filter_input_dict["content"]:
         content_filter = {
-            "translations.content": {"$regex": filter_input_dict["content"], "$options": "i"}
+            "translations.content": {
+                "$regex": filter_input_dict["content"],
+                "$options": "i",
+            }
         }
         filter_dict.update(content_filter)
         filter_input_dict.pop("content")
@@ -100,8 +124,8 @@ async def get_articles(
 
     res = []
     async for article in articles:
-        article_types = transform_entity_to_type(article, ArticleModel, ArticleType)
-        res.append(article_types)
+        article_type = transform_entity_to_type(article, ArticleModel, ArticleType)
+        res.append(article_type)
 
     return res
 

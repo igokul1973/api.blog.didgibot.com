@@ -7,19 +7,35 @@ import strawberry
 from beanie import PydanticObjectId, UpdateResponse
 from fastapi import HTTPException
 
-from app.models.beanie import (ArticleDocument, CategoryDocument, TagDocument,
-                               UserDocument)
-from app.models.pydantic import (ArticleModel, CategoryModel, PyObjectId,
-                                 TagInputModel, TagModel, TranslationModel,
-                                 UserModel)
+from app.models.beanie import (
+    ArticleDocument,
+    CategoryDocument,
+    TagDocument,
+    UserDocument,
+)
+from app.models.pydantic import (
+    ArticleModel,
+    CategoryModel,
+    TagInputModel,
+    TagModel,
+    UserModel,
+)
 from app.models.utils.common import transform_entity_to_type
-from app.schemas.typeDefs import (ArticleCreateInputType, ArticleType,
-                                  ArticleUpdateInputType,
-                                  CategoryCreateInputType, CategoryType,
-                                  CategoryUpdateInputType, DeleteResultType,
-                                  IdInputType, IdType, TagCreateInputType,
-                                  TagType, TagUpdateInputType, UserType,
-                                  UserUpdateFilterInputType)
+from app.schemas.typeDefs import (
+    ArticleCreateInputType,
+    ArticleType,
+    ArticleUpdateInputType,
+    CategoryCreateInputType,
+    CategoryType,
+    CategoryUpdateInputType,
+    DeleteResultType,
+    IdInputType,
+    TagCreateInputType,
+    TagType,
+    TagUpdateInputType,
+    UserType,
+    UserUpdateFilterInputType,
+)
 
 if TYPE_CHECKING:
     from app.schemas.schema import Context
@@ -62,10 +78,9 @@ async def get_category(category_data: dict) -> CategoryDocument:
     return category
 
 
-async def get_tags(tags: List[TagModel | None] | List[TagInputModel | None]) -> Tuple[
-    List[TagDocument],
-    List[TagDocument]
-]:
+async def get_tags(
+    tags: List[TagModel | None] | List[TagInputModel | None],
+) -> Tuple[List[TagDocument], List[TagDocument]]:
     """
     Processes a list of tags, distinguishing between existing and new tags.
 
@@ -115,7 +130,7 @@ class Mutation:
         data: ArticleCreateInputType,
         info: strawberry.Info[
             Annotated["Context", strawberry.lazy("app.schemas.schema")]
-        ]
+        ],
     ) -> ArticleType:
         """
         Create a new article.
@@ -126,20 +141,17 @@ class Mutation:
         from app.schemas.schema import AuthorizationService
 
         article_input_model = data.to_pydantic()
-        article_input_dict = article_input_model.model_dump()
-        article_to_insert = {"translations": [], "search_content": ""}
+        article_input_dict = article_input_model.model_dump(exclude_none=True)
+        article_to_insert = {"translations": [], "author": None}
 
         # author
         author = await info.context.user
         if not author:
             raise HTTPException(
-                status_code=401,
-                detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+                status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
             )
 
-        author_res = await UserDocument.find(
-            {"email": author.email}
-        ).first_or_none()
+        author_res = await UserDocument.find({"email": author.email}).first_or_none()
 
         if not author_res:
             user_model = author
@@ -160,8 +172,7 @@ class Mutation:
         article_to_insert["author"] = inserted_author.model_dump()
 
         for index, t in enumerate(article_input_dict["translations"]):
-            if t["is_published"] is True and not \
-                    t["published_at"]:
+            if t["is_published"] is True and not t.get("published_at", None):
                 t["published_at"] = datetime.now()
             elif t["is_published"] is False:
                 t["published_at"] = None
@@ -177,14 +188,9 @@ class Mutation:
             tags = input_model_translation.tags
             if len(tags) > 0:
                 existing_tags, inserted_tags = await get_tags(tags)
-                article_to_insert["translations"][index]["tags"] = \
-                    [tag.model_dump() for tag in inserted_tags] + \
-                    [tag.model_dump() for tag in existing_tags]
-
-            # Search content
-            # Inserting article content only as it will be
-            # properly updated in the watch script
-            article_to_insert["search_content"] = article_to_insert["translations"][0]["content"]
+                article_to_insert["translations"][index]["tags"] = [
+                    tag.model_dump() for tag in inserted_tags
+                ] + [tag.model_dump() for tag in existing_tags]
 
         article_document = ArticleDocument(**article_to_insert)
         inserted_article = await ArticleDocument.insert_one(article_document)
@@ -192,7 +198,9 @@ class Mutation:
         if not inserted_article:
             raise ValueError("Article not inserted")
 
-        return transform_entity_to_type(inserted_article.model_dump(), ArticleModel, ArticleType)
+        return transform_entity_to_type(
+            inserted_article.model_dump(), ArticleModel, ArticleType
+        )
 
     @strawberry.mutation
     async def update_article(self, data: ArticleUpdateInputType) -> ArticleType:
@@ -213,7 +221,7 @@ class Mutation:
         if not current_article_document:
             raise ValueError("Article cannot be updated as it was not found")
         # 3. Make sure each translation is up-to-date
-        for i, t in enumerate(current_article_document.translations) :
+        for i, t in enumerate(current_article_document.translations):
             # header, content, is_published, published_at
             header, content, is_published = itemgetter(
                 "header", "content", "is_published"
@@ -227,8 +235,7 @@ class Mutation:
                 t.is_published = is_published
 
             if t.is_published and t.published_at is not True:
-                t.published_at = \
-                    datetime.now()
+                t.published_at = datetime.now()
             elif not t.is_published and t.published_at is not None:
                 t.published_at = None
 
@@ -238,16 +245,14 @@ class Mutation:
                 cat = await get_category(category_input_dict)
                 t.category = CategoryModel(**cat.model_dump())
 
-            # 5
             # 5. Make sure the tags are created if they don't exist
             tags = article_input_model.translations[i].tags
             if tags is not None:
                 if len(tags) > 0:
                     existing_tags, inserted_tags = await get_tags(tags)
                     new_tags = [
-                        TagModel(
-                            **tag.model_dump()
-                        ) if tag else None for tag in (inserted_tags + existing_tags)
+                        TagModel(**tag.model_dump()) if tag else None
+                        for tag in (inserted_tags + existing_tags)
                     ]
                     t.tags = new_tags
                 else:
@@ -269,7 +274,9 @@ class Mutation:
     async def delete_article(self, data: IdInputType) -> DeleteResultType:
         input_dict = data.to_pydantic().model_dump()
 
-        res = await ArticleDocument.find_one(ArticleDocument.id == input_dict["id"]).delete()
+        res = await ArticleDocument.find_one(
+            ArticleDocument.id == input_dict["id"]
+        ).delete()
 
         if not res or not res.acknowledged:
             raise ValueError("Article not deleted")
@@ -307,9 +314,9 @@ class Mutation:
         current_user_dict = current_user_document.model_dump()
 
         # Merge current_user_document with user_input_dict
-        new_user_dict = (
-            current_user_dict | {k: v for (k, v) in user_input_dict.items() if v is not None}
-        )
+        new_user_dict = current_user_dict | {
+            k: v for (k, v) in user_input_dict.items() if v is not None
+        }
 
         new_user_document = UserDocument(**new_user_dict)
         updated_user_document = await new_user_document.save()
@@ -333,15 +340,17 @@ class Mutation:
         ).set(
             {
                 CategoryDocument.name: category.name,
-                CategoryDocument.updated_at: category.updated_at
+                CategoryDocument.updated_at: category.updated_at,
             },
-            response_type=UpdateResponse.NEW_DOCUMENT
+            response_type=UpdateResponse.NEW_DOCUMENT,
         )
 
         if not updated_category:
             raise ValueError("Category not updated")
 
-        category_type = transform_entity_to_type(updated_category, CategoryModel, CategoryType)
+        category_type = transform_entity_to_type(
+            updated_category, CategoryModel, CategoryType
+        )
 
         return category_type
 
@@ -356,9 +365,13 @@ class Mutation:
         ).to_list()
 
         if len(article_documents) > 0:
-            raise ValueError("Category cannot be deleted as it is used on some articles")
+            raise ValueError(
+                "Category cannot be deleted as it is used on some articles"
+            )
 
-        res = await CategoryDocument.find_one(CategoryDocument.id == input_dict["id"]).delete()
+        res = await CategoryDocument.find_one(
+            CategoryDocument.id == input_dict["id"]
+        ).delete()
 
         if not res or res.deleted_count == 0:
             raise ValueError("Category not found")
@@ -387,11 +400,9 @@ class Mutation:
 
         tag = TagDocument(**data.to_pydantic().model_dump())
 
-        updated_tag = await TagDocument.find_one(
-            TagDocument.id == tag.id
-        ).set(
+        updated_tag = await TagDocument.find_one(TagDocument.id == tag.id).set(
             {TagDocument.name: tag.name, TagDocument.updated_at: tag.updated_at},
-            response_type=UpdateResponse.NEW_DOCUMENT
+            response_type=UpdateResponse.NEW_DOCUMENT,
         )
 
         if not updated_tag:
@@ -453,11 +464,8 @@ class Mutation:
         if not updated_article:
             raise ValueError("Updated article not found")
 
-        new_search_content = get_search_content(updated_article.model_dump())
-
         update = {
             "$set": {
-                "search_content": new_search_content,
                 "updated_at": datetime.now(),
             },
         }
@@ -474,27 +482,3 @@ class Mutation:
         )
 
         return article_type
-
-
-def get_search_content(article: dict):
-    headers: str = ""
-    content: str = ""
-    categories: str = ""
-    tags: str = ""
-    for translation in article["translations"]:
-        headers += translation["header"]
-        content += translation["content"]
-        tags += " ".join([tag["name"] for tag in translation["tags"]])
-        categories += translation["category"]["name"]
-
-    search_content = headers + " " + content + " " + tags + " " + categories
-
-    search_content = clean_html_tags(search_content)
-
-    return search_content
-
-
-# type Mutation {
-#     loginUser(input: CredentialsInput!): Tokens
-#     refreshTokens(refreshToken: String!): Tokens
-# }

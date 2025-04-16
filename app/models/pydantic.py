@@ -5,9 +5,17 @@ from typing import Annotated, List, Optional
 import pymongo
 from beanie import PydanticObjectId
 from bson import ObjectId
-from pydantic import (AfterValidator, BaseModel, BeforeValidator, ConfigDict,
-                      EmailStr, Field, SerializeAsAny, model_validator)
-from strawberry import lazy
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    EmailStr,
+    Field,
+    SerializeAsAny,
+)
+
+from app.models.utils.common import now_factory
 
 
 def check_object_id(value: str) -> PydanticObjectId:
@@ -38,36 +46,32 @@ class SortDirEnum(Enum):
     desc = pymongo.DESCENDING
 
 
-def now_factory() -> datetime:
-    return datetime.now()
-
-
 class CreatedUpdatedAtModel:
     """
     Created and updated at mixin that automatically
     updates updated_at field.
     """
 
-    created_at: datetime = Field(default_factory=now_factory)
-    updated_at: datetime = Field(default_factory=now_factory)
+    created_at: datetime = Field(..., default_factory=now_factory)  # type: ignore
+    updated_at: datetime = Field(..., default_factory=now_factory)  # type: ignore
 
     model_config = ConfigDict(
         validate_assignment=True,
     )
 
-    @model_validator(mode="after")
-    @classmethod
-    def update_updated_at(cls, obj: "CreatedUpdatedAtModel") -> "CreatedUpdatedAtModel":
-        """Update updated_at field."""
-        # must disable validation to avoid infinite loop
-        obj.model_config["validate_assignment"] = False
+    # @model_validator(mode="after")
+    # @classmethod
+    # def update_updated_at(cls, obj: "CreatedUpdatedAtModel") -> "CreatedUpdatedAtModel":
+    # """Update updated_at field."""
+    # must disable validation to avoid infinite loop
+    # obj.model_config["validate_assignment"] = False
 
-        # update updated_at field
-        obj.updated_at = now_factory()
+    # update updated_at field
+    # obj.updated_at = now_factory()
 
-        # enable validation again
-        obj.model_config["validate_assignment"] = True
-        return obj
+    # enable validation again
+    # obj.model_config["validate_assignment"] = True
+    # return obj
 
 
 class IdModel(BaseModel):
@@ -133,10 +137,29 @@ class TagUpdateInputModel(IdModel):
     name: str = Field(min_length=3, max_length=40)
 
 
-class BaseTranslationCreateInputModel(BaseModel):
+class ContentBlockModel(BaseModel):
+    id: str = Field(...)
+    type: str = Field(...)
+    data: dict
+
+
+class ContentModel(BaseModel):
+    version: Optional[str] = Field(default=None)
+    time: Optional[int] = Field(default=None)
+    blocks: List[Optional[ContentBlockModel]] = Field(...)
+
+
+class BaseContentModelOptional(BaseModel):
+    content: Optional[ContentModel] = Field(default=None)
+
+
+class BaseContentModel(BaseModel):
+    content: ContentModel = Field(...)
+
+
+class BaseTranslationCreateInputModel(BaseContentModel):
     language: LanguageEnum = Field(..., min_length=2, max_length=40)
     header: str = Field(..., min_length=3, max_length=40)
-    content: str = Field(..., min_length=30, max_length=50000)
     is_published: bool
     published_at: Optional[datetime] = Field(default=None)
 
@@ -146,10 +169,9 @@ class TranslationCreateInputModel(BaseTranslationCreateInputModel):
     tags: List[Optional[TagInputModel]] = Field(default=[])
 
 
-class TranslationUpdateInputModel(BaseModel):
+class TranslationUpdateInputModel(BaseContentModel):
     language: LanguageEnum = Field(..., min_length=2, max_length=40)
     header: Optional[str] = Field(min_length=3, max_length=40, default=None)
-    content: Optional[str] = Field(min_length=30, max_length=50000, default=None)
     is_published: Optional[bool]
     published_at: Optional[datetime] = Field(default=None)
     category: Optional[CategoryInputModel] = Field(default=None)
@@ -161,19 +183,7 @@ class TranslationModel(BaseTranslationCreateInputModel):
     tags: List[Optional[TagModel]] = Field(default=[])
 
 
-baseArticleModelDescription = "Article's headers and content from all translations stripped of html tags for search index. Filled on each header/content update. Must be supported in code."
-
-
 class BaseArticleModel(CreatedUpdatedAtModel, OptionalIdModel):
-    # Article's headers and content from all translations
-    # stripped of html tags for search index.
-    # Filled on each header/content update.
-    # Must be supported in code.
-    search_content: str = Field(
-        ...,
-        min_length=30,
-        description=baseArticleModelDescription
-    )
     translations: List[TranslationModel] = Field(default=[])
 
 
@@ -214,11 +224,10 @@ class BaseFilterModel(BaseModel):
     updated_at: Optional[datetime] = Field(default=None)
 
 
-class ArticlesFilterInputModel(BaseFilterModel):
+class ArticlesFilterInputModel(BaseFilterModel, BaseContentModelOptional):
     ids: Optional[List[PyObjectId]] = Field(default=None)
     search: Optional[str] = Field(default=None)
     header: Optional[str] = Field(default=None)
-    content: Optional[str] = Field(default=None)
     language: Optional[LanguageEnum] = Field(default=None)
     is_published: Optional[bool] = Field(default=None)
     published_at: Optional[datetime] = Field(default=None)
