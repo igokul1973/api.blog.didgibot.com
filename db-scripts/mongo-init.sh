@@ -26,7 +26,7 @@ const user = {
     phone: ADMIN_PHONE,
     first_name: ADMIN_FIRST_NAME,
     last_name: ADMIN_LAST_NAME,
-    ip: ADMIN_LAST_NAME,
+    ip: '127.0.0.1',
     last_logged_at: newDate,
     created_at: newDate,
     updated_at: newDate,
