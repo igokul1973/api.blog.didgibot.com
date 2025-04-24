@@ -29,7 +29,7 @@ pipeline {
                             keyFileVariable: 'SSH_KEY'
                         ),
                         usernamePassword(
-                            credentialsId: 'mycreds',
+                            credentialsId: 'bc934908-4192-4b50-bb32-5fad86943329',
                             usernameVariable: 'USERNAME',
                             passwordVariable: 'GH_TOKEN'
                         )
@@ -42,6 +42,7 @@ pipeline {
                             // """
                             sh """
                                 git checkout ${env.BRANCH_NAME}
+                                env
                                 semantic-release version --no-vcs-release
                             """
                             // def new_app_version = readJSON text: sh(returnStdout: true, script: 'npm version')
