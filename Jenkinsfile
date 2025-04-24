@@ -65,7 +65,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Installing Python in docker container...'
-                    docker build -f `pwd`/cicd/Dockerfile.production \
+                    docker build -f `pwd`/Dockerfile.production \
                                       --target=base ../
                   """
                 }
@@ -80,7 +80,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Installing app dependencies...'
-                    docker build -f `pwd`/cicd/Dockerfile.production --target=deps .
+                    docker build -f `pwd`/Dockerfile.production --target=deps .
                   """
                 }
             }
@@ -94,7 +94,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Copying the app...'
-                    docker build -f `pwd`/cicd/Dockerfile.production --target=app .
+                    docker build -f `pwd`/Dockerfile.production --target=app .
                   """
                 }
             }
@@ -108,7 +108,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Linting the app...'
-                    docker build -f `pwd`/cicd/Dockerfile.production --target=lint .
+                    docker build -f `pwd`/Dockerfile.production --target=lint .
                   """
                 }
             }
@@ -122,7 +122,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Preparing app image for production and starting final docker build...'
-                    docker build -f `pwd`/cicd/Dockerfile.production --target=image-production --tag=${env.APP_DOCKER_IMAGE_NAME} .
+                    docker build -f `pwd`/Dockerfile.production --target=image-production --tag=${env.APP_DOCKER_IMAGE_NAME} .
                   """
                 }
             }
