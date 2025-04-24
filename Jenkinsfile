@@ -1,15 +1,14 @@
 /* Requires the Kubernetes Pipeline plugin */
-String dockerContainerName = 'docker'
-String pythonGitContainerName = 'python-git'
-String trueString = 'true'
-String falseString = 'false'
-
 pipeline {
     environment {
         RESULTS_FILE_NAME = 'job-results.txt'
         APP_DOCKER_IMAGE_NAME = "igk19/dgb-blog-api:${BUILD_NUMBER}"
         IMAGE_TAG_NUMBER = "${BUILD_NUMBER}"
         SHOULD_BUMP_VERSION_TEXT = 'SHOULD_BUMP_VERSION'
+        DOCKER_CONTAINER_NAME = 'docker'
+        PYTHON_GIT_CONTAINER_NAME = 'python-git'
+        TRUE_STRING = 'true'
+        FALSE_STRING = 'false'
     }
     agent {
         kubernetes {
@@ -20,10 +19,10 @@ pipeline {
         stage('Prepare') { steps { check() } }
         stage('Bump version') {
             when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: trueString
+                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.TRUE_STRING
             }
             steps {
-                container(pythonGitContainerName) {
+                container(env.PYTHON_GIT_CONTAINER_NAME) {
                     withCredentials([
                         sshUserPrivateKey(
                             credentialsId: 'github_ssh_credentials',
@@ -61,10 +60,10 @@ pipeline {
         // Create Node.js docker container
         stage('Create base Python docker container') {
             when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: falseString
+                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
-                container(dockerContainerName) {
+                container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Installing Python in docker container...'
                     docker build -f `pwd`/cicd/Dockerfile.production \
@@ -76,10 +75,10 @@ pipeline {
         // Install app dependencies
         stage('Install app dependencies') {
             when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: falseString
+                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
-                container(dockerContainerName) {
+                container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Installing app dependencies...'
                     docker build -f `pwd`/cicd/Dockerfile.production --target=deps .
@@ -90,10 +89,10 @@ pipeline {
         // Copy app inside docker container
         stage('Copy app') {
             when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: falseString
+                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
-                container(dockerContainerName) {
+                container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Copying the app...'
                     docker build -f `pwd`/cicd/Dockerfile.production --target=app .
@@ -104,10 +103,10 @@ pipeline {
         // Lint app source
         stage('Lint app') {
             when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: falseString
+                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
-                container(dockerContainerName) {
+                container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Linting the app...'
                     docker build -f `pwd`/cicd/Dockerfile.production --target=lint .
@@ -118,10 +117,10 @@ pipeline {
         // Build app docker image
         stage('Expose port and build app docker image') {
             when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: falseString
+                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
-                container(dockerContainerName) {
+                container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Preparing app image for production and starting final docker build...'
                     docker build -f `pwd`/cicd/Dockerfile.production --target=image-production --tag=${env.APP_DOCKER_IMAGE_NAME} .
@@ -132,10 +131,10 @@ pipeline {
         // Push app image it to the Docker Hub
         stage('Push app image') {
             when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: falseString
+                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
-                container(dockerContainerName) {
+                container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Starting app image push...'
                     docker push ${env.APP_DOCKER_IMAGE_NAME}
@@ -150,7 +149,7 @@ pipeline {
         // Start another job
         stage('Change image in didgibot.com deployment') {
             when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: falseString
+                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
                 build job: 'change-image-name-in-invoice-didgibot-com/api-blog', parameters: [
@@ -169,18 +168,18 @@ pipeline {
 
 void check() {
     env.BUILD_RESULT = 'ABORTED'
-    env.SHOULD_BUMP_VERSION = falseString
+    env.SHOULD_BUMP_VERSION = env.FALSE_STRING
     // `result` will be equal to 0 if the last commit message contains '[version bump]'.
     result = sh(script: "git log -1 | grep '.*\\[version bump\\].*'", returnStatus: true)
     // If the `result` is not equal to 0, the commit message does not contain '[version bump]'
     // so we should bump the version.
     if (result != 0) {
-        env.SHOULD_BUMP_VERSION = trueString
+        env.SHOULD_BUMP_VERSION = env.TRUE_STRING
     }
 }
 
 void postProcess() {
-    if (env.SHOULD_BUMP_VERSION == trueString) {
+    if (env.SHOULD_BUMP_VERSION == env.TRUE_STRING) {
         env.BUILD_RESULT = "BUMPED APPLICATION VERSION TO ${env.NEW_APP_VERSION}"
     }
     writeFile file: env.RESULTS_FILE_NAME, text: "The job build result: ${env.BUILD_RESULT}"
