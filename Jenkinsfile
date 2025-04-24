@@ -37,7 +37,7 @@ pipeline {
                             // """
                             sh """
                                 git checkout ${env.BRANCH_NAME}
-                                semantic-release version --no-vcs-release
+                                semantic-release version
                             """
                             // def new_app_version = readJSON text: sh(returnStdout: true, script: 'npm version')
                             String newAppVersion = sh(
