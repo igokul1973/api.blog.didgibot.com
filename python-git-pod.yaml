@@ -6,7 +6,7 @@ metadata:
 spec:
     containers:
         - name: python-git
-          image: igk19/python-git:1.0.0
+          image: igk19/python-git:1.0.1
           command:
               - sleep
           args:

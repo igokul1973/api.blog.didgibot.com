@@ -31,9 +31,8 @@ pipeline {
                     ]) {
                         script {
                             sh """
-                                git config --global --add safe.directory ${env.WORKSPACE}
                                 git checkout ${env.BRANCH_NAME}
-                                semantic-release version
+                                semantic-release version --no-vcs-release
                                 git add --all
                             """
                             // def new_app_version = readJSON text: sh(returnStdout: true, script: 'npm version')
