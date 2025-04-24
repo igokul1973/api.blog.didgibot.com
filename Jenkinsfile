@@ -24,6 +24,7 @@ pipeline {
                             sh """
                                 git config --global --add safe.directory ${env.WORKSPACE}
                                 git checkout ${env.BRANCH_NAME}
+                                semantic-release version
                                 npm version --no-git-tag-version patch
                                 git add --all
                             """
