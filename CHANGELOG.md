@@ -1,7 +1,7 @@
 # CHANGELOG
 
 
-## v0.1.0 (2025-04-24)
+## v0.1.2 (2025-04-24)
 
 ### Bug Fixes
 
@@ -14,14 +14,30 @@
 - Additional modifications in CICD files. WIP.
   ([`7feeeaa`](https://github.com/igokul1973/api.blog.didgibot.com/commit/7feeeaa26a6d66572410fff67aabb149f179e6c1))
 
-- Changes related to versioning. WIP.
-  ([`202542a`](https://github.com/igokul1973/api.blog.didgibot.com/commit/202542a73e294e32c4ed518f1c513c4a4d84c4f9))
+- Another fix 2. WIP.
+  ([`f763e1a`](https://github.com/igokul1973/api.blog.didgibot.com/commit/f763e1a072782a3f1d0d3ddf52b889cbe649f0ca))
+
+- Another fix. WIP.
+  ([`e60cc68`](https://github.com/igokul1973/api.blog.didgibot.com/commit/e60cc68a9a71de43cfc343b366763d4f472d2205))
+
+- Fixed wrong path. WIP.
+  ([`36a8e08`](https://github.com/igokul1973/api.blog.didgibot.com/commit/36a8e088ca3ee65ef3e478a482c64ff7008bfb78))
+
+
+## v0.1.1 (2025-04-24)
+
+### Bug Fixes
 
 - Fixed variables in Jenkinsfile. WIP.
   ([`95718df`](https://github.com/igokul1973/api.blog.didgibot.com/commit/95718dfa0b3c8543cda04c7e833e3e01934c4f1a))
 
-- Fixed wrong path. WIP.
-  ([`36a8e08`](https://github.com/igokul1973/api.blog.didgibot.com/commit/36a8e088ca3ee65ef3e478a482c64ff7008bfb78))
+
+## v0.1.0 (2025-04-23)
+
+### Bug Fixes
+
+- Changes related to versioning. WIP.
+  ([`202542a`](https://github.com/igokul1973/api.blog.didgibot.com/commit/202542a73e294e32c4ed518f1c513c4a4d84c4f9))
 
 ### Continuous Integration
 
