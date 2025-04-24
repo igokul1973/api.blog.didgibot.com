@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.1 (2025-04-24)
+
+### Bug Fixes
+
+- Fixed variables in Jenkinsfile. WIP.
+  ([`95718df`](https://github.com/igokul1973/api.blog.didgibot.com/commit/95718dfa0b3c8543cda04c7e833e3e01934c4f1a))
+
+
 ## v0.1.0 (2025-04-23)
 
 ### Bug Fixes
