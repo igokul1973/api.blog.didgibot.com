@@ -27,6 +27,11 @@ pipeline {
                         sshUserPrivateKey(
                             credentialsId: 'github_ssh_credentials',
                             keyFileVariable: 'SSH_KEY'
+                        ),
+                        usernamePassword(
+                            credentialsId: 'mycreds',
+                            usernameVariable: 'USERNAME',
+                            passwordVariable: 'GH_TOKEN'
                         )
                     ]) {
                         script {
