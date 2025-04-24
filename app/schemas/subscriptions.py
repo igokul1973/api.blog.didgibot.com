@@ -7,10 +7,8 @@ from fastapi_events.handlers.local import local_handler
 from fastapi_events.typing import Event
 from jose import JWTError
 from loguru import logger
-from pydantic import ValidationError
 
 from app.models.utils.errors import ConfigException
-from app.schemas.typeDefs import TokenType
 
 
 class MyEvent:
@@ -48,9 +46,7 @@ async def handle_all_events(event: Event):
 @strawberry.type
 class Subscription:
     @strawberry.subscription
-    async def jwt(
-        self, info: strawberry.Info
-    ) -> AsyncGenerator[str, None]:
+    async def jwt(self, info: strawberry.Info) -> AsyncGenerator[str, None]:
         from app.schemas.schema import AuthorizationService
 
         bearer_token = await info.context.token
@@ -69,5 +65,6 @@ class Subscription:
         except ConfigException as e:
             raise HTTPException(status_code=401, detail=str(e))
         except (KeyError, JWTError):
-            raise HTTPException(status_code=401, detail=AuthorizationService.INVALID_TOKEN_MESSAGE)
-
+            raise HTTPException(
+                status_code=401, detail=AuthorizationService.INVALID_TOKEN_MESSAGE
+            )

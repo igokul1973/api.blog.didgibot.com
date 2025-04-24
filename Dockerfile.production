@@ -1,0 +1,27 @@
+# Step 1: Create node container
+FROM python:3.12-alpine as base
+
+# Step 2: Update apk and install alpine dependencies
+FROM base AS apk
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk update && apk add --no-cache libc6-compat
+ENV ENVIRONMENT=production
+
+# Step 3: Install app dependencies
+FROM apk AS deps
+WORKDIR /code
+COPY ./requirements.txt /code/requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -U -r /code/requirements.txt && RUN pip install flake8
+
+# Step 4: Copy application
+FROM deps AS app
+COPY ./app/ /code/app/
+
+# Step 5: Lint the app
+FROM app AS lint
+RUN flake8 --config=setup.cfg --count --show-source --statistics app && pip uninstall flake8
+
+# Step 6: Expose port and run app
+EXPOSE 8888
+
+CMD ["fastapi", "run", "--host", "0.0.0.0", "--port", "8888"]

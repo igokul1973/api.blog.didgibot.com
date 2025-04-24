@@ -1,8 +1,6 @@
 from typing import Annotated, Any, List, Optional
 
 from beanie import PydanticObjectId
-from bson import ObjectId
-from pydantic import BaseModel
 from strawberry import lazy
 
 from app.models.beanie import (
@@ -18,7 +16,6 @@ from app.models.pydantic import (
     PyObjectId,
     TagModel,
     UserModel,
-    UserModelPartial,
 )
 from app.schemas.typeDefs import (
     ArticlesFilterInputType,
