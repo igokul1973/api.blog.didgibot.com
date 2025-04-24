@@ -32,7 +32,7 @@ pipeline {
                         script {
                             sh """
                                 git checkout ${env.BRANCH_NAME}
-                                semantic-release version --no-vcs-release
+                                semantic-release version --no-vcs-release --no-commit --no-push
                                 git add --all
                             """
                             // def new_app_version = readJSON text: sh(returnStdout: true, script: 'npm version')
