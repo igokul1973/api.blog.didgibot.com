@@ -20,6 +20,9 @@
 - Fixed variables in Jenkinsfile. WIP.
   ([`95718df`](https://github.com/igokul1973/api.blog.didgibot.com/commit/95718dfa0b3c8543cda04c7e833e3e01934c4f1a))
 
+- Fixed wrong path. WIP.
+  ([`36a8e08`](https://github.com/igokul1973/api.blog.didgibot.com/commit/36a8e088ca3ee65ef3e478a482c64ff7008bfb78))
+
 ### Continuous Integration
 
 - Started implementation of CI/CD pipelines.
