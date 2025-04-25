@@ -57,14 +57,6 @@ pipeline {
                         }
                     }
                 }
-                withCredentials([sshUserPrivateKey(
-                    credentialsId: 'github_ssh_credentials',
-                    keyFileVariable: 'SSH_KEY'
-                )]) {
-                    sshagent(credentials: ['github_ssh_credentials']) {
-                        sh 'git push'
-                    }
-                }
             }
         }
         // Create Node.js docker container
