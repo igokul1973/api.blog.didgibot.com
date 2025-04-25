@@ -146,7 +146,7 @@ pipeline {
                 environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
-                build job: 'change-image-name-in-invoice-didgibot-com/api-blog', parameters: [
+                build job: 'change-image-name-in-blog-api-didgibot-com/api-blog', parameters: [
                   string(name: 'IMAGE_TAG_NUMBER', value: env.IMAGE_TAG_NUMBER)
                 ]
             }
