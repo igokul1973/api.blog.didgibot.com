@@ -35,13 +35,15 @@ pipeline {
                         )
                     ]) {
                         script {
-                            sh "git checkout ${env.BRANCH_NAME}"
-                            sh 'git fetch'
-                            sh 'semantic-release version --no-vcs-release'
-                            String newAppVersion = sh(
+                            sh """
+                                git checkout ${env.BRANCH_NAME}
+                                git fetch
+                                semantic-release version --no-vcs-release
+                            """
+                            def newAppVersion = sh(
                                 returnStdout: true,
                                 script: "python -c 'from app.version import __version__; print(__version__)'"
-                            )
+                            ).trim()
                             sh "The new application version is: ${newAppVersion}"
                             env.NEW_APP_VERSION = newAppVersion
                         }
