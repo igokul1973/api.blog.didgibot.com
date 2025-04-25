@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.22 (2025-04-25)
+
+### Bug Fixes
+
+- Turned on diagnostic mode (sleep infinity). WIP.
+  ([`8cfd4e0`](https://github.com/igokul1973/api.blog.didgibot.com/commit/8cfd4e0b390b7841c91f4e8659e75b8da7b12b14))
+
+
 ## v0.1.21 (2025-04-25)
 
 ### Bug Fixes
