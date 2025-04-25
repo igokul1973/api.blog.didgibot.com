@@ -35,25 +35,17 @@ pipeline {
                         )
                     ]) {
                         script {
-                            // sh """
-                            //     git checkout ${env.BRANCH_NAME}
-                            //     semantic-release version --no-vcs-release
-                            //     git add --all
-                            // """
                             sh """
                                 git checkout ${env.BRANCH_NAME}
                                 git fetch
                                 semantic-release version --no-vcs-release
                             """
-                            // def new_app_version = readJSON text: sh(returnStdout: true, script: 'npm version')
                             String newAppVersion = sh(
                                 returnStdout: true,
                                 script: "python -c 'from app.version import __version__; print(__version__)'"
                             )
                             sh "The new application version is: ${newAppVersion}"
                             env.NEW_APP_VERSION = newAppVersion
-                        // def commit_message = "Upgrade to new application version - ${env.NEW_APP_VERSION} - [version bump]"
-                        // sh "git commit -m '${commit_message}'"
                         }
                     }
                 }
