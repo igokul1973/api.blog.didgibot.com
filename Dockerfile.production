@@ -11,12 +11,12 @@ ENV ENVIRONMENT=production
 FROM apk AS deps
 WORKDIR /code
 COPY ./requirements.txt /code/requirements.txt
+COPY ./setup.cfg /code/setup.cfg
 RUN pip install --upgrade pip && pip install --no-cache-dir -U -r /code/requirements.txt && pip install flake8
 
 # Step 4: Copy application
 FROM deps AS app
 COPY ./app/ /code/app/
-WORKDIR /code
 
 # Step 5: Lint the app
 FROM app AS lint

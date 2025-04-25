@@ -51,7 +51,7 @@ pipeline {
                                 script: "python -c 'from app.version import __version__; print(__version__)'"
                             )
                             sh "The new application version is: ${newAppVersion}"
-                            // env.NEW_APP_VERSION = newAppVersion
+                            env.NEW_APP_VERSION = newAppVersion
                             // def commit_message = "Upgrade to new application version - ${env.NEW_APP_VERSION} - [version bump]"
                             // sh "git commit -m '${commit_message}'"
                         }
