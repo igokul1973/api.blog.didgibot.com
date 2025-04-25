@@ -44,8 +44,8 @@ pipeline {
                                 returnStdout: true,
                                 script: "python -c 'from app.version import __version__; print(__version__)'"
                             ).trim()
-                            sh "The new application version is: ${newAppVersion}"
-                            // env.NEW_APP_VERSION = newAppVersion
+                            // sh "The new application version is: ${newAppVersion}"
+                            env.NEW_APP_VERSION = newAppVersion
                         }
                     }
                 }
