@@ -34,19 +34,15 @@ pipeline {
                             passwordVariable: 'GH_TOKEN'
                         )
                     ]) {
-                        script {
-                            sh """
-                                git checkout ${env.BRANCH_NAME}
-                                git fetch
-                                semantic-release version --no-vcs-release
-                            """
-                            String newAppVersion = sh(
-                                returnStdout: true,
-                                script: "python -c 'from app.version import __version__; print(__version__)'"
-                            )
-                            sh "The new application version is: ${newAppVersion}"
-                            env.NEW_APP_VERSION = newAppVersion
-                        }
+                        sh "git checkout ${env.BRANCH_NAME}"
+                        sh 'git fetch'
+                        sh 'semantic-release version --no-vcs-release'
+                        String newAppVersion = sh(
+                            returnStdout: true,
+                            script: "python -c 'from app.version import __version__; print(__version__)'"
+                        )
+                        sh "The new application version is: ${newAppVersion}"
+                        env.NEW_APP_VERSION = newAppVersion
                     }
                 }
             }
