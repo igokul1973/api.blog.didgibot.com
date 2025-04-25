@@ -42,7 +42,7 @@ pipeline {
                             // """
                             sh """
                                 git checkout ${env.BRANCH_NAME}
-                                git pull
+                                git fetch
                                 env
                                 semantic-release version --no-vcs-release
                             """
