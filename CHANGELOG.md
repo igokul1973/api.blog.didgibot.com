@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.17 (2025-04-25)
+
+### Bug Fixes
+
+- Another fix 15. WIP.
+  ([`e5b2af8`](https://github.com/igokul1973/api.blog.didgibot.com/commit/e5b2af8a80ffc695629e543e7b008a4086b5add7))
+
+
 ## v0.1.16 (2025-04-25)
 
 ### Bug Fixes
