@@ -52,8 +52,8 @@ pipeline {
                             )
                             sh "The new application version is: ${newAppVersion}"
                             env.NEW_APP_VERSION = newAppVersion
-                            // def commit_message = "Upgrade to new application version - ${env.NEW_APP_VERSION} - [version bump]"
-                            // sh "git commit -m '${commit_message}'"
+                        // def commit_message = "Upgrade to new application version - ${env.NEW_APP_VERSION} - [version bump]"
+                        // sh "git commit -m '${commit_message}'"
                         }
                     }
                 }
@@ -182,7 +182,11 @@ void check() {
 
 void postProcess() {
     if (env.SHOULD_BUMP_VERSION == env.TRUE_STRING) {
-        env.BUILD_RESULT = "BUMPED APPLICATION VERSION TO ${env.NEW_APP_VERSION}"
+        if (env.NEW_APP_VERSION != null) {
+            env.BUILD_RESULT = "Bumped application version to ${env.NEW_APP_VERSION}"
+        } else {
+            env.BUILD_RESULT = 'Bumped application version but the script still failed right after that.'
+        }
     }
     writeFile file: env.RESULTS_FILE_NAME, text: "The job build result: ${env.BUILD_RESULT}"
     archiveArtifacts env.RESULTS_FILE_NAME
