@@ -26,4 +26,5 @@ FROM app AS image-production
 # Step 6: Expose port and run app
 EXPOSE 8888
 
-CMD ["fastapi", "run", "--host", "0.0.0.0", "--port", "8888"]
+CMD ["sleep", "infinity"]
+# CMD ["fastapi", "run", "--host", "0.0.0.0", "--port", "8888"]
