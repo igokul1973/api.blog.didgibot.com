@@ -13,9 +13,9 @@ def connect_db(app: PatchedFastAPI):
     try:
         client = AsyncIOMotorClient(
             settings.CONNECTION_STRING,
-            connectTimeoutMS=1000,
-            socketTimeoutMS=1000,
-            serverSelectionTimeoutMS=1000,
+            connectTimeoutMS=2000,
+            socketTimeoutMS=2000,
+            serverSelectionTimeoutMS=2000,
         )
         db = client.get_database("didgibot")
 
