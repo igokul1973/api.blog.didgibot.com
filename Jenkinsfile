@@ -90,7 +90,7 @@ pipeline {
                         container(env.DOCKER_CONTAINER_NAME) {
                             sh """
                     echo 'Linting the app...'
-                    docker build -f `pwd`/Dockerfile.production --target=lint .
+                    docker build --network=host -f `pwd`/Dockerfile.production --target=lint .
                   """
                         }
                     }
