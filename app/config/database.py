@@ -10,14 +10,16 @@ def connect_db(app: PatchedFastAPI):
 
     print("The connection string:", settings.CONNECTION_STRING)
 
-    client = AsyncIOMotorClient(
-        settings.CONNECTION_STRING,
-        connectTimeoutMS=1000,
-        socketTimeoutMS=1000,
-        serverSelectionTimeoutMS=1000,
-    )
+    try:
+        client = AsyncIOMotorClient(
+            settings.CONNECTION_STRING,
+            connectTimeoutMS=1000,
+            socketTimeoutMS=1000,
+            serverSelectionTimeoutMS=1000,
+        )
+        db = client.get_database("didgibot")
 
-    db = client.get_database("didgibot")
-
-    app.mongo_client = client
-    app.db = db
+        app.mongo_client = client
+        app.db = db
+    except Exception as e:
+        print(e)
