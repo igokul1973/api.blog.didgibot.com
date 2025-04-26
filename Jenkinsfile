@@ -60,7 +60,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Installing Python in docker container...'
-                    docker build -f `pwd`/Dockerfile.production \
+                    docker build ${env.RUNNER_APP_DOCKER_IMAGE_NAME} -f `pwd`/Dockerfile.production \
                         --target=base --tag=${env.RUNNER_APP_DOCKER_IMAGE_NAME} .
                   """
                 }
@@ -105,7 +105,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Linting the app...'
-                    docker build  --cache-from ${env.RUNNER_APP_DOCKER_IMAGE_NAME} -f `pwd`/Dockerfile.production --target=lint --tag=${env.RUNNER_APP_DOCKER_IMAGE_NAME} .
+                    docker build  --cache-from ${env.RUNNER_APP_DOCKER_IMAGE_NAME} -f `pwd`/Dockerfile.production --target=lint .
                   """
                 }
             }
