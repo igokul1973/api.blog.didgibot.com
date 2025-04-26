@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.26 (2025-04-26)
+
+### Bug Fixes
+
+- Added network=host in the docker build command. WIP.
+  ([`a41d0d0`](https://github.com/igokul1973/api.blog.didgibot.com/commit/a41d0d0187fbc2e1ccf3bdb33093897ac23634d8))
+
+
 ## v0.1.25 (2025-04-26)
 
 ### Bug Fixes
