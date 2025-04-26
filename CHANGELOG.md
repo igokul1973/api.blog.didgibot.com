@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.25 (2025-04-26)
+
+### Bug Fixes
+
+- Changed connection string diagnostic message. WIP.
+  ([`ac86120`](https://github.com/igokul1973/api.blog.didgibot.com/commit/ac86120db3479db6988397b34e2ecbb8f5561589))
+
+
 ## v0.1.24 (2025-04-26)
 
 ### Bug Fixes
