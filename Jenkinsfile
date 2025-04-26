@@ -42,8 +42,7 @@ pipeline {
                             """
                             def newAppVersion = sh(
                                 returnStdout: true,
-                                script: "python -c 'from app.version import __version__; print(__version__)'"
-                            ).trim()
+                                script: "python -c 'from app.version import __version__; print(__version__)'").trim()
                             // sh "The new application version is: ${newAppVersion}"
                             env.NEW_APP_VERSION = newAppVersion
                         }
@@ -75,7 +74,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Installing app dependencies...'
-                    docker build -f `pwd`/Dockerfile.production --target=deps .
+                    docker build --network=host -f `pwd`/Dockerfile.production --target=deps .
                   """
                 }
             }
