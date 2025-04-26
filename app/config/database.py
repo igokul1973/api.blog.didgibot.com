@@ -8,7 +8,7 @@ def connect_db(app: PatchedFastAPI):
     print("Connecting to database...")
     # Set the Stable API version when creating a new client
 
-    print("Connection string:", settings.CONNECTION_STRING)
+    print("The connection string:", settings.CONNECTION_STRING)
 
     client = AsyncIOMotorClient(
         settings.CONNECTION_STRING,
