@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.38 (2025-04-26)
+
+### Bug Fixes
+
+- Another attempt to fix connection to DB 2. WIP.
+  ([`b1bba00`](https://github.com/igokul1973/api.blog.didgibot.com/commit/b1bba00a2da4276b95f1f2db3ee7981154a4a954))
+
+
 ## v0.1.37 (2025-04-26)
 
 ### Bug Fixes
