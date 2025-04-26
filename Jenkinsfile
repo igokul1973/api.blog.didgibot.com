@@ -72,6 +72,8 @@ pipeline {
             }
             steps {
                 container(env.DOCKER_CONTAINER_NAME) {
+                    // Using --network=host to access the host's docker socket as
+                    // the installation of pip packages takes forever without it.
                     sh """
                     echo 'Installing app dependencies...'
                     docker build --network=host -f `pwd`/Dockerfile.production --target=deps .
@@ -88,7 +90,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Copying the app...'
-                    docker build -f `pwd`/Dockerfile.production --target=app .
+                    docker build --network=host -f `pwd`/Dockerfile.production --target=app .
                   """
                 }
             }
