@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.33 (2025-04-26)
+
+### Bug Fixes
+
+- Reorganized some Jenkins pipeline stages. WIP.
+  ([`b8a1ae2`](https://github.com/igokul1973/api.blog.didgibot.com/commit/b8a1ae2782941393319ec799eba00d949226917d))
+
+
 ## v0.1.32 (2025-04-26)
 
 ### Bug Fixes
