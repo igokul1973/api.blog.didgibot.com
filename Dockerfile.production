@@ -14,7 +14,7 @@ COPY ./app/ /code/app/
 
 # Step 5: Lint the app
 FROM app AS lint
-COPY ./setup.cfg /setup.cfg
+COPY ./setup.cfg ./setup.cfg
 RUN pip install flake8 && flake8 --config=setup.cfg --count --show-source --statistics app
 
 # Step 3: Install app dependencies
