@@ -2,7 +2,6 @@
 pipeline {
     environment {
         RESULTS_FILE_NAME = 'job-results.txt'
-        RUNNER_APP_DOCKER_IMAGE_NAME = 'igk19/dgb-blog-api:runner'
         APP_DOCKER_IMAGE_NAME = "igk19/dgb-blog-api:${BUILD_NUMBER}"
         IMAGE_TAG_NUMBER = "${BUILD_NUMBER}"
         SHOULD_BUMP_VERSION_TEXT = 'SHOULD_BUMP_VERSION'
@@ -60,8 +59,8 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Installing Python in docker container...'
-                    docker build --cache-from=${env.RUNNER_APP_DOCKER_IMAGE_NAME} -f `pwd`/Dockerfile.production \
-                        --target=base --tag=${env.RUNNER_APP_DOCKER_IMAGE_NAME} .
+                    docker build -f `pwd`/Dockerfile.production \
+                        --target=base .
                   """
                 }
             }
@@ -77,7 +76,7 @@ pipeline {
                     // the installation of pip packages takes forever without it.
                     sh """
                     echo 'Installing app dependencies...'
-                    docker build --cache-from=${env.RUNNER_APP_DOCKER_IMAGE_NAME} --network=host -f `pwd`/Dockerfile.production --target=deps --tag=${env.RUNNER_APP_DOCKER_IMAGE_NAME} .
+                    docker build --network=host -f `pwd`/Dockerfile.production --target=deps .
                   """
                 }
             }
@@ -91,7 +90,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Copying the app...'
-                    docker build --network=host --cache-from=${env.RUNNER_APP_DOCKER_IMAGE_NAME} -f `pwd`/Dockerfile.production --target=app --tag=${env.RUNNER_APP_DOCKER_IMAGE_NAME} .
+                    docker build --network=host -f `pwd`/Dockerfile.production --target=app .
                   """
                 }
             }
@@ -105,7 +104,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Linting the app...'
-                    docker build  --cache-from=${env.RUNNER_APP_DOCKER_IMAGE_NAME} -f `pwd`/Dockerfile.production --target=lint .
+                    docker build -f `pwd`/Dockerfile.production --target=lint .
                   """
                 }
             }
@@ -119,7 +118,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Preparing app image for production and starting final docker build...'
-                    docker build --cache-from=${env.RUNNER_APP_DOCKER_IMAGE_NAME} -f `pwd`/Dockerfile.production --target=image-production --tag=${env.APP_DOCKER_IMAGE_NAME} .
+                    docker build -f `pwd`/Dockerfile.production --target=image-production .
                   """
                 }
             }
