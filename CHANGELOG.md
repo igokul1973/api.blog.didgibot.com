@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.24 (2025-04-26)
+
+### Bug Fixes
+
+- Returned everything to previous state. WIP.
+  ([`c3370cc`](https://github.com/igokul1973/api.blog.didgibot.com/commit/c3370cc0f6059c901161116b8620e869dbf67d63))
+
+
 ## v0.1.23 (2025-04-26)
 
 ### Bug Fixes
