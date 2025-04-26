@@ -65,22 +65,6 @@ pipeline {
                 }
             }
         }
-        // Install app dependencies
-        stage('Install app dependencies') {
-            when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
-            }
-            steps {
-                container(env.DOCKER_CONTAINER_NAME) {
-                    // Using --network=host to access the host's docker socket as
-                    // the installation of pip packages takes forever without it.
-                    sh """
-                    echo 'Installing app dependencies...'
-                    docker build --network=host -f `pwd`/Dockerfile.production --target=deps -t ${env.DOCKER_CONTAINER_NAME} .
-                  """
-                }
-            }
-        }
         // Copy app inside docker container
         stage('Copy app') {
             when {
@@ -95,17 +79,37 @@ pipeline {
                 }
             }
         }
-        // Lint app source
-        stage('Lint app') {
-            when {
-                environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
-            }
-            steps {
-                container(env.DOCKER_CONTAINER_NAME) {
-                    sh """
+        stage('Lint and dependencies') {
+            parallel {
+                // Lint app source
+                stage('Lint app') {
+                    when {
+                        environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
+                    }
+                    steps {
+                        container(env.DOCKER_CONTAINER_NAME) {
+                            sh """
                     echo 'Linting the app...'
                     docker build -f `pwd`/Dockerfile.production --target=lint .
                   """
+                        }
+                    }
+                }
+                // Install app dependencies
+                stage('Install app dependencies') {
+                    when {
+                        environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
+                    }
+                    steps {
+                        container(env.DOCKER_CONTAINER_NAME) {
+                            // Using --network=host to access the host's docker socket as
+                            // the installation of pip packages takes forever without it.
+                            sh """
+                    echo 'Installing app dependencies...'
+                    docker build --network=host -f `pwd`/Dockerfile.production --target=deps -t ${env.DOCKER_CONTAINER_NAME} .
+                  """
+                        }
+                    }
                 }
             }
         }

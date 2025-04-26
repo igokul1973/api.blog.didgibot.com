@@ -7,14 +7,8 @@ FROM base AS apk
 RUN apk update && apk add --no-cache libc6-compat
 ENV ENVIRONMENT=production
 
-# Step 3: Install app dependencies
-FROM apk AS deps
-WORKDIR /code
-COPY ./requirements.txt /code/requirements.txt
-RUN pip install --default-timeout=50 --no-cache-dir --upgrade pip && pip install --default-timeout=50 --no-cache-dir -r /code/requirements.txt
-
 # Step 4: Copy application
-FROM deps AS app
+FROM apk AS app
 COPY ./app/ /code/app/
 
 # Step 5: Lint the app
@@ -22,7 +16,13 @@ FROM app AS lint
 COPY ./setup.cfg /code/setup.cfg
 RUN pip install flake8 && flake8 --config=setup.cfg --count --show-source --statistics app
 
-FROM app AS image-production
+# Step 3: Install app dependencies
+FROM app AS deps
+WORKDIR /code
+COPY ./requirements.txt /code/requirements.txt
+RUN pip install --default-timeout=50 --no-cache-dir --upgrade pip && pip install --default-timeout=50 --no-cache-dir -r /code/requirements.txt
+
+FROM deps AS image-production
 # Step 6: Expose port and run app
 EXPOSE 8888
 
