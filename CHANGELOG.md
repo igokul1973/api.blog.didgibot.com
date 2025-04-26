@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.23 (2025-04-26)
+
+### Bug Fixes
+
+- Added mongosh to docker image. WIP.
+  ([`5100a19`](https://github.com/igokul1973/api.blog.didgibot.com/commit/5100a199db2a6f10f2b540057a20d0af81b70019))
+
+
 ## v0.1.22 (2025-04-25)
 
 ### Bug Fixes
