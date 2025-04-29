@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.39 (2025-04-29)
+
+### Bug Fixes
+
+- Added some debug messages. WIP.
+  ([`fdb391c`](https://github.com/igokul1973/api.blog.didgibot.com/commit/fdb391c3fa366c05ea40682036d0b01132332174))
+
+
 ## v0.1.38 (2025-04-26)
 
 ### Bug Fixes
