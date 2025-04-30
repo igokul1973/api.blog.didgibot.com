@@ -28,14 +28,14 @@ class Settings(BaseSettings):
     PORT: int = env.int("MONGO_REPLICA_PORT", 27017)
     HOST: str = env.str("MONGO_REPLICA_HOST", "password")
 
-    # CONNECTION_STRING: str = (
-    #     f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/didgibot"
-    #     + "?authSource=admin&replicaSet=rs0&directConnection=true"
-    # )
     CONNECTION_STRING: str = (
         f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/didgibot"
-        + "?authSource=admin&directConnection=true"
+        + "?authSource=admin&replicaSet=rs0&directConnection=true"
     )
+    # CONNECTION_STRING: str = (
+    #     f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/didgibot"
+    #     + "?authSource=admin&directConnection=true"
+    # )
 
     # Token
     SECRET_KEY: str | None = env.str("JWT_SECRET", None)  # in seconds
