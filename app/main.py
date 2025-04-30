@@ -23,8 +23,8 @@ from app.schemas.schema import AuthorizationService, graphql_router
 
 environment = os.getenv("ENVIRONMENT")
 
-if environment == "production":
-    sys.tracebacklimit = 0
+# if environment == "production":
+#     sys.tracebacklimit = 0
 
 # The subprocess is used to run the watcher in a separate process
 # to avoid blocking the main process and to watch DB events
