@@ -39,7 +39,7 @@ async def lifespan(app: PatchedFastAPI):
         print("Now trying to initialize the beanie!")
         # await init_beanie(database=app.db, document_models=models)
         await init_beanie(
-            database=app.db,
+            # database=app.db,
             connection_string=settings.CONNECTION_STRING,
             document_models=models,
         )
