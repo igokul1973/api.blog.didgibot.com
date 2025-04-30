@@ -34,7 +34,7 @@ environment = os.getenv("ENVIRONMENT")
 
 @asynccontextmanager
 async def lifespan(app: PatchedFastAPI):
-    connect_db(app)
+    # connect_db(app)
     try:
         print("Now trying to initialize the beanie!")
         await init_beanie(database=app.db, document_models=models)
@@ -53,6 +53,9 @@ async def lifespan(app: PatchedFastAPI):
         except Exception as e:
             print("Still could not initialize Beanie... Retrying...")
             logger.error(e)
+    except Exception as e:
+        print("Could not connect beanie!")
+        logger.error(e)
     yield
     app.mongo_client.close()
     logger.error("Closed mongo client connection to DB")
