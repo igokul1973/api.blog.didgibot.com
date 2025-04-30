@@ -14,7 +14,7 @@ from fastapi_events.middleware import EventHandlerASGIMiddleware
 from loguru import logger
 from pymongo.errors import OperationFailure
 
-from app.config.database import connect_db
+# from app.config.database import connect_db
 from app.config.settings import settings
 from app.models.beanie import UserDocument, models
 from app.models.pydantic import TokenModel
@@ -39,7 +39,7 @@ async def lifespan(app: PatchedFastAPI):
         print("Now trying to initialize the beanie!")
         # await init_beanie(database=app.db, document_models=models)
         await init_beanie(
-            # database=app.db,
+            database=app.db,
             connection_string=settings.CONNECTION_STRING,
             document_models=models,
         )
