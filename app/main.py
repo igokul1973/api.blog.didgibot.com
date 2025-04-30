@@ -37,7 +37,10 @@ async def lifespan(app: PatchedFastAPI):
     # connect_db(app)
     try:
         print("Now trying to initialize the beanie!")
-        await init_beanie(database=app.db, document_models=models)
+        # await init_beanie(database=app.db, document_models=models)
+        await init_beanie(
+            connection_string=settings.CONNECTION_STRING, document_models=models
+        )
         print("Success with beanie!")
     except OperationFailure:
         print("Could not initialize Beanie... Retrying...")
