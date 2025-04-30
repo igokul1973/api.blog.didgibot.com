@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.41 (2025-04-30)
+
+### Bug Fixes
+
+- Added traceback. WIP.
+  ([`9b07b20`](https://github.com/igokul1973/api.blog.didgibot.com/commit/9b07b20dc068f45649889cb6a99bcd4f30bbe2e9))
+
+
 ## v0.1.40 (2025-04-30)
 
 ### Bug Fixes
