@@ -28,9 +28,13 @@ class Settings(BaseSettings):
     PORT: int = env.int("MONGO_REPLICA_PORT", 27017)
     HOST: str = env.str("MONGO_REPLICA_HOST", "password")
 
+    # CONNECTION_STRING: str = (
+    #     f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/didgibot"
+    #     + "?authSource=admin&replicaSet=rs0&directConnection=true"
+    # )
     CONNECTION_STRING: str = (
-        f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/"
-        + "?authSource=admin&replicaSet=rs0&directConnection=true"
+        f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/didgibot"
+        + "?authSource=admin&directConnection=true"
     )
 
     # Token
