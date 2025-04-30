@@ -23,6 +23,7 @@ def connect_db(app: PatchedFastAPI):
 
         app.mongo_client = client
         app.db = db
+        print("Assigned to app mongo_client and db variables...")
     except Exception as e:
         print("In the exception!")
         print(e)

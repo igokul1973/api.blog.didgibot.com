@@ -62,3 +62,5 @@ mongoKeyfile
 # Tests
 playground.mongodb.js
 playground2.mongodb.js
+
+Dockerfile.mongosh

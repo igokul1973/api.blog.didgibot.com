@@ -17,24 +17,25 @@ services:
         depends_on:
             - dgb-blog-mongo
         # command: ["python", "../app/main.py"]
-        command:
-            - python
-            - "-m"
-            - "debugpy"
-            - "--listen"
-            - "0.0.0.0:${DEBUG_PORT}"
-            - "-m"
-            - "uvicorn"
-            - "app.main:app"
-            - "--reload"
-            - "--host"
-            - "0.0.0.0"
-            - "--port"
-            - "${BACKEND_PORT}"
-            - "--log-level"
-            - "trace"
-            - "--timeout-graceful-shutdown"
-            - "0"
+        command: ["fastapi", "run", "--host", "0.0.0.0", "--port", "8888"]
+        # command:
+        #     - python
+        #     - "-m"
+        #     - "debugpy"
+        #     - "--listen"
+        #     - "0.0.0.0:${DEBUG_PORT}"
+        #     - "-m"
+        #     - "uvicorn"
+        #     - "app.main:app"
+        #     - "--reload"
+        #     - "--host"
+        #     - "0.0.0.0"
+        #     - "--port"
+        #     - "${BACKEND_PORT}"
+        #     - "--log-level"
+        #     - "trace"
+        #     - "--timeout-graceful-shutdown"
+        #     - "0"
 
         restart: always
         volumes:
@@ -66,23 +67,35 @@ services:
             - dgb-blog-mongo
             - dgb-blog-backend
         command:
-            - python
-            - "-m"
-            - "debugpy"
-            - "--listen"
-            - "0.0.0.0:${DEBUG_PORT}"
-            - "-m"
-            - "uvicorn"
-            - "app.watch:app"
-            - "--reload"
-            - "--host"
-            - "0.0.0.0"
-            - "--port"
-            - "${BACKEND_PORT}"
-            - "--log-level"
-            - "trace"
-            - "--timeout-graceful-shutdown"
-            - "0"
+            [
+                "fastapi",
+                "run",
+                "app/watch.py",
+                "--app",
+                "app",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8889",
+            ]
+        # command:
+        #     - python
+        #     - "-m"
+        #     - "debugpy"
+        #     - "--listen"
+        #     - "0.0.0.0:${DEBUG_PORT}"
+        #     - "-m"
+        #     - "uvicorn"
+        #     - "app.watch:app"
+        #     - "--reload"
+        #     - "--host"
+        #     - "0.0.0.0"
+        #     - "--port"
+        #     - "${BACKEND_PORT}"
+        #     - "--log-level"
+        #     - "trace"
+        #     - "--timeout-graceful-shutdown"
+        #     - "0"
         restart: always
         volumes:
             - ./app:/code/app

@@ -37,7 +37,9 @@ async def lifespan(app: PatchedFastAPI):
     try:
         print("Now trying to initialize the beanie!")
         await init_beanie(database=app.db, document_models=models)
+        print("Success with beanie!")
     except OperationFailure:
+        print("Could not initialize Beanie... Retrying...")
         sleep_time = 3
         logger.warning(
             "It seems the Beanie could not initialize due to DB connection failure."
@@ -48,6 +50,7 @@ async def lifespan(app: PatchedFastAPI):
         try:
             await init_beanie(database=app.db, document_models=models)
         except Exception as e:
+            print("Still could not initialize Beanie... Retrying...")
             logger.error(e)
     yield
     app.mongo_client.close()
