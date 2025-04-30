@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.40 (2025-04-30)
+
+### Bug Fixes
+
+- More diagnostic messages... WIP.
+  ([`32449d4`](https://github.com/igokul1973/api.blog.didgibot.com/commit/32449d4f7223fa2fedeb21b99656a07ab3be3b78))
+
+
 ## v0.1.39 (2025-04-29)
 
 ### Bug Fixes
