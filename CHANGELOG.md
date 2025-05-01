@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.49 (2025-05-01)
+
+### Bug Fixes
+
+- Returned codebase to previous state - removed all debug messages. WIP.
+  ([`da1b641`](https://github.com/igokul1973/api.blog.didgibot.com/commit/da1b6413789dd230b6d819a18018981169b0c1b3))
+
+
 ## v0.1.48 (2025-04-30)
 
 ### Bug Fixes
