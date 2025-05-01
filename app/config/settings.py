@@ -32,10 +32,6 @@ class Settings(BaseSettings):
         f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/didgibot"
         + "?authSource=admin&replicaSet=rs0&directConnection=true"
     )
-    # CONNECTION_STRING: str = (
-    #     f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/didgibot"
-    #     + "?authSource=admin&directConnection=true"
-    # )
 
     # Token
     SECRET_KEY: str | None = env.str("JWT_SECRET", None)  # in seconds

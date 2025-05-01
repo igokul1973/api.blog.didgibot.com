@@ -1,6 +1,5 @@
 import os
-
-# import sys
+import sys
 from asyncio import sleep
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime, timedelta
@@ -14,7 +13,7 @@ from fastapi_events.middleware import EventHandlerASGIMiddleware
 from loguru import logger
 from pymongo.errors import OperationFailure
 
-# from app.config.database import connect_db
+from app.config.database import connect_db
 from app.config.settings import settings
 from app.models.beanie import UserDocument, models
 from app.models.pydantic import TokenModel
@@ -24,8 +23,8 @@ from app.schemas.schema import AuthorizationService, graphql_router
 
 environment = os.getenv("ENVIRONMENT")
 
-# if environment == "production":
-#     sys.tracebacklimit = 0
+if environment == "production":
+    sys.tracebacklimit = 0
 
 # The subprocess is used to run the watcher in a separate process
 # to avoid blocking the main process and to watch DB events
@@ -34,19 +33,11 @@ environment = os.getenv("ENVIRONMENT")
 
 @asynccontextmanager
 async def lifespan(app: PatchedFastAPI):
-    # connect_db(app)
+    connect_db(app)
     try:
         print("Now trying to initialize the beanie!")
-        print("The connection string:", settings.CONNECTION_STRING)
-        # await init_beanie(database=app.db, document_models=models)
-        await init_beanie(
-            # database=app.db,
-            connection_string=settings.CONNECTION_STRING,
-            document_models=models,
-        )
-        print("Success with beanie!")
+        await init_beanie(database=app.db, document_models=models)
     except OperationFailure:
-        print("Could not initialize Beanie... Retrying...")
         sleep_time = 3
         logger.warning(
             "It seems the Beanie could not initialize due to DB connection failure."
@@ -62,9 +53,6 @@ async def lifespan(app: PatchedFastAPI):
         except Exception as e:
             print("Still could not initialize Beanie... Retrying...")
             logger.error(e)
-    except Exception as e:
-        print("Could not connect beanie!")
-        logger.error(e)
     yield
     app.mongo_client.close()
     logger.error("Closed mongo client connection to DB")
