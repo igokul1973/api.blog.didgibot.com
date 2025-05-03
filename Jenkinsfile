@@ -150,8 +150,7 @@ pipeline {
                 environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
             steps {
-                def jobName = 'change-image-name-in-blog-api-didgibot-com/' + env.BRANCH_NAME
-                build job: jobName, parameters: [
+                build job: 'change-image-name-in-blog-api-didgibot-com/' + env.BRANCH_NAME, parameters: [
                   string(name: 'IMAGE_TAG_NUMBER', value: env.IMAGE_TAG_NUMBER)
                 ]
             }
