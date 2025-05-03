@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.3 (2025-05-03)
+
+### Bug Fixes
+
+- Fixed Jenkinsfile and Dockerfile.production.
+  ([`275dfb9`](https://github.com/igokul1973/api.blog.didgibot.com/commit/275dfb957a99b67b34498a4b3d518621e3e32dee))
+
+
 ## v0.0.2 (2025-05-03)
 
 ### Bug Fixes
