@@ -58,7 +58,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Installing Python in docker container...'
-                    docker build --no-cache -f `pwd`/Dockerfile.production \
+                    docker build -f `pwd`/Dockerfile.production \
                         --target=base -t ${env.DOCKER_CONTAINER_NAME} .
                   """
                 }
@@ -121,7 +121,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Preparing app image for production and starting final docker build...'
-                    docker build -f `pwd`/Dockerfile.production --target=image-production -t ${env.APP_DOCKER_IMAGE_NAME} .
+                    docker build -f --network=host `pwd`/Dockerfile.production --target=image-production -t ${env.APP_DOCKER_IMAGE_NAME} .
                   """
                 }
             }
