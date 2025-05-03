@@ -121,7 +121,7 @@ pipeline {
                 container(env.DOCKER_CONTAINER_NAME) {
                     sh """
                     echo 'Preparing app image for production and starting final docker build...'
-                    docker build -f --network=host `pwd`/Dockerfile.production --target=image-production -t ${env.APP_DOCKER_IMAGE_NAME} .
+                    docker build --network=host -f `pwd`/Dockerfile.production --target=image-production -t ${env.APP_DOCKER_IMAGE_NAME} .
                   """
                 }
             }
