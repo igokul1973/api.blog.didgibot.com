@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.5 (2025-05-07)
+
+### Bug Fixes
+
+- Another minor fix for articles fetch.
+  ([`5a79830`](https://github.com/igokul1973/api.blog.didgibot.com/commit/5a79830d8d3bcd3fa4fb1d279f3c4c1b1f188bdd))
+
+
 ## v0.0.4 (2025-05-03)
 
 ### Bug Fixes
