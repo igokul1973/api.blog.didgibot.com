@@ -105,7 +105,7 @@ async def get_articles(
     if "filter" in r:
         articles = ArticleDocument.find(r["filter"])
     else:
-        articles = ArticleDocument.find()
+        articles = ArticleDocument.find_all()
 
     if limit:
         articles = articles.limit(limit)
