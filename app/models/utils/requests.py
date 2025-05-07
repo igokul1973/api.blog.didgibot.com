@@ -102,7 +102,10 @@ async def get_articles(
     if is_search:
         r["projection"] = {"score": {"$meta": "textScore"}}
 
-    articles = ArticleDocument.find(r["filter"])
+    if "filter" in r:
+        articles = ArticleDocument.find(r["filter"])
+    else:
+        articles = ArticleDocument.find()
 
     if limit:
         articles = articles.limit(limit)

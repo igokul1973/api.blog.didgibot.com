@@ -7,6 +7,7 @@ spec:
     containers:
         - name: python-git
           image: igk19/python-git:1.0.1
+          automountServiceAccountToken: false
           command:
               - sleep
           args:
@@ -14,11 +15,17 @@ spec:
           securityContext:
               runAsUser: 1000 # default UID of jenkins user in agent image
           resources:
+              requests:
+                  memory: "512Mi"
+                  cpu: "400m"
+                  ephemeral-storage: "500Mi"
               limits:
                   memory: "512Mi"
-                  cpu: "200m"
+                  cpu: "400m"
+                  ephemeral-storage: "500Mi"
         - name: docker
           image: igk19/docker:dind1
+          automountServiceAccountToken: false
           # This env var is for making sure buildx runs in the pipeline.
           # Else it complains that the /root/.docker/buildx is read-only
           # It is due to the volume mount into the /root/.docker below...
@@ -27,9 +34,14 @@ spec:
                 value: /tmp/buildx
           tty: true
           resources:
+              requests:
+                  memory: "512Mi"
+                  cpu: "400m"
+                  ephemeral-storage: "500Mi"
               limits:
                   memory: "1024Mi"
                   cpu: "500m"
+                  ephemeral-storage: "1000Mi"
           securityContext:
               privileged: true
           volumeMounts:

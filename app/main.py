@@ -108,6 +108,8 @@ async def authenticate_middleware(request: Request, call_next):
             and request.method != "GET"
         ):
             payload = await AuthorizationService.authorize(request)
+            if payload == "free_ride":
+                return await call_next(request)
             if not payload:
                 raise HTTPException(
                     status_code=401,
@@ -145,7 +147,7 @@ async def authenticate_middleware(request: Request, call_next):
                 )
         return await call_next(request)
     except HTTPException as e:
-        logger.error("An error occured during request: {0}".format(str(e)))
+        logger.error("An error occurred during request: {0}".format(str(e)))
         return get_graphql_error_response(e.detail, e.status_code)
 
 

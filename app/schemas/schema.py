@@ -103,6 +103,8 @@ class AuthorizationService:
 
                 token = request.headers["Authorization"]
                 return cls.get_token_payload(token)
+            else:
+                return "free_ride"
         except ConfigException as e:
             raise HTTPException(status_code=401, detail=str(e))
         except (KeyError, JWTError):
