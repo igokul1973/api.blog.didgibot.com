@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.6 (2025-05-10)
+
+### Bug Fixes
+
+- Fixed transform_ids function.
+  ([`cda3dfa`](https://github.com/igokul1973/api.blog.didgibot.com/commit/cda3dfa91c196f3c47d13341088d96b07072e5bd))
+
+
 ## v0.0.5 (2025-05-07)
 
 ### Bug Fixes
