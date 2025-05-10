@@ -72,17 +72,38 @@ def transform_id(entity: dict) -> dict:
     return {k: v for k, v in entity.items() if k != "_id"}
 
 
-def transform_ids_recursive(entity: dict) -> dict:
+def _transform_ids_recursive(entity: dict | list) -> dict | list:
+    """
+    Recursively transforms a nested data structure
+    (dict or list) by replacing "_id" with "id" in all
+    dictionaries found.
+
+    Attn:
+    This function must be used only by "transform_ids" function!
+
+    Args:
+        entity (dict | list): The data structure to
+            transform.
+
+    Returns:
+        dict | list: The transformed data structure.
+    """
+    if not isinstance(entity, dict):
+        return entity
     if "_id" in entity:
         entity = transform_id(entity)
     for key, value in entity.items():
         if isinstance(value, list):
             for i, item in enumerate(value):
-                value[i] = transform_ids_recursive(item)
+                value[i] = _transform_ids_recursive(item)
         if isinstance(value, dict):
-            entity[key] = transform_ids_recursive(value)
-
+            entity[key] = _transform_ids_recursive(value)
     return entity
+
+
+def transform_ids(entity: dict) -> dict:
+    handled_entity = _transform_ids_recursive(entity)
+    return handled_entity if isinstance(handled_entity, dict) else {}
 
 
 def transform_entity_to_type(
@@ -92,7 +113,7 @@ def transform_entity_to_type(
 ) -> StrawberryTypeFromPydantic[PydanticModel]:
     if isinstance(entity, Document):
         entity = entity.model_dump()
-    entity = transform_ids_recursive(entity)
+    entity = transform_ids(entity)
     k = model(**entity)
     return strawberry_type.from_pydantic(k)
 
