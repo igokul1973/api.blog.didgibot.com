@@ -39,6 +39,8 @@ def get_graphql_error_response(
 
 
 def transform_object_to_serializable(entity: dict) -> dict:
+    if not isinstance(entity, dict):
+        return entity
     for key, value in entity.items():
         if isinstance(value, PydanticObjectId):
             entity[key] = str(value)
