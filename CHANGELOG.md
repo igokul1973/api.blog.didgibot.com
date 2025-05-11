@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.7 (2025-05-11)
+
+### Bug Fixes
+
+- Fixed transform_object_to_serializable function.
+  ([`e2844b6`](https://github.com/igokul1973/api.blog.didgibot.com/commit/e2844b6787b85943b2a0b585e2be8a10209e7369))
+
+
 ## v0.0.6 (2025-05-10)
 
 ### Bug Fixes
