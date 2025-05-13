@@ -1,10 +1,12 @@
 import sys
+import traceback
 from datetime import UTC, datetime, timedelta
 from functools import cached_property
 from typing import List, Optional
 
 from environs import Env
 from fastapi import HTTPException, WebSocket
+from fastapi.responses import JSONResponse
 from graphql import GraphQLFormattedError
 from jose import JWTError, jwt
 from loguru import logger
@@ -15,7 +17,8 @@ from strawberry import Schema
 from strawberry.fastapi import BaseContext, GraphQLRouter
 from strawberry.http import GraphQLHTTPResponse
 from strawberry.schema.config import StrawberryConfig
-from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL, GRAPHQL_WS_PROTOCOL
+from strawberry.subscriptions import (GRAPHQL_TRANSPORT_WS_PROTOCOL,
+                                      GRAPHQL_WS_PROTOCOL)
 from strawberry.types import ExecutionResult
 
 from app.config.settings import Settings, settings
@@ -43,6 +46,8 @@ logger.add(
 
 class AuthorizationService:
     PROTECTED_ENDPOINTS: List[str] = [
+        "/api/uploadFile",
+        "/api/fetchUrl",
         "users",
         "get_users",
         "set_user",
@@ -95,9 +100,12 @@ class AuthorizationService:
         # This'll probably be done in the middleware or on the
         # web server level.
         try:
-            graphql_query = await request.json()
+            operation_name = request.url.path
+            if operation_name.startswith(settings.GRAPHQL_PREFIX):
+                graphql_query = await request.json()
+                operation_name = graphql_query["operationName"].lower()
             if (
-                graphql_query["operationName"].lower() in cls.PROTECTED_ENDPOINTS
+                operation_name in cls.PROTECTED_ENDPOINTS
                 or "Authorization" in request.headers
             ):
 

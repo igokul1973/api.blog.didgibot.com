@@ -1,11 +1,14 @@
 import os
 import sys
+import traceback
 from asyncio import sleep
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime, timedelta
 
+import httpx
 from beanie import init_beanie
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, File, HTTPException, Request, UploadFile
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_events.dispatcher import dispatch
 from fastapi_events.handlers.local import local_handler
@@ -102,8 +105,10 @@ async def authenticate_middleware(request: Request, call_next):
     Middleware function to check for JWT token
     """
     try:
+        # TODO: Questionable authorization logic
+        # Redo when possible.
         if (
-            request.url.path == settings.GRAPHQL_PREFIX
+            request.url.path != settings.LOGIN_PREFIX
             and request.method != "OPTIONS"
             and request.method != "GET"
         ):
@@ -148,7 +153,29 @@ async def authenticate_middleware(request: Request, call_next):
         return await call_next(request)
     except HTTPException as e:
         logger.error("An error occurred during request: {0}".format(str(e)))
-        return get_graphql_error_response(e.detail, e.status_code)
+        if (
+            request.url.path == settings.GRAPHQL_PREFIX
+        ):
+            return get_graphql_error_response(e.detail, e.status_code)
+        else:
+            return JSONResponse(
+                content={
+                    "message": e.detail
+                },
+                status_code=e.status_code,
+            )
+    except Exception as e:
+        logger.error("An unexpected error occured during request: {0}".format(str(e)))
+        logger.info(
+            "Traceback is: {0}".format(str(traceback.format_tb(e.__traceback__, 10)))
+        )
+        return JSONResponse(
+            content={
+                "message": "Unexpected error occured during request processing. \
+                Our team has been notified."
+            },
+            status_code=500,
+        )
 
 
 @app.post("/api/login", response_model=TokenModel)
@@ -185,6 +212,54 @@ async def log_in(
 
     token_payload = {"access_token": access_token, "token_type": "bearer"}
     return token_payload
+
+
+@app.post("/api/uploadFile")
+async def upload_file(
+    image: UploadFile = File(...)
+):
+    from app.config.settings import settings
+
+    try:
+        async with httpx.AsyncClient() as client:
+            # post to client the image as a formdata
+            formData = {"image": image.file.read()}
+            print('Requesting URL:', settings.UPLOAD_FILE_URL)
+            response = await client.post(
+                settings.UPLOAD_FILE_URL,
+                files=formData,
+                headers={"Content-Type": "multipart/form-data"},
+            )
+            response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+            print(response)
+
+        # return JSON response containing settings
+        return JSONResponse(content={"upload": response.json()}, status_code=200)
+
+    except httpx.ConnectError as e:
+        print(f"Connection error: {e}")
+        return JSONResponse(content={"error": "Failed to connect to the server"}, status_code=500)
+
+    except httpx.TimeoutException as e:
+        print(f"Timeout error: {e}")
+        return JSONResponse(content={"error": "Request timed out"}, status_code=500)
+
+    except httpx.HTTPError as e:
+        print(f"HTTP error: {e}")
+        return JSONResponse(content={"error": "Failed to upload file"}, status_code=e.status_code)
+
+    except Exception as e:
+        print(f"Unknown error: {e}")
+        return JSONResponse(content={"error": "An unknown error occurred"}, status_code=500)
+
+@app.post("/api/fetchUrl", response_model=TokenModel)
+async def fetchUrl(
+    form_data: OAuth2PasswordRequestForm = Depends(), request: Request = None
+):
+    from app.config.settings import settings
+
+    # return JSON response containing settings
+    return JSONResponse(content={"cra": "tra"}, status_code=200)
 
 
 # # Install middleware to catch all exceptions
