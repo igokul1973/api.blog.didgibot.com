@@ -1,12 +1,10 @@
 import sys
-import traceback
 from datetime import UTC, datetime, timedelta
 from functools import cached_property
 from typing import List, Optional
 
 from environs import Env
 from fastapi import HTTPException, WebSocket
-from fastapi.responses import JSONResponse
 from graphql import GraphQLFormattedError
 from jose import JWTError, jwt
 from loguru import logger

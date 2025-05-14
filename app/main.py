@@ -7,7 +7,7 @@ from datetime import UTC, datetime, timedelta
 
 import httpx
 from beanie import init_beanie
-from fastapi import Depends, File, HTTPException, Request, UploadFile
+from fastapi import Depends, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_events.dispatcher import dispatch
@@ -256,14 +256,14 @@ async def upload_file(image: UploadFile):
         )
 
 
-@app.post("/api/fetchUrl", response_model=TokenModel)
-async def fetchUrl(
-    form_data: OAuth2PasswordRequestForm = Depends(), request: Request = None
-):
-    from app.config.settings import settings
+# @app.post("/api/fetchUrl", response_model=TokenModel)
+# async def fetchUrl(
+#     form_data: OAuth2PasswordRequestForm = Depends(), request: Request = None
+# ):
+#     from app.config.settings import settings
 
-    # return JSON response containing settings
-    return JSONResponse(content={"cra": "tra"}, status_code=200)
+#     # return JSON response containing settings
+#     return JSONResponse(content={"cra": "tra"}, status_code=200)
 
 
 # # Install middleware to catch all exceptions
