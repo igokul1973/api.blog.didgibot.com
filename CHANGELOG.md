@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.8 (2025-05-14)
+
+### Bug Fixes
+
+- Minor fix in settings.
+  ([`a81c55d`](https://github.com/igokul1973/api.blog.didgibot.com/commit/a81c55db042773f3ca0edb1270198f3ffb7b789f))
+
+
 ## v0.0.7 (2025-05-11)
 
 ### Bug Fixes
