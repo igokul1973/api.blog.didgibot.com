@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.9 (2025-05-14)
+
+### Bug Fixes
+
+- Fixed linter errors.
+  ([`6ef491b`](https://github.com/igokul1973/api.blog.didgibot.com/commit/6ef491bd9d0c5632486c81d5caeabee1cabc4920))
+
+
 ## v0.0.8 (2025-05-14)
 
 ### Bug Fixes
