@@ -153,15 +153,11 @@ async def authenticate_middleware(request: Request, call_next):
         return await call_next(request)
     except HTTPException as e:
         logger.error("An error occurred during request: {0}".format(str(e)))
-        if (
-            request.url.path == settings.GRAPHQL_PREFIX
-        ):
+        if request.url.path == settings.GRAPHQL_PREFIX:
             return get_graphql_error_response(e.detail, e.status_code)
         else:
             return JSONResponse(
-                content={
-                    "message": e.detail
-                },
+                content={"message": e.detail},
                 status_code=e.status_code,
             )
     except Exception as e:
@@ -215,30 +211,34 @@ async def log_in(
 
 
 @app.post("/api/uploadFile")
-async def upload_file(
-    image: UploadFile = File(...)
-):
+async def upload_file(image: UploadFile):
     from app.config.settings import settings
 
     try:
         async with httpx.AsyncClient() as client:
             # post to client the image as a formdata
-            formData = {"image": image.file.read()}
-            print('Requesting URL:', settings.UPLOAD_FILE_URL)
+            files = {"image": image.file.read()}
+            form_data = {
+                "bucket": settings.UPLOAD_BUCKET,
+                "accountId": "dgb-blog",
+                "entityId": "article",
+                "filename": image.filename,
+            }
+
             response = await client.post(
-                settings.UPLOAD_FILE_URL,
-                files=formData,
-                headers={"Content-Type": "multipart/form-data"},
+                settings.UPLOAD_FILE_URL, data=form_data, files=files
             )
             response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-            print(response)
 
         # return JSON response containing settings
-        return JSONResponse(content={"upload": response.json()}, status_code=200)
+        return JSONResponse(content=response.json(), status_code=200)
 
     except httpx.ConnectError as e:
         print(f"Connection error: {e}")
-        return JSONResponse(content={"error": "Failed to connect to the server"}, status_code=500)
+        return JSONResponse(
+            content={"error": "Failed to connect to the server"},
+            status_code=500,
+        )
 
     except httpx.TimeoutException as e:
         print(f"Timeout error: {e}")
@@ -246,11 +246,15 @@ async def upload_file(
 
     except httpx.HTTPError as e:
         print(f"HTTP error: {e}")
-        return JSONResponse(content={"error": "Failed to upload file"}, status_code=e.status_code)
+        return JSONResponse(content={"error": "Failed to upload file"}, status_code=400)
 
     except Exception as e:
         print(f"Unknown error: {e}")
-        return JSONResponse(content={"error": "An unknown error occurred"}, status_code=500)
+        return JSONResponse(
+            content={"error": "An unknown error occurred"},
+            status_code=500,
+        )
+
 
 @app.post("/api/fetchUrl", response_model=TokenModel)
 async def fetchUrl(

@@ -40,6 +40,7 @@ class Settings(BaseSettings):
 
     # Fileservice
     UPLOAD_FILE_URL: str = env.str("FILE_SERVICE_URL", "http://127.0.0.1:8080/api/file")
+    UPLOAD_BUCKET: str = env.str("FILE_SERVICE_BUCKET", "images")
 
 
 settings = Settings()
