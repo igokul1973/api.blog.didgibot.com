@@ -7,35 +7,18 @@ import strawberry
 from beanie import PydanticObjectId, UpdateResponse
 from fastapi import HTTPException
 
-from app.models.beanie import (
-    ArticleDocument,
-    CategoryDocument,
-    TagDocument,
-    UserDocument,
-)
-from app.models.pydantic import (
-    ArticleModel,
-    CategoryModel,
-    TagInputModel,
-    TagModel,
-    UserModel,
-)
+from app.models.beanie import (ArticleDocument, CategoryDocument, TagDocument,
+                               UserDocument)
+from app.models.pydantic import (ArticleModel, CategoryModel, TagInputModel,
+                                 TagModel, UserModel)
 from app.models.utils.common import transform_entity_to_type
-from app.schemas.typeDefs import (
-    ArticleCreateInputType,
-    ArticleType,
-    ArticleUpdateInputType,
-    CategoryCreateInputType,
-    CategoryType,
-    CategoryUpdateInputType,
-    DeleteResultType,
-    IdInputType,
-    TagCreateInputType,
-    TagType,
-    TagUpdateInputType,
-    UserType,
-    UserUpdateFilterInputType,
-)
+from app.schemas.typeDefs import (ArticleCreateInputType, ArticleType,
+                                  ArticleUpdateInputType,
+                                  CategoryCreateInputType, CategoryType,
+                                  CategoryUpdateInputType, DeleteResultType,
+                                  IdInputType, TagCreateInputType, TagType,
+                                  TagUpdateInputType, UserType,
+                                  UserUpdateFilterInputType)
 
 if TYPE_CHECKING:
     from app.schemas.schema import Context

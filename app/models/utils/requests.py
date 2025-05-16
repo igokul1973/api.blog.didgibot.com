@@ -3,31 +3,14 @@ from typing import Annotated, Any, List, Optional
 from beanie import PydanticObjectId
 from strawberry import lazy
 
-from app.models.beanie import (
-    ArticleDocument,
-    CategoryDocument,
-    TagDocument,
-    UserDocument,
-)
-from app.models.pydantic import (
-    ArticleModel,
-    CategoryModel,
-    EntityEnum,
-    PyObjectId,
-    TagModel,
-    UserModel,
-)
-from app.schemas.typeDefs import (
-    ArticlesFilterInputType,
-    ArticleType,
-    CategoriesFilterInputType,
-    CategoryType,
-    SortInputType,
-    TagsFilterInputType,
-    TagType,
-    UsersFilterInputType,
-    UserType,
-)
+from app.models.beanie import (ArticleDocument, CategoryDocument, TagDocument,
+                               UserDocument)
+from app.models.pydantic import (ArticleModel, CategoryModel, EntityEnum,
+                                 PyObjectId, TagModel, UserModel)
+from app.schemas.typeDefs import (ArticlesFilterInputType, ArticleType,
+                                  CategoriesFilterInputType, CategoryType,
+                                  SortInputType, TagsFilterInputType, TagType,
+                                  UsersFilterInputType, UserType)
 
 
 def wrap_search_query(query):
@@ -79,6 +62,45 @@ async def get_articles(
         }
         filter_dict.update(content_filter)
         filter_input_dict.pop("content")
+
+    if filter_input_dict["created_at"]:
+        if filter_input_dict["created_at"]["from_"]:
+            created_at_filter = {
+                "created_at": {"$gte": filter_input_dict["created_at"]["from_"]}
+            }
+            filter_dict.update(created_at_filter)
+        if filter_input_dict["created_at"]["to_"]:
+            created_at_filter = {
+                "created_at": {"$lte": filter_input_dict["created_at"]["to_"]}
+            }
+            filter_dict.update(created_at_filter)
+        filter_input_dict.pop("created_at")
+
+    if filter_input_dict["updated_at"]:
+        if filter_input_dict["updated_at"]["from_"]:
+            updated_at_filter = {
+                "updated_at": {"$gte": filter_input_dict["updated_at"]["from_"]}
+            }
+            filter_dict.update(updated_at_filter)
+        if filter_input_dict["updated_at"]["to_"]:
+            updated_at_filter = {
+                "updated_at": {"$lte": filter_input_dict["updated_at"]["to_"]}
+            }
+            filter_dict.update(updated_at_filter)
+        filter_input_dict.pop("updated_at")
+
+    if filter_input_dict["published_at"]:
+        if filter_input_dict["published_at"]["from_"]:
+            published_at_filter = {
+                "published_at": {"$gte": filter_input_dict["published_at"]["from_"]}
+            }
+            filter_dict.update(published_at_filter)
+        if filter_input_dict["published_at"]["to_"]:
+            published_at_filter = {
+                "published_at": {"$lte": filter_input_dict["published_at"]["to_"]}
+            }
+            filter_dict.update(published_at_filter)
+        filter_input_dict.pop("published_at")
 
     if "search" in filter_input_dict:
         if filter_input_dict["search"]:
