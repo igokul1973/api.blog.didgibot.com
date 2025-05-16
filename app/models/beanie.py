@@ -8,7 +8,6 @@ from app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel
 
 
 class ArticleDocument(Document, ArticleModel):
-
     class Settings:
         name = "articles"
         indexes = [
@@ -19,6 +18,7 @@ class ArticleDocument(Document, ArticleModel):
                     ("translations.category.name", TEXT),
                     ("translations.content.blocks.data.text", TEXT),
                     ("translations.content.blocks.data.content", TEXT),
+                    ("translations.content.blocks.data.code", TEXT),
                     ("translations.content.blocks.data.items.content", TEXT),
                     ("translations.content.blocks.data.items.code", TEXT),
                     ("translations.content.blocks.data.items.cols.text", TEXT),
@@ -31,6 +31,7 @@ class ArticleDocument(Document, ArticleModel):
                     "translations.category.name": 5,
                     "translations.content.blocks.data.text": 5,
                     "translations.content.blocks.data.content": 5,
+                    "translations.content.blocks.data.code": 5,
                     "translations.content.blocks.data.items.content": 5,
                     "translations.content.blocks.data.items.code": 5,
                     "translations.content.blocks.data.items.cols.text": 5,

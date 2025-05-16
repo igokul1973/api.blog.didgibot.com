@@ -219,9 +219,14 @@ class SortModel(BaseModel):
     dir: SortDirEnum
 
 
+class BaseDateRangeModel(BaseModel):
+    to_: Optional[datetime] = Field(default=None)
+    from_: Optional[datetime] = Field(default=None)
+
+
 class BaseFilterModel(BaseModel):
-    created_at: Optional[datetime] = Field(default=None)
-    updated_at: Optional[datetime] = Field(default=None)
+    created_at: Optional[BaseDateRangeModel] = Field(default=None)
+    updated_at: Optional[BaseDateRangeModel] = Field(default=None)
 
 
 class ArticlesFilterInputModel(BaseFilterModel, BaseContentModelOptional):
@@ -230,7 +235,7 @@ class ArticlesFilterInputModel(BaseFilterModel, BaseContentModelOptional):
     header: Optional[str] = Field(default=None)
     language: Optional[LanguageEnum] = Field(default=None)
     is_published: Optional[bool] = Field(default=None)
-    published_at: Optional[datetime] = Field(default=None)
+    published_at: Optional[BaseDateRangeModel] = Field(default=None)
     user_id: Optional[PyObjectId] = Field(default=None)
 
 

@@ -10,6 +10,7 @@ from app.models.pydantic import (
     ArticleModelPartial,
     ArticlesFilterInputModel,
     ArticleUpdateInputModel,
+    BaseDateRangeModel,
     CategoriesFilterInputModel,
     CategoryCreateInputModel,
     CategoryInputModel,
@@ -292,8 +293,20 @@ class ArticleUpdateInputType:
 class UserInputType: ...
 
 
+@strawberry.experimental.pydantic.input(model=BaseDateRangeModel, all_fields=True)
+class BaseDateRangeInput: ...
+
+
+@strawberry.experimental.pydantic.input(
+    model=ArticlesFilterInputModel, fields=["ids", "search"]
+)
 @strawberry.experimental.pydantic.input(model=ArticlesFilterInputModel, all_fields=True)
 class ArticlesFilterInputType: ...
+
+
+# published_at: Optional[BaseDateRangeModel] = Field(default=None)
+# created_at: Optional[BaseDateRangeModel] = Field(default=None)
+# updated_at: Optional[BaseDateRangeModel] = Field(default=None)
 
 
 @strawberry.experimental.pydantic.input(model=UsersFilterInputModel, all_fields=True)

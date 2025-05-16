@@ -62,19 +62,18 @@ async def handle_article_insert(inserted_document: dict):
 
 async def handle_article_update(updated_document: dict):
     """
-    This function updates 'users' table, but only in case
-    the author of the article did not change. Else we
-    fall into a circular dependency.
-    It also updates the article's search content.
+    This function updates 'users' table, but only in case the
+    article itself changed, not its updated_at field and the author
+    of the article. Else - we fall into a circular dependency.
     """
     updated_fields = updated_document["updateDescription"]["updatedFields"]
     try:
-        if (
-            "author" in updated_fields
-            and "updated_at" in updated_fields
-            and len(updated_fields) == 2
-        ):
-            pass  # NOSONAR
+        if "author" in updated_fields and len(updated_fields) == 1:
+            return logger.info(
+                "Only an author of the article was updated. "
+                "It means the user associated with the author "
+                "already has the same changes. Nothing to do..."
+            )
         else:
             # Update user document with updated article
             updated_article_document = await ArticleDocument.get(
@@ -105,6 +104,9 @@ async def handle_article_update(updated_document: dict):
             if updated_article["id"] in [
                 article["id"] for article in user_to_update_model["articles"]
             ]:
+                """
+                Update article in 'users' table
+                """
                 updated_user = await user_to_update.update(
                     {
                         "$set": {
@@ -115,6 +117,9 @@ async def handle_article_update(updated_document: dict):
                     array_filters=[{"article.id": updated_article["id"]}],
                 )
             else:
+                """
+                Add article to 'users' table
+                """
                 updated_user = await user_to_update.update(
                     {
                         "$push": {"articles": updated_article},
@@ -172,7 +177,9 @@ async def handle_user_update(updated_document: dict):
         # I'll do it. This way we can get via one article all articles
         # written by the same author, and via one author all his or her
         # articles.
-        set_query = {"$set": {"author": author, "updated_at": datetime.now()}}
+
+        # article.
+        set_query = {"$set": {"author": author}}
         updated_articles = await ArticleDocument.find(
             ArticleDocument.author.id == updated_user_id
         ).update_many(set_query)
@@ -343,7 +350,11 @@ async def lifespan(app: PatchedFastAPI):
 
     try:
         print("Now trying to initialize the beanie!")
-        await init_beanie(database=app.db, document_models=models)
+        await init_beanie(
+            database=app.db,
+            document_models=models,
+            allow_index_dropping=True,
+        )
     except OperationFailure:
         sleep_time = 3
         logger.warning(

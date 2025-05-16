@@ -15,8 +15,7 @@ from strawberry import Schema
 from strawberry.fastapi import BaseContext, GraphQLRouter
 from strawberry.http import GraphQLHTTPResponse
 from strawberry.schema.config import StrawberryConfig
-from strawberry.subscriptions import (GRAPHQL_TRANSPORT_WS_PROTOCOL,
-                                      GRAPHQL_WS_PROTOCOL)
+from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL, GRAPHQL_WS_PROTOCOL
 from strawberry.types import ExecutionResult
 
 from app.config.settings import Settings, settings
@@ -190,7 +189,6 @@ def get_context() -> Context:
 
 
 class MyGraphQLRouter(GraphQLRouter):
-
     async def process_result(
         self, request: Request, result: ExecutionResult
     ) -> GraphQLHTTPResponse:
