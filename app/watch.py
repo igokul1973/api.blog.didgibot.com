@@ -172,7 +172,10 @@ async def handle_user_update(updated_document: dict):
         # I'll do it. This way we can get via one article all articles
         # written by the same author, and via one author all his or her
         # articles.
-        set_query = {"$set": {"author": author, "updated_at": datetime.now()}}
+        # We are not updating the `updated_at` field of the articles,
+        # because the change of the author is an inderect change of the
+        # article.
+        set_query = {"$set": {"author": author}}
         updated_articles = await ArticleDocument.find(
             ArticleDocument.author.id == updated_user_id
         ).update_many(set_query)
