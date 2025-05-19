@@ -3,14 +3,31 @@ from typing import Annotated, Any, List, Optional
 from beanie import PydanticObjectId
 from strawberry import lazy
 
-from app.models.beanie import (ArticleDocument, CategoryDocument, TagDocument,
-                               UserDocument)
-from app.models.pydantic import (ArticleModel, CategoryModel, EntityEnum,
-                                 PyObjectId, TagModel, UserModel)
-from app.schemas.typeDefs import (ArticlesFilterInputType, ArticleType,
-                                  CategoriesFilterInputType, CategoryType,
-                                  SortInputType, TagsFilterInputType, TagType,
-                                  UsersFilterInputType, UserType)
+from app.models.beanie import (
+    ArticleDocument,
+    CategoryDocument,
+    TagDocument,
+    UserDocument,
+)
+from app.models.pydantic import (
+    ArticleModel,
+    CategoryModel,
+    EntityEnum,
+    PyObjectId,
+    TagModel,
+    UserModel,
+)
+from app.schemas.typeDefs import (
+    ArticlesFilterInputType,
+    ArticleType,
+    CategoriesFilterInputType,
+    CategoryType,
+    SortInputType,
+    TagsFilterInputType,
+    TagType,
+    UsersFilterInputType,
+    UserType,
+)
 
 
 def wrap_search_query(query):

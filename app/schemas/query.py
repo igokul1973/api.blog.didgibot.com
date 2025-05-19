@@ -3,13 +3,25 @@ from typing import TYPE_CHECKING, Annotated, List, Optional
 import strawberry
 
 from app.models.pydantic import CountModel, EntityEnum
-from app.models.utils.requests import (get_articles, get_categories, get_count,
-                                       get_tags, get_users)
-from app.schemas.typeDefs import (ArticlesFilterInputType, ArticleType,
-                                  CategoriesFilterInputType, CategoryType,
-                                  CountType, SortInputType,
-                                  TagsFilterInputType, TagType,
-                                  UsersFilterInputType, UserType)
+from app.models.utils.requests import (
+    get_articles,
+    get_categories,
+    get_count,
+    get_tags,
+    get_users,
+)
+from app.schemas.typeDefs import (
+    ArticlesFilterInputType,
+    ArticleType,
+    CategoriesFilterInputType,
+    CategoryType,
+    CountType,
+    SortInputType,
+    TagsFilterInputType,
+    TagType,
+    UsersFilterInputType,
+    UserType,
+)
 
 if TYPE_CHECKING:
     from app.schemas.schema import Context
@@ -17,7 +29,6 @@ if TYPE_CHECKING:
 
 @strawberry.type
 class Query:
-
     @strawberry.field
     async def count(
         self,

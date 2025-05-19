@@ -5,8 +5,15 @@ from typing import Annotated, List, Optional
 import pymongo
 from beanie import PydanticObjectId
 from bson import ObjectId
-from pydantic import (AfterValidator, BaseModel, BeforeValidator, ConfigDict,
-                      EmailStr, Field, SerializeAsAny)
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    EmailStr,
+    Field,
+    SerializeAsAny,
+)
 
 from app.models.utils.common import now_factory
 

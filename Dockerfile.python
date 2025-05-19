@@ -1,7 +1,7 @@
 # Just-in-case debugging image for connecting using python
 
 # This file is needed to create a pod in Jenkins with python and git.
-FROM --platform=linux/amd64 python:3.12-alpine
+FROM --platform=linux/amd64 python:3.13-alpine
 
 RUN apk update && apk add --no-cache nmap && \
     echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
