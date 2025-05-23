@@ -38,6 +38,16 @@ def wrap_search_query(query):
         return query
 
 
+def is_cyrillic_word(word: str):
+    if word is None or len(word) == 0:
+        return False
+    for char in word:
+        if not "\u0400" <= char <= "\u04ff":
+            return False
+
+    return True
+
+
 async def get_articles(
     filter_input: ArticlesFilterInputType = ArticlesFilterInputType(),
     sort_input: Optional[List[SortInputType]] = None,
@@ -121,8 +131,15 @@ async def get_articles(
 
     if "search" in filter_input_dict:
         if filter_input_dict["search"]:
+            # This simple trick allows to search more effectively
+            # in both Russian and English languages.
+            is_ru = is_cyrillic_word(filter_input_dict["search"])
+            language = "ru" if is_ru else "en"
             search_filter = {
-                "$text": {"$search": wrap_search_query(filter_input_dict["search"])},
+                "$text": {
+                    "$search": wrap_search_query(filter_input_dict["search"]),
+                    "$language": language,
+                },
             }
             filter_dict.update(search_filter)
             is_search = True

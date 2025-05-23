@@ -19,152 +19,1102 @@ use(database);
 //     _id: ObjectId('681ce9f53aaee641aee2e2be'),
 // });
 
-const data = {
-    // timestamps:
-    "created_at": (new Date()).getTime(),
-    "updated_at": (new Date()).getTime(),
-    "translations": [
-        {
-            "language": "en",
-            "header": "First Article",
-            "content": {
-                "version": "2.31.0-rc.7",
-                "time": 1747961883289,
-                "blocks": [
-                    {
-                        "id": "LZihsZN9EL",
-                        "type": "paragraph",
-                        "data": {
-                            "text": "First article but will be added to the second"
-                        }
-                    },
-                    {
-                        "id": "13_1K_Yhv7",
-                        "type": "header",
-                        "data": {
-                            "text": "Let's start here",
-                            "level": 3
-                        }
-                    },
-                    {
-                        "id": "BH5-JOYcrp",
-                        "type": "paragraph",
-                        "data": {
-                            "text": "The most amazing adventures of Heckleberry Finn and myself. I'll be damned!"
-                        }
-                    },
-                    {
-                        "id": "dKjgbA5s8S",
-                        "type": "code",
-                        "data": {
-                            "code": "<p class=\"p1\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177); white-space: normal;\" data-empty=\"false\"><span class=\"s1\" style=\"font-kerning: none; color: rgb(184, 93, 213); -webkit-text-stroke-color: rgb(184, 93, 213);\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\">const</span></span></span></span></span></span></span><span class=\"s2\" style=\"font-kerning: none; background-color: rgb(30, 33, 39);\"> t = </span><span class=\"s3\" style=\"font-kerning: none; color: rgb(136, 185, 102); -webkit-text-stroke-color: rgb(136, 185, 102);\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\">'20s'</span></span></span></span></span></span></span><span class=\"s2\" style=\"font-kerning: none; background-color: rgb(30, 33, 39);\">;</span></p><p class=\"p2\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(184, 93, 213); -webkit-text-stroke-color: rgb(184, 93, 213); white-space: normal;\" data-empty=\"false\"><span class=\"s4\" style=\"font-kerning: none;\"><span class=\"hljs-function\"><span class=\"hljs-keyword\"><span class=\"hljs-function\"><span class=\"hljs-keyword\"><span class=\"hljs-function\"><span class=\"hljs-keyword\"><span class=\"hljs-function\"><span class=\"hljs-keyword\"><span class=\"hljs-function\"><span class=\"hljs-keyword\"><span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span></span></span></span></span></span></span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"> </span></span></span></span></span></span></span><span class=\"s6\" style=\"font-kerning: none; color: rgb(81, 156, 233); -webkit-text-stroke-color: rgb(81, 156, 233);\"><span class=\"hljs-function\"><span class=\"hljs-title\"><span class=\"hljs-function\"><span class=\"hljs-title\"><span class=\"hljs-function\"><span class=\"hljs-title\"><span class=\"hljs-function\"><span class=\"hljs-title\"><span class=\"hljs-function\"><span class=\"hljs-title\"><span class=\"hljs-function\"><span class=\"hljs-title\">logT</span></span></span></span></span></span></span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\">(</span></span></span></span></span><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span>) </span></span></span></span></span></span>{</span></p><p class=\"p1\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177); white-space: normal;\" data-empty=\"false\"><span class=\"s4\" style=\"font-kerning: none;\">&nbsp; </span><span class=\"s7\" style=\"font-kerning: none; color: rgb(223, 180, 104); -webkit-text-stroke-color: rgb(223, 180, 104);\"><span class=\"hljs-built_in\"><span class=\"hljs-built_in\"><span class=\"hljs-built_in\"><span class=\"hljs-built_in\"><span class=\"hljs-built_in\"><span class=\"hljs-built_in\">console</span></span></span></span></span></span></span><span class=\"s4\" style=\"font-kerning: none;\">.log(t);</span></p><p class=\"p1\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177); white-space: normal;\" data-empty=\"false\"><span class=\"s4\" style=\"font-kerning: none;\">}</span></p><p class=\"p3\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177); min-height: 17px; white-space: normal;\" data-empty=\"true\"><span class=\"s4\" style=\"font-kerning: none;\"></span><br></p><p class=\"p2\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(184, 93, 213); -webkit-text-stroke-color: rgb(184, 93, 213); white-space: normal;\" data-empty=\"false\"><span class=\"s4\" style=\"font-kerning: none;\"><span class=\"hljs-class\"><span class=\"hljs-keyword\"><span class=\"hljs-class\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-class\"><span class=\"hljs-keyword\"><span class=\"hljs-class\"><span class=\"hljs-keyword\"><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span></span></span></span></span></span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\"> </span></span></span></span></span></span><span class=\"s7\" style=\"font-kerning: none; color: rgb(223, 180, 104); -webkit-text-stroke-color: rgb(223, 180, 104);\"><span class=\"hljs-class\"><span class=\"hljs-title\"><span class=\"hljs-class\"><span class=\"hljs-title\"><span class=\"hljs-class\"><span class=\"hljs-title\"><span class=\"hljs-class\"><span class=\"hljs-title\"><span class=\"hljs-class\"><span class=\"hljs-title\">Arby</span></span></span></span></span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\"> </span></span></span></span></span>{</span></p><p class=\"p2\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(184, 93, 213); -webkit-text-stroke-color: rgb(184, 93, 213); white-space: normal;\" data-empty=\"false\"><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\">&nbsp; &nbsp; </span><span class=\"s4\" style=\"font-kerning: none;\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\">constructor</span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\">(<span class=\"hljs-params\"></span>) {</span></p><p class=\"p1\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177); white-space: normal;\" data-empty=\"false\"><span class=\"s4\" style=\"font-kerning: none;\">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class=\"s1\" style=\"font-kerning: none; color: rgb(184, 93, 213); -webkit-text-stroke-color: rgb(184, 93, 213);\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\">this</span></span></span></span></span></span></span><span class=\"s4\" style=\"font-kerning: none;\">.clever = </span><span class=\"s3\" style=\"font-kerning: none; color: rgb(136, 185, 102); -webkit-text-stroke-color: rgb(136, 185, 102);\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\">'not much'</span></span></span></span></span></span></span><span class=\"s4\" style=\"font-kerning: none;\">;</span></p><p class=\"p1\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177); white-space: normal;\" data-empty=\"false\"><span class=\"s4\" style=\"font-kerning: none;\"><span class=\"Apple-converted-space\">&nbsp; &nbsp; </span>}</span></p><p class=\"p1\" style=\"margin: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177); white-space: normal;\" data-empty=\"false\"><span class=\"s4\" style=\"font-kerning: none;\">} <span class=\"Apple-converted-space\">&nbsp;</span></span></p>",
-                            "lang": "javascript",
-                            "theme": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/atom-one-dark.min.css"
-                        }
-                    },
-                    {
-                        "id": "Ao41U9tWNO",
-                        "type": "list",
-                        "data": {
-                            "style": "unordered",
-                            "meta": {},
-                            "items": [
-                                {
-                                    "content": "Good",
-                                    "meta": {},
-                                    "items": []
-                                },
-                                {
-                                    "content": "Bad",
-                                    "meta": {},
-                                    "items": []
-                                },
-                                {
-                                    "content": "and",
-                                    "meta": {},
-                                    "items": [
-                                        {
-                                            "content": "Ugly",
-                                            "meta": {},
-                                            "items": []
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "is_published": false,
-            "category": {
-                "id": "682fc755296bd21c1381726d",
-                "name": "Javascript"
-            },
-            "tags": [
-                {
-                    "id": "682fc722296bd21c13817269",
-                    "name": "Tag 1"
-                },
-                {
-                    "id": "682fc728296bd21c1381726a",
-                    "name": "Tag 2"
-                }
-            ]
-        },
-        {
-            "language": "ru",
-            "header": "Первая статья",
-            "content": {
-                "version": "2.31.0-rc.7",
-                "time": 1747962077759,
-                "blocks": [
-                    {
-                        "id": "1J_QLVpqNm",
-                        "type": "paragraph",
-                        "data": {
-                            "text": "Но будет еще и вторая, хоть это и первая статейка!"
-                        }
-                    },
-                    {
-                        "id": "LlTlLlrWag",
-                        "type": "code",
-                        "data": {
-                            "code": "<p class=\"p1\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(155, 162, 177); margin: 0px; color: rgb(155, 162, 177); white-space: normal;\"><span class=\"s1\" style=\"font-kerning: none; color: rgb(184, 93, 213); -webkit-text-stroke-color: rgb(184, 93, 213);\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\">const</span></span></span></span><span class=\"s2\" style=\"font-kerning: none; background-color: rgb(30, 33, 39);\">&nbsp;t =&nbsp;</span><span class=\"s3\" style=\"font-kerning: none; color: rgb(136, 185, 102); -webkit-text-stroke-color: rgb(136, 185, 102);\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\">'20s'</span></span></span></span><span class=\"s2\" style=\"font-kerning: none; background-color: rgb(30, 33, 39);\">;</span></p><p class=\"p2\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(184, 93, 213); margin: 0px; color: rgb(184, 93, 213); white-space: normal;\"><span class=\"s4\" style=\"font-kerning: none;\"><span class=\"hljs-function\"><span class=\"hljs-keyword\"><span class=\"hljs-function\"><span class=\"hljs-keyword\"><span class=\"hljs-function\"><span class=\"hljs-keyword\">function</span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\"><span class=\"hljs-function\"><span class=\"hljs-function\">&nbsp;</span></span></span><span class=\"s6\" style=\"font-kerning: none; color: rgb(81, 156, 233); -webkit-text-stroke-color: rgb(81, 156, 233);\"><span class=\"hljs-function\"><span class=\"hljs-title\"><span class=\"hljs-function\"><span class=\"hljs-title\"><span class=\"hljs-function\"><span class=\"hljs-title\">logT</span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\"><span class=\"hljs-function\">(</span></span></span></span></span><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span><span class=\"hljs-function\"><span class=\"hljs-params\"></span>)&nbsp;</span></span></span></span></span></span>{</span></p><p class=\"p1\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(155, 162, 177); margin: 0px; color: rgb(155, 162, 177); white-space: normal;\"><span class=\"s4\" style=\"font-kerning: none;\">&nbsp;&nbsp;</span><span class=\"s7\" style=\"font-kerning: none; color: rgb(223, 180, 104); -webkit-text-stroke-color: rgb(223, 180, 104);\"><span class=\"hljs-built_in\"><span class=\"hljs-built_in\"><span class=\"hljs-built_in\">console</span></span></span></span><span class=\"s4\" style=\"font-kerning: none;\">.log(t);</span></p><p class=\"p1\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(155, 162, 177); margin: 0px; color: rgb(155, 162, 177); white-space: normal;\"><span class=\"s4\" style=\"font-kerning: none;\">}</span></p><p class=\"p3\" data-empty=\"true\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(155, 162, 177); margin: 0px; color: rgb(155, 162, 177); min-height: 17px; white-space: normal;\"><span class=\"s4\" style=\"font-kerning: none;\"></span><br></p><p class=\"p2\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(184, 93, 213); margin: 0px; color: rgb(184, 93, 213); white-space: normal;\"><span class=\"s4\" style=\"font-kerning: none;\"><span class=\"hljs-class\"><span class=\"hljs-keyword\"><span class=\"hljs-class\"><span class=\"hljs-keyword\"><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\"><span class=\"hljs-class\"><span class=\"hljs-class\">&nbsp;</span></span></span><span class=\"s7\" style=\"font-kerning: none; color: rgb(223, 180, 104); -webkit-text-stroke-color: rgb(223, 180, 104);\"><span class=\"hljs-class\"><span class=\"hljs-title\"><span class=\"hljs-class\"><span class=\"hljs-title\"><span class=\"hljs-class\"><span class=\"hljs-title\">Arby</span></span></span></span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\"><span class=\"hljs-class\">&nbsp;</span></span></span></span></span>{</span></p><p class=\"p2\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(184, 93, 213); margin: 0px; color: rgb(184, 93, 213); white-space: normal;\"><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\">&nbsp; &nbsp;&nbsp;</span><span class=\"s4\" style=\"font-kerning: none;\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\">constructor</span></span></span></span><span class=\"s5\" style=\"font-kerning: none; color: rgb(155, 162, 177); -webkit-text-stroke-color: rgb(155, 162, 177);\">(<span class=\"hljs-params\"></span>) {</span></p><p class=\"p1\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(155, 162, 177); margin: 0px; color: rgb(155, 162, 177); white-space: normal;\"><span class=\"s4\" style=\"font-kerning: none;\">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span class=\"s1\" style=\"font-kerning: none; color: rgb(184, 93, 213); -webkit-text-stroke-color: rgb(184, 93, 213);\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\"><span class=\"hljs-keyword\">this</span></span></span></span><span class=\"s4\" style=\"font-kerning: none;\">.clever =&nbsp;</span><span class=\"s3\" style=\"font-kerning: none; color: rgb(136, 185, 102); -webkit-text-stroke-color: rgb(136, 185, 102);\"><span class=\"hljs-string\"><span class=\"hljs-string\"><span class=\"hljs-string\">'not much'</span></span></span></span><span class=\"s4\" style=\"font-kerning: none;\">;</span></p><p class=\"p1\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(155, 162, 177); margin: 0px; color: rgb(155, 162, 177); white-space: normal;\"><span class=\"s4\" style=\"font-kerning: none;\"><span class=\"Apple-converted-space\">&nbsp; &nbsp;&nbsp;</span>}</span></p><p class=\"p1\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(155, 162, 177); margin: 0px; color: rgb(155, 162, 177); white-space: normal;\"><span class=\"s4\" style=\"font-kerning: none;\">}</span></p><p class=\"p1\" data-empty=\"false\" style=\"font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-variant-emoji: normal; font-stretch: normal; line-height: normal; font-family: Courier; -webkit-text-stroke-color: rgb(155, 162, 177); margin: 0px; color: rgb(155, 162, 177); white-space: normal;\"><span class=\"hljs-comment\"><span class=\"hljs-comment\">// Will add here a comment that would say - hey you, branching apple!</span></span></p>",
-                            "lang": "Auto-detect",
-                            "theme": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/atom-one-dark.min.css"
-                        }
-                    },
-                    {
-                        "id": "nTTLZ0vgf9",
-                        "type": "image",
-                        "data": {
-                            "caption": "",
-                            "with_border": true,
-                            "with_background": false,
-                            "stretched": true,
-                            "file": {
-                                "url": "http://invoice-minio:9000/images-dgb-blog/article_Picture_2.jpg"
+const data = [
+    {
+        created_at: ISODate('2025-05-02T02:40:32.487Z'),
+        updated_at: ISODate('2025-05-06T17:26:38.018Z'),
+        translations: [
+            {
+                content: {
+                    version: '2.31.0-rc.7',
+                    time: 1747981604088,
+                    blocks: [
+                        {
+                            id: '0FrL8jfZ2P',
+                            type: 'paragraph',
+                            data: {
+                                text: 'Another very bad trial and text here and more editing document'
+                            }
+                        },
+                        {
+                            id: 'QqFfoktJv4',
+                            type: 'code',
+                            data: {
+                                code: 'from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = "articles"\n        indexes = [\n            IndexModel(\n                [\n                    ("translations.header", TEXT),\n                    ("translations.tags.name", TEXT),\n                    ("translations.category.name", TEXT),\n                    ("translations.content.blocks.data.text", TEXT),\n                    ("translations.content.blocks.data.content", TEXT),\n                    ("translations.content.blocks.data.code", TEXT),\n                    ("translations.content.blocks.data.items.content", TEXT),\n                    ("translations.content.blocks.data.items.code", TEXT),\n                    ("translations.content.blocks.data.items.cols.text", TEXT),\n                    ("translations.content.blocks.data.items.cols.content", TEXT),\n                ],\n                name="search_article_index",\n                weights={\n                    "translations.header": 10,\n                    "translations.tags.name": 5,\n                    "translations.category.name": 5,\n                    "translations.content.blocks.data.text": 5,\n                    "translations.content.blocks.data.content": 5,\n                    "translations.content.blocks.data.code": 5,\n                    "translations.content.blocks.data.items.content": 5,\n                    "translations.content.blocks.data.items.code": 5,\n                    "translations.content.blocks.data.items.cols.text": 5,\n                    "translations.content.blocks.data.items.cols.content": 5,\n                },\n                default_language="russian",\n            )\n        ]',
+                                showlinenumbers: true,
+                                show_copy_button: true,
+                                lang: 'scss'
                             }
                         }
+                    ]
+                },
+                language: 'en',
+                header: 'Ninth human on earth',
+                is_published: false,
+                published_at: null,
+                category: {
+                    id: ObjectId('682fc75e296bd21c1381726e'),
+                    created_at: ISODate('2025-05-23T00:54:54.758Z'),
+                    updated_at: ISODate('2025-05-23T00:54:54.758Z'),
+                    name: 'Python'
+                },
+                tags: [
+                    {
+                        id: ObjectId('682fc722296bd21c13817269'),
+                        created_at: ISODate('2025-05-23T00:53:54.237Z'),
+                        updated_at: ISODate('2025-05-23T00:53:54.237Z'),
+                        name: 'Tag 1'
                     }
                 ]
             },
-            "is_published": false,
-            "category": {
-                "id": "682fc771296bd21c1381726f",
-                "name": "ДжаваСкрипт"
-            },
-            "tags": [
+            {
+                content: {
+                    version: '2.31.0-rc.7',
+                    time: 1747978266723,
+                    blocks: [
+                        {
+                            id: 'k_U-_G5mMM',
+                            type: 'paragraph',
+                            data: {
+                                text: 'Something else here'
+                            }
+                        },
+                        {
+                            id: 'blAGnW_Wtl',
+                            type: 'code',
+                            data: {
+                                code: 'from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = "articles"\n        indexes = [\n            IndexModel(\n                [\n                    ("translations.header", TEXT),\n                    ("translations.tags.name", TEXT),\n                    ("translations.category.name", TEXT),\n                    ("translations.content.blocks.data.text", TEXT),\n                    ("translations.content.blocks.data.content", TEXT),\n                    ("translations.content.blocks.data.code", TEXT),\n                    ("translations.content.blocks.data.items.content", TEXT),\n                    ("translations.content.blocks.data.items.code", TEXT),\n                    ("translations.content.blocks.data.items.cols.text", TEXT),\n                    ("translations.content.blocks.data.items.cols.content", TEXT),\n                ],\n                name="search_article_index",\n                weights={\n                    "translations.header": 10,\n                    "translations.tags.name": 5,\n                    "translations.category.name": 5,\n                    "translations.content.blocks.data.text": 5,\n                    "translations.content.blocks.data.content": 5,\n                    "translations.content.blocks.data.code": 5,\n                    "translations.content.blocks.data.items.content": 5,\n                    "translations.content.blocks.data.items.code": 5,\n                    "translations.content.blocks.data.items.cols.text": 5,\n                    "translations.content.blocks.data.items.cols.content": 5,\n                },\n                default_language="russian",\n            )\n        ]',
+                                showlinenumbers: true,
+                                show_copy_button: true,
+                                lang: 'python'
+                            }
+                        }
+                    ]
+                },
+                language: 'ru',
+                header: 'Десятый человек на Земле',
+                is_published: false,
+                published_at: null,
+                category: {
+                    id: ObjectId('682fc77b296bd21c13817270'),
+                    created_at: ISODate('2025-05-23T00:55:23.992Z'),
+                    updated_at: ISODate('2025-05-23T00:55:23.992Z'),
+                    name: 'Питон'
+                },
+                tags: [
+                    {
+                        id: ObjectId('682fc741296bd21c1381726b'),
+                        created_at: ISODate('2025-05-23T00:54:25.887Z'),
+                        updated_at: ISODate('2025-05-23T00:54:25.887Z'),
+                        name: 'Тэг 1'
+                    }
+                ]
+            }
+        ],
+        author: {
+            id: ObjectId('682fc6e9d1b8df284665d0fb'),
+            created_at: ISODate('2025-05-23T00:52:57.120Z'),
+            updated_at: ISODate('2025-05-23T16:34:48.745Z'),
+            email: 'igk19@me.com',
+            phone: '+1-\u202a5037655684\u202c',
+            first_name: 'Igor',
+            last_name: 'Kulebyakin',
+            ip: '172.19.0.1',
+            last_logged_at: ISODate('2025-05-23T16:22:44.482Z'),
+            articles: [
                 {
-                    "id": "682fc748296bd21c1381726c",
-                    "name": "Тэг 2"
+                    id: ObjectId('682ffc40688ab2c6443ff75d')
                 }
             ]
         }
-    ]
-};
+    },
+    {
+        created_at: ISODate('2025-04-01T04:40:32.487Z'),
+        updated_at: ISODate('2025-05-10T22:26:38.018Z'),
+        translations: [
+            {
+                content: {
+                    version: '2.31.0-rc.7',
+                    time: 1747981604088,
+                    blocks: [
+                        {
+                            id: 'CDfz8_Jk-O',
+                            type: 'paragraph',
+                            data: {
+                                text: 'Very long and may be not the best in the West'
+                            }
+                        },
+                        {
+                            id: 'QqpL-gbtJx1',
+                            type: 'code',
+                            data: {
+                                code: 'from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = "articles"\n        indexes = [\n            IndexModel(\n                [\n                    ("translations.header", TEXT),\n                    ("translations.tags.name", TEXT),\n                    ("translations.category.name", TEXT),\n                    ("translations.content.blocks.data.text", TEXT),\n                    ("translations.content.blocks.data.content", TEXT),\n                    ("translations.content.blocks.data.code", TEXT),\n                    ("translations.content.blocks.data.items.content", TEXT),\n                    ("translations.content.blocks.data.items.code", TEXT),\n                    ("translations.content.blocks.data.items.cols.text", TEXT),\n                    ("translations.content.blocks.data.items.cols.content", TEXT),\n                ],\n                name="search_article_index",\n                weights={\n                    "translations.header": 10,\n                    "translations.tags.name": 5,\n                    "translations.category.name": 5,\n                    "translations.content.blocks.data.text": 5,\n                    "translations.content.blocks.data.content": 5,\n                    "translations.content.blocks.data.code": 5,\n                    "translations.content.blocks.data.items.content": 5,\n                    "translations.content.blocks.data.items.code": 5,\n                    "translations.content.blocks.data.items.cols.text": 5,\n                    "translations.content.blocks.data.items.cols.content": 5,\n                },\n                default_language="russian",\n            )\n        ]',
+                                showlinenumbers: true,
+                                show_copy_button: true,
+                                lang: 'scss'
+                            }
+                        }
+                    ]
+                },
+                language: 'en',
+                header: 'Rabbits and rabbies',
+                is_published: false,
+                published_at: null,
+                category: {
+                    id: ObjectId('682fc75e296bd21c1381726e'),
+                    created_at: ISODate('2025-05-23T00:54:54.758Z'),
+                    updated_at: ISODate('2025-05-23T00:54:54.758Z'),
+                    name: 'Python'
+                },
+                tags: [
+                    {
+                        id: ObjectId('682fc722296bd21c13817269'),
+                        created_at: ISODate('2025-05-23T00:53:54.237Z'),
+                        updated_at: ISODate('2025-05-23T00:53:54.237Z'),
+                        name: 'Tag 1'
+                    }
+                ]
+            },
+            {
+                content: {
+                    version: '2.31.0-rc.7',
+                    time: 1747978266723,
+                    blocks: [
+                        {
+                            id: 'kT3S_J9zmH',
+                            type: 'paragraph',
+                            data: {
+                                text: 'Something else here'
+                            }
+                        },
+                        {
+                            id: 'b02nw6OKl_l',
+                            type: 'code',
+                            data: {
+                                code: 'from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = "articles"\n        indexes = [\n            IndexModel(\n                [\n                    ("translations.header", TEXT),\n                    ("translations.tags.name", TEXT),\n                    ("translations.category.name", TEXT),\n                    ("translations.content.blocks.data.text", TEXT),\n                    ("translations.content.blocks.data.content", TEXT),\n                    ("translations.content.blocks.data.code", TEXT),\n                    ("translations.content.blocks.data.items.content", TEXT),\n                    ("translations.content.blocks.data.items.code", TEXT),\n                    ("translations.content.blocks.data.items.cols.text", TEXT),\n                    ("translations.content.blocks.data.items.cols.content", TEXT),\n                ],\n                name="search_article_index",\n                weights={\n                    "translations.header": 10,\n                    "translations.tags.name": 5,\n                    "translations.category.name": 5,\n                    "translations.content.blocks.data.text": 5,\n                    "translations.content.blocks.data.content": 5,\n                    "translations.content.blocks.data.code": 5,\n                    "translations.content.blocks.data.items.content": 5,\n                    "translations.content.blocks.data.items.code": 5,\n                    "translations.content.blocks.data.items.cols.text": 5,\n                    "translations.content.blocks.data.items.cols.content": 5,\n                },\n                default_language="russian",\n            )\n        ]',
+                                showlinenumbers: true,
+                                show_copy_button: true,
+                                lang: 'python'
+                            }
+                        }
+                    ]
+                },
+                language: 'ru',
+                header: 'Кролики и рабби',
+                is_published: false,
+                published_at: null,
+                category: {
+                    id: ObjectId('682fc77b296bd21c13817270'),
+                    created_at: ISODate('2025-05-23T00:55:23.992Z'),
+                    updated_at: ISODate('2025-05-23T00:55:23.992Z'),
+                    name: 'Питон'
+                },
+                tags: [
+                    {
+                        id: ObjectId('682fc741296bd21c1381726b'),
+                        created_at: ISODate('2025-05-23T00:54:25.887Z'),
+                        updated_at: ISODate('2025-05-23T00:54:25.887Z'),
+                        name: 'Тэг 1'
+                    }
+                ]
+            }
+        ],
+        author: {
+            id: ObjectId('682fc6e9d1b8df284665d0fb'),
+            created_at: ISODate('2025-05-23T00:52:57.120Z'),
+            updated_at: ISODate('2025-05-23T16:34:48.745Z'),
+            email: 'igk19@me.com',
+            phone: '+1-\u202a5037655684\u202c',
+            first_name: 'Igor',
+            last_name: 'Kulebyakin',
+            ip: '172.19.0.1',
+            last_logged_at: ISODate('2025-05-23T16:22:44.482Z'),
+            articles: [
+                {
+                    id: ObjectId('682ffc40688ab2c6443ff75d')
+                }
+            ]
+        }
+    }
+];
 
-db.articles.insert(data);
+const articles = [
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "Fifty fifth article",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "0_r_8jTjTP",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Hope for the best"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "QqRk-EktJv4",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Сто Четвертая",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747978266723,
+                    "blocks": [
+                        {
+                            "id": "kAQ0_G5mMM",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "My best of the hellish helicopters"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "blanNBoZtl",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2025-02-23T02:40:32.487",
+        "updated_at": "2025-05-23T12:26:38.018",
+        "__typename": "ArticleType"
+    },
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "First articles",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "Nfspb8jfZ1P",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Very strange matters"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "QqRfyZtJx1",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Джаваскрипт все еще скрипит",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747978266723,
+                    "blocks": [
+                        {
+                            "id": "km35_dlmMM",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Неизвестность Пелевина"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "bqZT6LkWtl",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2025-04-23T04:40:32.487",
+        "updated_at": "2025-04-28T16:26:38.018",
+        "__typename": "ArticleType"
+    },
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "Different types of Go language",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "0_pb8j-Z2P",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Another very bad trial and text here and more editing document"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "QqRfbZtJv4",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Дорохов и его команда",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747978266723,
+                    "blocks": [
+                        {
+                            "id": "Sm9N_G8VM-",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Нужные вещи всегда были здесь невовремя"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "bgSS6W_Wtl",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2025-05-23T10:40:32.487",
+        "updated_at": "2025-05-23T10:26:38.018",
+        "__typename": "ArticleType"
+    },
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "Cabochones and their properties",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "00rL8jlK2P",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Lost treasures be mine"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "QdJf_ktJv4",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Замыкание как признак величия",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747978266723,
+                    "blocks": [
+                        {
+                            "id": "k_ULhG5mMM",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Something else here"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "bNAGnw-Wtl",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2024-05-02T02:40:32.487",
+        "updated_at": "2024-05-06T06:26:38.018",
+        "__typename": "ArticleType"
+    },
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "Normal as new crazy",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "C4fzifJkDe",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Heating place is not the same as the fireplace"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "QqpLNoNtJx1",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Ненормальные идеи нормальных программистов",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747978266723,
+                    "blocks": [
+                        {
+                            "id": "kT7sDJ9zmX",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "To be or not to be - in that the question!"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "b12nw9OLzmP",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2024-09-01T04:40:32.487",
+        "updated_at": "2025-01-29T21:26:38.018",
+        "__typename": "ArticleType"
+    },
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "Croll and his parents",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "CDSouLJk1O",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "CT Scans go wired"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "QqDevDt6x1",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Пробуй сколько хочешь и ничего у тебя не получится!",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747978266723,
+                    "blocks": [
+                        {
+                            "id": "KlhS3-9zMC",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Wapes are no longer in"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "bLtAw26Kl_l",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2023-08-21T04:48:32.487",
+        "updated_at": "2024-12-13T16:27:38.018",
+        "__typename": "ArticleType"
+    },
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "Full moon",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "0Dp-Gcfr1O",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Kaching is not a real word. Lose it!"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "iq-FgETsx2",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Забытый всеми стул оказался кладом.",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747978266723,
+                    "blocks": [
+                        {
+                            "id": "k6d6sf7mBC",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Great and not only!"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "bQsLVOxutl",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2025-04-22T04:40:22.477",
+        "updated_at": "2025-05-13T10:16:58.018",
+        "__typename": "ArticleType"
+    },
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "Freaks and their shows",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "CD_G8c-Z1O",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "The snadard way of losing it"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "QqrRrrRtx0",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Шестьсотая",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747978266723,
+                    "blocks": [
+                        {
+                            "id": "km26_JroTC",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Маньяк маньяку не товарищ"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "bqZL60KN-_",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2025-03-22T04:56:32.487",
+        "updated_at": "2025-04-27T06:16:18.018",
+        "__typename": "ArticleType"
+    },
+    {
+        "translations": [
+            {
+                "language": "en",
+                "header": "Horses from Mars",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1747981604088,
+                    "blocks": [
+                        {
+                            "id": "0Sp_dAnZ1O",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Next tough guy - next touchdown"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "S_WeCZtmx1",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "scss"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc75e296bd21c1381726e",
+                    "name": "Python",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc722296bd21c13817269",
+                        "name": "Tag 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            },
+            {
+                "language": "ru",
+                "header": "Травести шоу давно закончилось",
+                "content": {
+                    "version": "2.31.0-rc.7",
+                    "time": 1748026125951,
+                    "blocks": [
+                        {
+                            "id": "km26_LzXVC",
+                            "type": "paragraph",
+                            "data": {
+                                "text": "Волосатый друг лысого оказался медведем"
+                            },
+                            "__typename": "ContentBlockType"
+                        },
+                        {
+                            "id": "bQdL6W_WDL",
+                            "type": "code",
+                            "data": {
+                                "code": "from typing import Annotated\n\nfrom beanie import Document, Indexed\nfrom pydantic import Field\nfrom pymongo import ASCENDING, TEXT, IndexModel\n\nfrom app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel\n\n\nclass ArticleDocument(Document, ArticleModel):\n    class Settings:\n        name = \"articles\"\n        indexes = [\n            IndexModel(\n                [\n                    (\"translations.header\", TEXT),\n                    (\"translations.tags.name\", TEXT),\n                    (\"translations.category.name\", TEXT),\n                    (\"translations.content.blocks.data.text\", TEXT),\n                    (\"translations.content.blocks.data.content\", TEXT),\n                    (\"translations.content.blocks.data.code\", TEXT),\n                    (\"translations.content.blocks.data.items.content\", TEXT),\n                    (\"translations.content.blocks.data.items.code\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.text\", TEXT),\n                    (\"translations.content.blocks.data.items.cols.content\", TEXT),\n                ],\n                name=\"search_article_index\",\n                weights={\n                    \"translations.header\": 10,\n                    \"translations.tags.name\": 5,\n                    \"translations.category.name\": 5,\n                    \"translations.content.blocks.data.text\": 5,\n                    \"translations.content.blocks.data.content\": 5,\n                    \"translations.content.blocks.data.code\": 5,\n                    \"translations.content.blocks.data.items.content\": 5,\n                    \"translations.content.blocks.data.items.code\": 5,\n                    \"translations.content.blocks.data.items.cols.text\": 5,\n                    \"translations.content.blocks.data.items.cols.content\": 5,\n                },\n                default_language=\"russian\",\n            )\n        ]",
+                                "showlinenumbers": true,
+                                "show_copy_button": true,
+                                "lang": "python"
+                            },
+                            "__typename": "ContentBlockType"
+                        }
+                    ],
+                    "__typename": "ContentType"
+                },
+                "is_published": false,
+                "published_at": null,
+                "category": {
+                    "id": "682fc77b296bd21c13817270",
+                    "name": "Питон",
+                    "__typename": "CategoryType"
+                },
+                "tags": [
+                    {
+                        "id": "682fc741296bd21c1381726b",
+                        "name": "Тэг 1",
+                        "__typename": "TagType"
+                    }
+                ],
+                "__typename": "TranslationType"
+            }
+        ],
+        "created_at": "2022-11-23T04:40:32.487",
+        "updated_at": "2023-11-27T19:48:49.070",
+        "__typename": "ArticleType"
+    }
+];
+
+db.articles.insertMany(articles);
 
 // db.categories.update({ name: "Cat 1" }, { $set: { name: "Cat 2" } });
 
