@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.10 (2025-06-04)
+
+### Bug Fixes
+
+- Removed test.py.
+  ([`89932e8`](https://github.com/igokul1973/api.blog.didgibot.com/commit/89932e8d7bc84b14b920ccf8a7ec85a28a02c8bb))
+
+
 ## v0.0.9 (2025-05-14)
 
 ### Bug Fixes
