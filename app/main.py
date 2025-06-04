@@ -38,7 +38,7 @@ if environment == "production":
 async def lifespan(app: PatchedFastAPI):
     connect_db(app)
     try:
-        print("Now trying to initialize the beanie!")
+        logger.info("Now trying to initialize the beanie!")
         await init_beanie(
             database=app.db,
             document_models=models,
@@ -58,7 +58,7 @@ async def lifespan(app: PatchedFastAPI):
                 connection_string=settings.CONNECTION_STRING, document_models=models
             )
         except Exception as e:
-            print("Still could not initialize Beanie... Retrying...")
+            logger.warning("Still could not initialize Beanie... Retrying...")
             logger.error(e)
     yield
     app.mongo_client.close()
@@ -238,22 +238,22 @@ async def upload_file(image: UploadFile):
         return JSONResponse(content=response.json(), status_code=200)
 
     except httpx.ConnectError as e:
-        print(f"Connection error: {e}")
+        logger.error(f"Connection error: {e}")
         return JSONResponse(
             content={"error": "Failed to connect to the server"},
             status_code=500,
         )
 
     except httpx.TimeoutException as e:
-        print(f"Timeout error: {e}")
+        logger.error(f"Timeout error: {e}")
         return JSONResponse(content={"error": "Request timed out"}, status_code=500)
 
     except httpx.HTTPError as e:
-        print(f"HTTP error: {e}")
+        logger.error(f"HTTP error: {e}")
         return JSONResponse(content={"error": "Failed to upload file"}, status_code=400)
 
     except Exception as e:
-        print(f"Unknown error: {e}")
+        logger.error(f"Unknown error: {e}")
         return JSONResponse(
             content={"error": "An unknown error occurred"},
             status_code=500,

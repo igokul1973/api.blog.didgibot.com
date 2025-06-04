@@ -1,3 +1,4 @@
+from loguru import logger
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.config.settings import settings
@@ -15,10 +16,10 @@ def connect_db(app: PatchedFastAPI):
             socketTimeoutMS=2000,
             serverSelectionTimeoutMS=2000,
         )
-        print("Successfully connected to DB.")
+        logger.info("Successfully connected to DB.")
         db = client.get_database("didgibot")
 
         app.mongo_client = client
         app.db = db
     except Exception as e:
-        print(e)
+        logger.error(e)
