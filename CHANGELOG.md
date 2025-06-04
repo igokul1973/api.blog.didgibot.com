@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.11 (2025-06-04)
+
+### Bug Fixes
+
+- Replaced some print() statements to its appropriate Logger analogs.
+  ([`d3a25e0`](https://github.com/igokul1973/api.blog.didgibot.com/commit/d3a25e0b2ba29e7eec455bf0a162d60d1a71c717))
+
+
 ## v0.0.10 (2025-06-04)
 
 ### Bug Fixes
