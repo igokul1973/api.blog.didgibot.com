@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v0.0.12 (2025-06-09)
+
+### Bug Fixes
+
+- Modified business logic: if the user is not logged in, the requests to get articles will only
+  return articles whose all translations were published.
+  ([`e9e2d30`](https://github.com/igokul1973/api.blog.didgibot.com/commit/e9e2d301de6c4b800b32b38c4a57cbf2f0390b61))
+
+
 ## v0.0.11 (2025-06-04)
 
 ### Bug Fixes
