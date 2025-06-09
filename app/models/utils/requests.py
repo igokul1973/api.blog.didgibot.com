@@ -116,6 +116,14 @@ async def get_articles(
             filter_dict.update(updated_at_filter)
         filter_input_dict.pop("updated_at")
 
+    if filter_input_dict["is_published"]:
+        # Return only articles where all translations are published
+        is_published_filter = {
+            "translations": {"$not": {"$elemMatch": {"is_published": {"$ne": True}}}}
+        }
+        filter_dict.update(is_published_filter)
+        filter_input_dict.pop("is_published")
+
     if filter_input_dict["published_at"]:
         if filter_input_dict["published_at"]["from_"]:
             published_at_filter = {

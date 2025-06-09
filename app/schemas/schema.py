@@ -167,10 +167,10 @@ class Context(BaseContext):
         try:
             payload = await AuthorizationService.authorize(self.request)
             # get user from database
-            if not payload:
+            if not payload or payload == "free_ride":
                 return None
             users = await get_users(
-                filter_input=UsersFilterInputType(email=payload["sub"]), limit=1
+                filter_input=UsersFilterInputType(email=payload.get("sub")), limit=1
             )
             if not users or not users[0]:
                 raise HTTPException(

@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Annotated, List, Optional
 
 import strawberry
+from strawberry.experimental.pydantic.conversion_types import StrawberryTypeFromPydantic
 
-from app.models.pydantic import CountModel, EntityEnum
+from app.models.pydantic import ArticlesFilterInputModel, CountModel, EntityEnum
 from app.models.utils.requests import (
     get_articles,
     get_categories,
@@ -51,8 +52,20 @@ class Query:
     ) -> List[
         Optional[Annotated["ArticleType", strawberry.lazy("app.schemas.typeDefs")]]
     ]:
+        user = await info.context.user
         if not filter_input:
             filter_input = ArticlesFilterInputType()
+        if not user:
+            """
+            If user is not logged in, then we return only published articles.
+            Otherwise, we return all articles according to the filter.
+            """
+            article_input_model = filter_input.to_pydantic()
+            article_input_model.is_published = True
+            article_input_model = ArticlesFilterInputModel.model_validate(
+                article_input_model
+            )
+            filter_input = ArticlesFilterInputType.from_pydantic(article_input_model)
         return await get_articles(filter_input, sort_input, limit, skip)
 
     @strawberry.field
