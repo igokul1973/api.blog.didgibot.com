@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.13 (2025-06-12)
+
+### Bug Fixes
+
+- Changed token near expiration delta to 1200 seconds (20 minutes).
+  ([`31491ee`](https://github.com/igokul1973/api.blog.didgibot.com/commit/31491ee78667ba1fdcb3d51d76fd0905f9674db6))
+
+
 ## v0.0.12 (2025-06-09)
 
 ### Bug Fixes
