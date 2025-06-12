@@ -98,9 +98,9 @@ def is_token_near_expiration(payload):
     expiration_time = datetime.fromtimestamp(exp, tz=UTC)
     # Refresh token if the API his is 10 minutes or less
     # before the token expiration
-    td = timedelta(seconds=600)
-    five_minutes_before_expiration = expiration_time - td
-    return now >= five_minutes_before_expiration
+    td = timedelta(seconds=1200)
+    twenty_minutes_before_expiration_time = expiration_time - td
+    return now >= twenty_minutes_before_expiration_time
 
 
 @app.middleware("http")
