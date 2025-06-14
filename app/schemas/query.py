@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Annotated, List, Optional
 
 import strawberry
-from strawberry.experimental.pydantic.conversion_types import StrawberryTypeFromPydantic
 
 from app.models.pydantic import ArticlesFilterInputModel, CountModel, EntityEnum
 from app.models.utils.requests import (
