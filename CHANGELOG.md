@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.14 (2025-06-14)
+
+### Bug Fixes
+
+- Fixed a linting error.
+  ([`353de90`](https://github.com/igokul1973/api.blog.didgibot.com/commit/353de902e36ed923dddce45dd5c85132c1e66790))
+
+
 ## v0.0.13 (2025-06-12)
 
 ### Bug Fixes
