@@ -159,7 +159,7 @@ class BaseContentModel(BaseModel):
 
 class BaseTranslationCreateInputModel(BaseContentModel):
     language: LanguageEnum = Field(..., min_length=2, max_length=40)
-    header: str = Field(..., min_length=3, max_length=40)
+    header: str = Field(..., min_length=3, max_length=80)
     is_published: bool
     published_at: Optional[datetime] = Field(default=None)
 
@@ -171,7 +171,7 @@ class TranslationCreateInputModel(BaseTranslationCreateInputModel):
 
 class TranslationUpdateInputModel(BaseContentModel):
     language: LanguageEnum = Field(..., min_length=2, max_length=40)
-    header: Optional[str] = Field(min_length=3, max_length=40, default=None)
+    header: Optional[str] = Field(min_length=3, max_length=80, default=None)
     is_published: Optional[bool]
     published_at: Optional[datetime] = Field(default=None)
     category: Optional[CategoryInputModel] = Field(default=None)
