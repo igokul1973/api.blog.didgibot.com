@@ -1,4 +1,12 @@
-FROM python:3.13-alpine
+# FROM python:3.13-alpine
+FROM python:3.13-slim-trixie
+
+RUN apt-get update && \
+    apt-get upgrade -y
+
+# RUN apk update && \
+#     apk upgrade && \
+#     apk add --no-cache gcompat
 
 WORKDIR /code
 

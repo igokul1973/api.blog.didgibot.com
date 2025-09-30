@@ -1,0 +1,16 @@
+// .devcontainer/devcontainer.json
+{
+    "name": "Python in Docker",
+    "dockerComposeFile": "../docker-compose.yaml", // Or "image": "python:3.9-slim"
+    "service": "dgb-blog-backend", // If using docker-compose
+    "workspaceFolder": "/code",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "Codeium.codeium"
+            ]
+        }
+    },
+    "remoteUser": "root"
+}

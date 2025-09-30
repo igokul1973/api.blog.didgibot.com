@@ -11,7 +11,7 @@ services:
             - ${BACKEND_PORT}
             - ${DEBUG_PORT}
         ports:
-            - ${BACKEND_PORT}:${BACKEND_PORT}
+            - "${BACKEND_PORT}:${BACKEND_PORT}"
             # Debugging ports
             - "${DEBUG_PORT}:${DEBUG_PORT}"
         depends_on:
@@ -60,7 +60,7 @@ services:
             - ${BACKEND_PORT}
             - ${DEBUG_PORT}
         ports:
-            - ${BACKEND_WATCH_PORT}:${BACKEND_PORT}
+            - "${BACKEND_WATCH_PORT}:${BACKEND_PORT}"
             # Debugging ports
             - "${DEBUG_PORT_WATCH}:${DEBUG_PORT}"
         depends_on:
