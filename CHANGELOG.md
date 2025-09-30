@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.15 (2025-09-30)
+
+### Bug Fixes
+
+- Changed translation (article) header length to 80 chars.
+  ([`4efb045`](https://github.com/igokul1973/api.blog.didgibot.com/commit/4efb045629a07da41e9a4035126734f4276fca1f))
+
+
 ## v0.0.14 (2025-06-14)
 
 ### Bug Fixes
