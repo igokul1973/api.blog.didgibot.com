@@ -1,0 +1,13 @@
+FROM igk19/debian-base:0.3.0
+
+# Set environment variables to ensure non-interactive installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update apt, install necessary build tools and Python 3.13, and then clean up apt cache
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3.13 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/python3 /usr/local/bin/python

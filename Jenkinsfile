@@ -145,7 +145,7 @@ pipeline {
             }
         }
         // Start another job
-        stage('Change image in didgibot.com deployment') {
+        stage('Change image in api.blog.didgibot.com deployment') {
             when {
                 environment name: env.SHOULD_BUMP_VERSION_TEXT, value: env.FALSE_STRING
             }
