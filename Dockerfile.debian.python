@@ -1,4 +1,4 @@
-FROM igk19/debian-base:0.3.0
+FROM igk19/debian-base:0.4.0
 
 # Set environment variables to ensure non-interactive installation
 ENV DEBIAN_FRONTEND=noninteractive
