@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.0.16 (2025-10-02)
+
+### Bug Fixes
+
+- Bla 2
+  ([`8be19a6`](https://github.com/igokul1973/api.blog.didgibot.com/commit/8be19a6fa18324d470dcaa009cf2da722e6384aa))
+
+### Chores
+
+- Added pipx package to Dockerfile.debian.python for dev purposes.
+  ([`c709761`](https://github.com/igokul1973/api.blog.didgibot.com/commit/c70976121d897c85a9196929563792de39f867aa))
+
+
 ## v0.0.15 (2025-09-30)
 
 ### Bug Fixes
