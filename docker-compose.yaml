@@ -46,7 +46,7 @@ services:
                 max-file: "3"
         networks:
             - dgb_blog_network
-            - fileservicedidgibotcom_filenet
+            - didgibot_filenet
 
     dgb-blog-backend-watch:
         container_name: dgb-blog-backend-watch
@@ -166,5 +166,5 @@ services:
 networks:
     dgb_blog_network:
         driver: bridge
-    fileservicedidgibotcom_filenet:
+    didgibot_filenet:
         external: true
