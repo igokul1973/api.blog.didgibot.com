@@ -22,13 +22,14 @@
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
     // Uncomment the next line to run commands after the container is created.
-    // "postCreateCommand": "cat /etc/os-release",
+    "postCreateCommand": "python -m venv .venv && . .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt",
     // Configure tool-specific properties.
     "customizations": {
         "vscode": {
             "extensions": [
                 "donjayamanne.python-extension-pack",
-                "codeium.codeium"
+                "codeium.codeium",
+                "almenon.arepl"
             ]
         }
     },

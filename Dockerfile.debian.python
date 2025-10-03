@@ -12,8 +12,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3.13 \
-    python3-pip \
-    pipx \
-    && rm -rf /var/lib/apt/lists/*
+    python3-venv \
+    && apt-get clean
+
+RUN rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
