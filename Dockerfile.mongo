@@ -1,3 +1,6 @@
+# File to build a MongoDB image with replica set and authentication enabled
+# Had to be done this way because the official MongoDB image does not support
+# enabling authentication and replica set initialization out of the box
 ARG MONGO_VERSION=8
 
 FROM mongo:${MONGO_VERSION}
