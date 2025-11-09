@@ -182,8 +182,13 @@ class TranslationModel(BaseTranslationCreateInputModel):
     category: CategoryModel
     tags: List[Optional[TagModel]] = Field(default=[])
 
+class BaseSlugModel:
+    slug: str = Field(..., min_length=3, max_length=60) 
+    # slug: Optional[str] = Field(default='') 
+    priority: Optional[float] = Field(default=None)
 
-class BaseArticleModel(CreatedUpdatedAtModel, OptionalIdModel):
+
+class BaseArticleModel(OptionalIdModel, CreatedUpdatedAtModel, BaseSlugModel):
     translations: List[TranslationModel] = Field(default=[])
 
 
@@ -203,10 +208,14 @@ class ArticleModel(BaseArticleModel):
 class ArticleCreateInputModel(BaseModel):
     translations: List[TranslationCreateInputModel]
     author: Optional[UserModelPartial] = Field(default=None)
+    slug: Optional[str] = Field(default=None) 
+    priority: Optional[float] = Field(default=None)
 
 
 class ArticleUpdateInputModel(IdModel):
     translations: List[TranslationUpdateInputModel]
+    slug: Optional[str] = Field(default=None) 
+    priority: Optional[float] = Field(default=None)
 
 
 class TokensModel(BaseModel):
@@ -237,6 +246,8 @@ class ArticlesFilterInputModel(BaseFilterModel, BaseContentModelOptional):
     is_published: Optional[bool] = Field(default=None)
     published_at: Optional[BaseDateRangeModel] = Field(default=None)
     user_id: Optional[PyObjectId] = Field(default=None)
+    slug: Optional[str] = Field(default=None)
+    priority: Optional[float] = Field(default=None)
 
 
 class UsersFilterInputModel(BaseFilterModel):
@@ -273,3 +284,14 @@ class CountInputModel(BaseModel):
 class CountModel(BaseModel):
     count: int
     entity: EntityEnum
+
+class SitemapModel(BaseModel):
+    title: str
+    slug: str
+    priority: float
+    language: LanguageEnum
+    publishedAt: datetime
+    updatedAt: datetime
+
+class SitemapResponseModel(BaseModel):
+    data: List[SitemapModel]

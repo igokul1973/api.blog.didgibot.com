@@ -5,5 +5,5 @@ class TMongoEntitySanitized(TypedDict):
     id: str
 
 
-class TMongoEntity(TMongoEntitySanitized, TypedDict):
+class TMongoEntity(TMongoEntitySanitized):
     _id: str

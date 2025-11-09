@@ -80,6 +80,15 @@ async def get_articles(
         }
         filter_dict.update(header_filter)
         filter_input_dict.pop("header")
+    if filter_input_dict["slug"]:
+        slug_filter = {
+            "slug": {
+                "$regex": filter_input_dict["slug"],
+                "$options": "i",
+            }
+        }
+        filter_dict.update(slug_filter)
+        filter_input_dict.pop("slug")
     if filter_input_dict["content"]:
         content_filter = {
             "translations.content": {

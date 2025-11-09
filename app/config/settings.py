@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     USER: str = env.str("MONGO_INITDB_ROOT_USERNAME", "username")
     PASSWORD: str = parse.quote_plus(env.str("MONGO_INITDB_ROOT_PASSWORD", "password"))
     PORT: int = env.int("MONGO_REPLICA_PORT", 27017)
-    HOST: str = env.str("MONGO_REPLICA_HOST", "password")
+    HOST: str = env.str("MONGO_REPLICA_HOST", "localhost")
 
     CONNECTION_STRING: str = (
         f"mongodb://{USER}:{PASSWORD}@{HOST}:{PORT}/didgibot"

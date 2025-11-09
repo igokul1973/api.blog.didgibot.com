@@ -13,14 +13,21 @@
         "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/root/.ssh,type=bind,readonly"
     ],
-    // "runArgs": [
-    //     "--volume",
-    //     "/var/run/docker.sock:/var/run/docker.sock"
-    // ],
+    "runArgs": [
+        //     "--volume",
+        //     "/var/run/docker.sock:/var/run/docker.sock"
+        "--memory=4g",
+        "--memory-swap=8g"
+    ],
+    "containerEnv": {
+        "MONGO_REPLICA_HOST": "host.docker.internal"
+    },
     // Features to add to the dev container. More info: https://containers.dev/features.
     // "features": {},
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
-    // "forwardPorts": [],
+    // "forwardPorts": [
+    //     27017
+    // ],
     // Uncomment the next line to run commands after the container is created.
     "postCreateCommand": "python -m venv .venv && . .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt",
     // Configure tool-specific properties.
@@ -29,7 +36,9 @@
             "extensions": [
                 "donjayamanne.python-extension-pack",
                 "codeium.codeium",
-                "almenon.arepl"
+                "almenon.arepl",
+                "buenon.scratchpads",
+                "mongodb.mongodb-vscode"
             ]
         }
     },

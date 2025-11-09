@@ -16,11 +16,12 @@ from app.models.beanie import (
 from app.models.pydantic import (
     ArticleModel,
     CategoryModel,
+    LanguageEnum,
     TagInputModel,
     TagModel,
     UserModel,
 )
-from app.models.utils.common import transform_entity_to_type
+from app.models.utils.common import generate_slug, transform_entity_to_type
 from app.schemas.typeDefs import (
     ArticleCreateInputType,
     ArticleType,
@@ -89,7 +90,7 @@ async def get_tags(
     performs the necessary database operations.
 
     Args:
-    - tags: A list of TagModel or TagInputModel objects (or None). Tags with
+    - tags: A list of TagModel or TagInputModel objects or None. Tags with
       no id are considered new and will be inserted into the database.
 
     Returns:
@@ -192,6 +193,29 @@ class Mutation:
                     tag.model_dump() for tag in inserted_tags
                 ] + [tag.model_dump() for tag in existing_tags]
 
+        article_to_insert["slug"] = article_input_dict["slug"]
+        # Find header from english translation. Mind you, the english translation
+        # has translations.language = 'en'
+        if not article_to_insert["slug"]:
+            en_translation: dict | None = next(
+                (
+                    t
+                    for t in article_input_dict["translations"]
+                    if t["language"] == LanguageEnum.en
+                ),
+                None,
+            )
+            article_to_insert["slug"] = (
+                generate_slug(en_translation["header"]) if en_translation else None
+            )
+
+        if not article_to_insert["slug"]:
+            raise ValueError(
+                "There is no English translation therefore header or slug is empty"
+            )
+
+        article_to_insert["priority"] = article_input_dict["priority"] or 0.8
+
         article_document = ArticleDocument(**article_to_insert)
         inserted_article = await ArticleDocument.insert_one(article_document)
 
@@ -234,7 +258,7 @@ class Mutation:
             if is_published is not None:
                 t.is_published = is_published
 
-            if t.is_published and t.published_at is not True:
+            if t.is_published and t.published_at is None:
                 t.published_at = datetime.now()
             elif not t.is_published and t.published_at is not None:
                 t.published_at = None
@@ -261,8 +285,31 @@ class Mutation:
         # 6. Update the current article document with above categories and tags
         # and update the updated_at field
         current_article_document.updated_at = datetime.now()
+        # 7. Update the slug and priority
+        current_article_document.slug = article_input_dict["slug"]
+        # Find header from english translation. Mind you, the english translation
+        # has translations.language = 'en'
+        if not current_article_document.slug:
+            en_translation: dict | None = next(
+                (
+                    t
+                    for t in article_input_dict["translations"]
+                    if t["language"] == LanguageEnum.en
+                ),
+                None,
+            )
+            current_article_document.slug = (
+                generate_slug(en_translation["header"]) if en_translation else None
+            )
 
-        # 7. Save the updated article document.
+        if not current_article_document.slug:
+            raise ValueError(
+                "There is no English translation therefore header or slug is empty"
+            )
+
+        current_article_document.priority = article_input_dict["priority"] or 0.8
+
+        # 8. Save the updated article document.
         updated_article = await current_article_document.save()
 
         if not updated_article:

@@ -1,20 +1,26 @@
 input ArticleCreateInputType {
   translations: [TranslationCreateInputType!]!
   author: UserInputType = null
+  slug: String = null
+  priority: Float = null
 }
 
 type ArticleType {
-  id: String
+  slug: String!
+  priority: Float
   created_at: EpochDateTime!
   updated_at: EpochDateTime!
+  id: String
   translations: [TranslationType!]!
   author: UserTypePartial!
 }
 
 type ArticleTypePartial {
-  id: String
+  slug: String!
+  priority: Float
   created_at: EpochDateTime!
   updated_at: EpochDateTime!
+  id: String
   translations: [TranslationType!]!
   author: IdType!
 }
@@ -22,24 +28,33 @@ type ArticleTypePartial {
 input ArticleUpdateInputType {
   id: String!
   translations: [TranslationUpdateInputType!]!
+  slug: String = null
+  priority: Float = null
 }
 
 input ArticlesFilterInputType {
   content: ContentInputType = null
-  created_at: EpochDateTime = null
-  updated_at: EpochDateTime = null
+  created_at: BaseDateRangeInput = null
+  updated_at: BaseDateRangeInput = null
   ids: [String!] = null
   search: String = null
   header: String = null
   language: LanguageEnum = null
   is_published: Boolean = null
-  published_at: EpochDateTime = null
+  published_at: BaseDateRangeInput = null
   user_id: String = null
+  slug: String = null
+  priority: Float = null
+}
+
+input BaseDateRangeInput {
+  to_: EpochDateTime = null
+  from_: EpochDateTime = null
 }
 
 input CategoriesFilterInputType {
-  created_at: EpochDateTime = null
-  updated_at: EpochDateTime = null
+  created_at: BaseDateRangeInput = null
+  updated_at: BaseDateRangeInput = null
   ids: [String!] = null
   name: String = null
 }
@@ -185,8 +200,8 @@ input TagUpdateInputType {
 }
 
 input TagsFilterInputType {
-  created_at: EpochDateTime = null
-  updated_at: EpochDateTime = null
+  created_at: BaseDateRangeInput = null
+  updated_at: BaseDateRangeInput = null
   ids: [String!] = null
   name: String = null
 }
@@ -264,8 +279,8 @@ input UserUpdateFilterInputType {
 }
 
 input UsersFilterInputType {
-  created_at: EpochDateTime = null
-  updated_at: EpochDateTime = null
+  created_at: BaseDateRangeInput = null
+  updated_at: BaseDateRangeInput = null
   ids: [String!] = null
   email: String = null
   phone: String = null

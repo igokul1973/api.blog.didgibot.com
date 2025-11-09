@@ -31,9 +31,19 @@ Docker and docker compose are recommended for development purposes.
 
 ### Development procedures
 
-The app starts in Docker and you're now able to change the code which reloads automatically with every saved change thanks to **uvicorn's** `--reload` flag.
+This app should be started in Docker. The code would reload automatically with every saved change (thanks to **uvicorn's** `--reload` flag).
+
+The minimum requirement is to start Mongo DB, which is also configured in a docker compose environment (see docker-compose.yaml in the root of the project). For this you can run `docker compose up -d` in the root of this project. Create, however, .env file first - clone it from the .env.dist and modify accordingly.
+
+I also recommend to start this and other apps by running `docker compose up -d` in the parent folder instead. Most probably the folder's name is `didgibot`. There other applications, such as Blog FE and Blog Admin FE, among others, reside. This way all applications necessary for Blog project will be started (Blog, for example, also needs the MinIO).
+
+Since this repo uses DevContainers (which can be configured in .devcontainer/devcontainer.json), next step is to open it as a devcontainer. This way the correct python version is ensured, among other benefits. In VS Code use Dev Containers extension.
+
+The GraphQL schema is available in the Graphql IDE (Apollo Sandbox) form at http://<HOSTNAME>:<PORT>/graphql path (most probably http://localhost:8888/graphql).
 
 ### Debugging
+
+For debugging purposes do not forget to install necessary extension, such as Python Debugger (if using VS Code).
 
 The codebase ships with `.vscode` folder that contains the `launch.json` file. The file contains the "Python Debugger: Remote Attach" configuration that would allow to set breakpoints and debug the application inside VSCode. For any other IDE's - please find an appropriate documentation.
 

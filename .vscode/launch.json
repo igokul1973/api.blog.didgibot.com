@@ -9,7 +9,8 @@
             "type": "debugpy",
             "request": "attach",
             "connect": {
-                "host": "localhost",
+                "host": "host.docker.internal",
+                // "host": "localhost",
                 "port": 5690
             },
             "pathMappings": [
@@ -35,6 +36,18 @@
                 }
             ],
             "justMyCode": true
+        },
+        {
+            "name": "Python: Migration module run",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "app.migrations.cli", // Your module name without "python -m"
+            "args": [
+                "run"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

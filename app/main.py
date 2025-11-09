@@ -18,8 +18,8 @@ from pymongo.errors import OperationFailure
 
 from app.config.database import connect_db
 from app.config.settings import settings
-from app.models.beanie import UserDocument, models
-from app.models.pydantic import TokenModel
+from app.models.beanie import ArticleDocument, UserDocument, models
+from app.models.pydantic import TokenModel, SitemapResponseModel
 from app.models.utils.common import get_graphql_error_response
 from app.PatchedApi import PatchedFastAPI
 from app.schemas.schema import AuthorizationService, graphql_router
@@ -132,9 +132,19 @@ async def authenticate_middleware(request: Request, call_next):
                         status_code=401,
                         detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE,
                     )
+
+                print(f"{'*'*60}")
+                print("I am falling here...")
+                print("User:\n", user)
+                print(f"{'*'*60}")
+
                 user_document = await UserDocument.find_one(
                     UserDocument.email == user.get("email")
                 )
+
+                print(f"{'*'*60}")
+                print("I am falling here...")
+                print(f"{'*'*60}")
 
                 if not user_document:
                     logger.error("User not found")
@@ -197,21 +207,35 @@ async def log_in(
         raise HTTPException(
             status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
         )
-    user = await UserDocument.find_one(UserDocument.email == form_data.username)
 
-    if not user:
-        logger.error("User not found")
-        raise HTTPException(
-            status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+    try:
+        user = await UserDocument.find_one(UserDocument.email == form_data.username)
+
+        if not user:
+            logger.error("User not found")
+            raise HTTPException(
+                status_code=401, detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE
+            )
+        user.ip = request.client.host if request.client else "not found"
+        user.last_logged_at = datetime.now(UTC)
+        await user.save()
+
+        access_token = AuthorizationService.create_jwt(user)
+
+        token_payload = {"access_token": access_token, "token_type": "bearer"}
+        return token_payload
+    except Exception as e:
+        logger.error("An unexpected error occured during request: {0}".format(str(e)))
+        logger.info(
+            "Traceback is: {0}".format(str(traceback.format_tb(e.__traceback__, 10)))
         )
-    user.ip = request.client.host if request.client else "not found"
-    user.last_logged_at = datetime.now(UTC)
-    await user.save()
-
-    access_token = AuthorizationService.create_jwt(user)
-
-    token_payload = {"access_token": access_token, "token_type": "bearer"}
-    return token_payload
+        return JSONResponse(
+            content={
+                "message": "Unexpected error occured during request processing. \
+                Our team has been notified."
+            },
+            status_code=500,
+        )
 
 
 @app.post("/api/uploadFile")
@@ -259,6 +283,111 @@ async def upload_file(image: UploadFile):
             status_code=500,
         )
 
+
+@app.get("/api/sitemap", response_model=SitemapResponseModel)
+async def sitemap():
+
+    try:
+        from datetime import datetime
+
+        pipeline = [
+            # First, match articles with both EN and RU published translations
+            {
+                "$match": {
+                    "translations": {
+                        "$all": [
+                            {"$elemMatch": {"language": "en", "is_published": True}},
+                            {"$elemMatch": {"language": "ru", "is_published": True}}
+                        ]
+                    }
+                }
+            },
+            # Add fields to extract specific translations
+            {
+                "$addFields": {
+                    "en_translation": {
+                        "$arrayElemAt": [
+                            {
+                                "$filter": {
+                                    "input": "$translations",
+                                    "as": "trans",
+                                    "cond": {"$eq": ["$$trans.language", "en"]}
+                                }
+                            },
+                            0
+                        ]
+                    },
+                    # Finding the translation whose `published_at` field is the latest, because if both 
+                    # translations are published at a different time, the actual publishing occured
+                    # when the last translation was published.
+                    # (e.g. English translation of the article was published after Russian translation,
+                    # so we need the English translation as it is then the translation of whole article
+                    # took place).
+                    # This logic is a bit convoluted as I decided to have `is_published` field for each 
+                    # translation, as I wanted the data to be flexible and possibly, in the future, be
+                    # able to publish each translation separately.
+                    "latest_published_translation": {
+                        "$arrayElemAt": [
+                            {
+                                "$sortArray": {
+                                    "input": {
+                                        "$filter": {
+                                            "input": "$translations",
+                                            "as": "trans",
+                                            "cond": {
+                                                "$and": [
+                                                    {"$eq": ["$$trans.is_published", True]},
+                                                    {"$lte": ["$$trans.published_at", datetime.now()]}
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "sortBy": {"published_at": -1}
+                                }
+                            },
+                            0
+                        ]
+                    }
+                }
+            },
+            # Project the final structure
+            {
+                "$project": {
+                    "_id": 0,
+                    "title": "$en_translation.header",
+                    "slug": 1,
+                    "priority": 1,
+                    "language": {"$literal": "en"},
+                    "publishedAt": "$latest_published_translation.published_at",
+                    "updatedAt": "$updated_at"
+                }
+            }
+        ]
+
+        articles = await ArticleDocument.aggregate(pipeline).to_list()
+        
+        return { "data": articles }
+
+    except Exception as e:
+        logger.error("An unexpected error occured during request: {0}".format(str(e)))
+        logger.info(
+            "Traceback is: {0}".format(str(traceback.format_tb(e.__traceback__, 10)))
+        )
+        return JSONResponse(
+            content={
+                "message": "Unexpected error occured during request processing. \
+                Our team has been notified."
+            },
+            status_code=500,
+        )
+
+@app.get("/health")
+async def health_check():
+    """ K8S readiness/liveness probe """
+    return JSONResponse(
+        content={"status": "ok"},
+        status_code=200,
+    )
 
 # @app.post("/api/fetchUrl", response_model=TokenModel)
 # async def fetchUrl(

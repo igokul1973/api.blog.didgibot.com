@@ -3,6 +3,7 @@ Dockerfile
 README.md
 .vscode
 .venv
+venv
 docker
 .git
 # .env

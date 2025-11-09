@@ -185,6 +185,8 @@ class TranslationType:
         "id",
         "created_at",
         "updated_at",
+        "slug",
+        "priority"
     ],
 )
 class ArticleTypePartial:
@@ -198,6 +200,8 @@ class ArticleTypePartial:
         "id",
         "created_at",
         "updated_at",
+        "slug",
+        "priority"
     ],
 )
 class ArticleType:
@@ -266,7 +270,7 @@ class TranslationUpdateInputType:
 
 @strawberry.experimental.pydantic.input(
     model=ArticleCreateInputModel,
-    fields=None,
+    fields=["slug", "priority"],
 )
 class ArticleCreateInputType:
     translations: List[TranslationCreateInputType]
@@ -277,7 +281,7 @@ class ArticleCreateInputType:
 
 @strawberry.experimental.pydantic.input(
     model=ArticleUpdateInputModel,
-    fields=["id"],
+    fields=["id", "slug", "priority"],
 )
 class ArticleUpdateInputType:
     translations: List[TranslationUpdateInputType]
@@ -297,9 +301,6 @@ class UserInputType: ...
 class BaseDateRangeInput: ...
 
 
-@strawberry.experimental.pydantic.input(
-    model=ArticlesFilterInputModel, fields=["ids", "search"]
-)
 @strawberry.experimental.pydantic.input(model=ArticlesFilterInputModel, all_fields=True)
 class ArticlesFilterInputType: ...
 

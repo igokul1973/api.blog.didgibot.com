@@ -53,6 +53,7 @@ Thumbs.db
 # Env variables
 .env
 .venv
+venv
 
 # GraphQL
 graphql-config

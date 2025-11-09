@@ -1,6 +1,6 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  },
-  "vscode-graphql.cacheSchemaFileForLookup": true
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "vscode-graphql.cacheSchemaFileForLookup": true,
 }

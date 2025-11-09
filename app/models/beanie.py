@@ -5,9 +5,14 @@ from pydantic import Field
 from pymongo import ASCENDING, TEXT, IndexModel
 
 from app.models.pydantic import ArticleModel, CategoryModel, TagModel, UserModel
+from app.migrations.core import MigrationRecord
 
 
 class ArticleDocument(Document, ArticleModel):
+    slug: Annotated[str, Indexed(index_type=ASCENDING, unique=True, sparse=True)] = Field(
+        ..., min_length=3, max_length=60
+    )
+
     class Settings:
         name = "articles"
         indexes = [
@@ -38,7 +43,12 @@ class ArticleDocument(Document, ArticleModel):
                     "translations.content.blocks.data.items.cols.content": 5,
                 },
                 default_language="russian",
-            )
+            ),
+            IndexModel(
+                "translations.header",
+                unique=True,
+                name="article_header_unique_index",
+            ),
         ]
 
 
@@ -69,4 +79,4 @@ class TagDocument(Document, TagModel):
         name = "tags"
 
 
-models = [ArticleDocument, UserDocument, CategoryDocument, TagDocument]
+models = [ArticleDocument, UserDocument, CategoryDocument, TagDocument, MigrationRecord]
