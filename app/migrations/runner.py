@@ -72,8 +72,13 @@ class MigrationRunner:
 
     async def run_pending_migrations(self) -> tuple[int, int]:
         """Run all pending migrations. Returns (successful, failed) counts tuple."""
+        logger.info("Running pending migrations...")
         applied = await self.get_applied_migrations()
+        logger.info("Got applied migrations.")
+        logger.info(f"Found {len(applied)} applied migration(s).")
+        logger.info(f"Now will try to get pending migrations...")
         pending = [m for m in ALL_MIGRATIONS if m.version not in applied]
+        logger.info("Got pending migrations.")
 
         if not pending:
             print("No pending migrations found.")
@@ -85,6 +90,7 @@ class MigrationRunner:
         failed = 0
 
         for migration in pending:
+            logger.info("Now will run each migration...")
             success = await self.run_migration(migration)
             if success:
                 successful += 1
@@ -92,6 +98,8 @@ class MigrationRunner:
                 failed += 1
                 print(f"✗ Stopping due to failed migration: {migration.version}")
                 break
+
+        logger.info("Finished running migrations")
 
         return (successful, failed)
 
@@ -113,6 +121,7 @@ async def main(is_rollback=False):
             await runner.run_migration(ALL_MIGRATIONS[-1], True)
         else:
             successful, failed = await runner.run_pending_migrations()
+            logger.info(f"✓ successful: {successful}, failed: {failed}.")
 
             print(f"\n{'=' * 60}")
             logger.info("Migration summary:")
