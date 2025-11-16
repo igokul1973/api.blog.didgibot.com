@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.22 (2025-11-16)
+
+### Bug Fixes
+
+- Another migrations fix attempt by adding more logs.
+  ([`19385ba`](https://github.com/igokul1973/api.blog.didgibot.com/commit/19385ba88ad722e31fd48a299793b28055716029))
+
+
 ## v0.0.21 (2025-11-16)
 
 ### Bug Fixes
