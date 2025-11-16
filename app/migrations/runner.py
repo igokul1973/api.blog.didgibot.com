@@ -115,9 +115,10 @@ async def main(is_rollback=False):
             successful, failed = await runner.run_pending_migrations()
 
             print(f"\n{'=' * 60}")
-            print("Migration summary:")
-            print(f"   Successful: {successful}")
-            print(f"   Failed: {failed}")
+            logger.info("Migration summary:")
+            logger.info(f"   Successful: {successful}")
+            logger.error(f"   Failed: {failed}")
+            logger.error(f"   Failed: {failed}")
             print(f"\n{'=' * 60}")
 
             if failed > 0:
