@@ -41,6 +41,13 @@ Since this repo uses DevContainers (which can be configured in .devcontainer/dev
 
 The GraphQL schema is available in the Graphql IDE (Apollo Sandbox) form at http://<HOSTNAME>:<PORT>/graphql path (most probably http://localhost:8888/graphql).
 
+### Migrations
+In the dev environment run following terminal command from the project's root: `python -m app.migrations.cli run` to run all pending migrations.
+To go back one step, run `python -m app.migrations.cli rollback`. It will roll back one migration at a time.
+Note: The migrations will be run automatically when the app is deployed to `main` branch using the init pod.
+
+If you want 
+
 ### Debugging
 
 For debugging purposes do not forget to install necessary extension, such as Python Debugger (if using VS Code).
