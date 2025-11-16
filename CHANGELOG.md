@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.20 (2025-11-16)
+
+### Bug Fixes
+
+- Troubleshooting the migrations again.
+  ([`5295a89`](https://github.com/igokul1973/api.blog.didgibot.com/commit/5295a89a2bca9a89595543ad6ac00cf4bbcdd951))
+
+
 ## v0.0.19 (2025-11-16)
 
 ### Bug Fixes
