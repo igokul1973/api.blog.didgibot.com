@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.19 (2025-11-16)
+
+### Bug Fixes
+
+- Migration fixes.
+  ([`e2192bc`](https://github.com/igokul1973/api.blog.didgibot.com/commit/e2192bc27442d00d7d9f358e396fec196af81d88))
+
+
 ## v0.0.18 (2025-11-16)
 
 ### Bug Fixes
