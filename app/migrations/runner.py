@@ -105,9 +105,9 @@ async def main(is_rollback=False):
     runner = MigrationRunner(settings.CONNECTION_STRING)
 
     try:
-        print("Connecting to database...")
+        logger.info("Connecting to database...")
         await runner.connect()
-        print("✓ Connected to database.\n")
+        logger.info("✓ Connected to database.")
 
         if is_rollback:
             await runner.run_migration(ALL_MIGRATIONS[-1], True)
@@ -124,7 +124,7 @@ async def main(is_rollback=False):
                 sys.exit(1)  # Exit with error code
 
     except Exception as e:
-        print(f"✗ Failed to run migrations: {e}")
+        logger.error(f"✗ Failed to run migrations: {e}")
         sys.exit(1)
     finally:
         await runner.close()

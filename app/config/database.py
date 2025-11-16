@@ -6,7 +6,7 @@ from app.PatchedApi import PatchedFastAPI
 
 
 def connect_db(app: PatchedFastAPI):
-    print("Connecting to database...")
+    logger.info("Connecting to database...")
     # Set the Stable API version when creating a new client
 
     try:
