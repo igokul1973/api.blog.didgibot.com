@@ -167,29 +167,44 @@ def generate_slug(title, suffix: str | None = None) -> str:
     slug = title.lower()
 
     # Remove accents and converts to ASCII
-    slug = unicodedata.normalize('NFKD', slug).encode('ascii', 'ignore').decode('ascii')
+    slug = unicodedata.normalize("NFKD", slug).encode("ascii", "ignore").decode("ascii")
 
     # Replace spaces and underscores with hyphens
-    slug = re.sub(r'[\s_]+', '-', slug)
+    slug = re.sub(r"[\s_]+", "-", slug)
 
     # Remove all non-alphanumeric characters except hyphens
-    slug = re.sub(r'[^a-z0-9-]', '', slug)
+    slug = re.sub(r"[^a-z0-9-]", "", slug)
 
     # Add suffix if provided
     if suffix:
-        slug += '-' + suffix.lower()
+        slug += "-" + suffix.lower()
 
     # Remove common stop words (optional but recommended for SEO)
-    stop_words = ['a', 'an', 'and', 'at', 'by', 'for', 'in', 'is', 'it', 'on', 'or', 'the', 'to', 'with']
-    words = slug.split('-')
+    stop_words = [
+        "a",
+        "an",
+        "and",
+        "at",
+        "by",
+        "for",
+        "in",
+        "is",
+        "it",
+        "on",
+        "or",
+        "the",
+        "to",
+        "with",
+    ]
+    words = slug.split("-")
     # Keep stop word if it is first
     words = [w for w in words if w not in stop_words or words.index(w) == 0]
-    slug = '-'.join(words)
+    slug = "-".join(words)
 
     # Remove consecutive hyphens and trim hyphens from ends:
     # The regular expression '-+' matches one or more consecutive hyphens
     # The strip('-') method removes leading and trailing hyphens
     # The strip() method removes any leading or trailing whitespace
-    slug = re.sub(r'-+', '-', slug).strip('-').strip()
+    slug = re.sub(r"-+", "-", slug).strip("-").strip()
 
     return slug

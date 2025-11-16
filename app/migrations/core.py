@@ -8,8 +8,10 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 
 class MigrationRecord(Document):
-    """ Tracks executed migrations """
-    version: Annotated[int, Indexed(index_type=ASCENDING, unique=True)] = Field(...)  # e.g. "001_add_new_fields"
+    """Tracks executed migrations"""
+
+    # e.g. "001_add_new_fields"
+    version: Annotated[int, Indexed(index_type=ASCENDING, unique=True)] = Field(...)
     applied_at: datetime = Field(default_factory=now_factory)
     success: bool = True
     error_message: Optional[str] = None
@@ -18,8 +20,9 @@ class MigrationRecord(Document):
         name = "schema_migrations"
         indexes = ["version"]
 
+
 class Migration:
-    """ Base class for migrations """
+    """Base class for migrations"""
 
     def __init__(self, version: int, description: str) -> None:
         self.version = version
@@ -29,5 +32,5 @@ class Migration:
         raise NotImplementedError
 
     async def downgrade(self, db: AsyncIOMotorDatabase):
-        """ Optional rollback logic """
+        """Optional rollback logic"""
         pass

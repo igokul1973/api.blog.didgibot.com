@@ -38,7 +38,9 @@
                 "codeium.codeium",
                 "almenon.arepl",
                 "buenon.scratchpads",
-                "mongodb.mongodb-vscode"
+                "mongodb.mongodb-vscode",
+                "ms-python.black-formatter",
+                "ms-python.flake8"
             ]
         }
     },

@@ -182,9 +182,10 @@ class TranslationModel(BaseTranslationCreateInputModel):
     category: CategoryModel
     tags: List[Optional[TagModel]] = Field(default=[])
 
+
 class BaseSlugModel:
-    slug: str = Field(..., min_length=3, max_length=60) 
-    # slug: Optional[str] = Field(default='') 
+    slug: str = Field(..., min_length=3, max_length=60)
+    # slug: Optional[str] = Field(default='')
     priority: Optional[float] = Field(default=None)
 
 
@@ -208,13 +209,13 @@ class ArticleModel(BaseArticleModel):
 class ArticleCreateInputModel(BaseModel):
     translations: List[TranslationCreateInputModel]
     author: Optional[UserModelPartial] = Field(default=None)
-    slug: Optional[str] = Field(default=None) 
+    slug: Optional[str] = Field(default=None)
     priority: Optional[float] = Field(default=None)
 
 
 class ArticleUpdateInputModel(IdModel):
     translations: List[TranslationUpdateInputModel]
-    slug: Optional[str] = Field(default=None) 
+    slug: Optional[str] = Field(default=None)
     priority: Optional[float] = Field(default=None)
 
 
@@ -285,6 +286,7 @@ class CountModel(BaseModel):
     count: int
     entity: EntityEnum
 
+
 class SitemapModel(BaseModel):
     title: str
     slug: str
@@ -292,6 +294,7 @@ class SitemapModel(BaseModel):
     language: LanguageEnum
     publishedAt: datetime
     updatedAt: datetime
+
 
 class SitemapResponseModel(BaseModel):
     data: List[SitemapModel]

@@ -133,18 +133,18 @@ async def authenticate_middleware(request: Request, call_next):
                         detail=AuthorizationService.INVALID_CREDENTIALS_MESSAGE,
                     )
 
-                print(f"{'*'*60}")
+                print(f"{'*' * 60}")
                 print("I am falling here...")
                 print("User:\n", user)
-                print(f"{'*'*60}")
+                print(f"{'*' * 60}")
 
                 user_document = await UserDocument.find_one(
                     UserDocument.email == user.get("email")
                 )
 
-                print(f"{'*'*60}")
+                print(f"{'*' * 60}")
                 print("I am falling here...")
-                print(f"{'*'*60}")
+                print(f"{'*' * 60}")
 
                 if not user_document:
                     logger.error("User not found")
@@ -190,7 +190,8 @@ async def authenticate_middleware(request: Request, call_next):
 
 @app.post("/api/login", response_model=TokenModel)
 async def log_in(
-    form_data: OAuth2PasswordRequestForm = Depends(), request: Request = None
+    request: Request,
+    form_data: OAuth2PasswordRequestForm = Depends(),
 ):
     from app.config.settings import settings
 
@@ -297,7 +298,7 @@ async def sitemap():
                     "translations": {
                         "$all": [
                             {"$elemMatch": {"language": "en", "is_published": True}},
-                            {"$elemMatch": {"language": "ru", "is_published": True}}
+                            {"$elemMatch": {"language": "ru", "is_published": True}},
                         ]
                     }
                 }
@@ -311,21 +312,22 @@ async def sitemap():
                                 "$filter": {
                                     "input": "$translations",
                                     "as": "trans",
-                                    "cond": {"$eq": ["$$trans.language", "en"]}
+                                    "cond": {"$eq": ["$$trans.language", "en"]},
                                 }
                             },
-                            0
+                            0,
                         ]
                     },
-                    # Finding the translation whose `published_at` field is the latest, because if both 
-                    # translations are published at a different time, the actual publishing occured
-                    # when the last translation was published.
-                    # (e.g. English translation of the article was published after Russian translation,
-                    # so we need the English translation as it is then the translation of whole article
-                    # took place).
-                    # This logic is a bit convoluted as I decided to have `is_published` field for each 
-                    # translation, as I wanted the data to be flexible and possibly, in the future, be
-                    # able to publish each translation separately.
+                    # Finding the translation whose `published_at` field is the latest, because if
+                    # both translations are published at a different time, the actual publishing
+                    # occured when the last translation was published.
+                    # E.g. English translation of the article was published after Russian
+                    # translation, so we need the English translation as it is then the
+                    # translation of whole article took place.
+                    # This logic is a bit convoluted as I decided to have
+                    # `is_published` field for each translation, as I wanted the data to
+                    # be flexible and possibly, in the future, be able to publish each
+                    # translation separately.
                     "latest_published_translation": {
                         "$arrayElemAt": [
                             {
@@ -336,18 +338,28 @@ async def sitemap():
                                             "as": "trans",
                                             "cond": {
                                                 "$and": [
-                                                    {"$eq": ["$$trans.is_published", True]},
-                                                    {"$lte": ["$$trans.published_at", datetime.now()]}
+                                                    {
+                                                        "$eq": [
+                                                            "$$trans.is_published",
+                                                            True,
+                                                        ]
+                                                    },
+                                                    {
+                                                        "$lte": [
+                                                            "$$trans.published_at",
+                                                            datetime.now(),
+                                                        ]
+                                                    },
                                                 ]
-                                            }
+                                            },
                                         }
                                     },
-                                    "sortBy": {"published_at": -1}
+                                    "sortBy": {"published_at": -1},
                                 }
                             },
-                            0
+                            0,
                         ]
-                    }
+                    },
                 }
             },
             # Project the final structure
@@ -359,14 +371,14 @@ async def sitemap():
                     "priority": 1,
                     "language": {"$literal": "en"},
                     "publishedAt": "$latest_published_translation.published_at",
-                    "updatedAt": "$updated_at"
+                    "updatedAt": "$updated_at",
                 }
-            }
+            },
         ]
 
         articles = await ArticleDocument.aggregate(pipeline).to_list()
-        
-        return { "data": articles }
+
+        return {"data": articles}
 
     except Exception as e:
         logger.error("An unexpected error occured during request: {0}".format(str(e)))
@@ -381,13 +393,15 @@ async def sitemap():
             status_code=500,
         )
 
+
 @app.get("/health")
 async def health_check():
-    """ K8S readiness/liveness probe """
+    """K8S readiness/liveness probe"""
     return JSONResponse(
         content={"status": "ok"},
         status_code=200,
     )
+
 
 # @app.post("/api/fetchUrl", response_model=TokenModel)
 # async def fetchUrl(

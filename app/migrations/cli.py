@@ -4,7 +4,9 @@ import asyncio
 from pathlib import Path
 
 # Load .env files before importing anything that uses settings
+# flake8: noqa: E402
 from dotenv import load_dotenv
+
 load_dotenv()
 
 from app.config.settings import settings
