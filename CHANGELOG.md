@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.21 (2025-11-16)
+
+### Bug Fixes
+
+- Logger changes in an attempt to fix migrations.
+  ([`80ae2a4`](https://github.com/igokul1973/api.blog.didgibot.com/commit/80ae2a44e41a666ba22c432b7acc60833fa0a8c0))
+
+
 ## v0.0.20 (2025-11-16)
 
 ### Bug Fixes
