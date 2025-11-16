@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.18 (2025-11-16)
+
+### Bug Fixes
+
+- Fixed linting and formatting errors, added more VS Code extensions to devcontainer.json.
+  ([`44316e1`](https://github.com/igokul1973/api.blog.didgibot.com/commit/44316e16626b423e9c91cd56aa864287c5dbd66c))
+
+
 ## v0.0.17 (2025-11-16)
 
 ### Bug Fixes
