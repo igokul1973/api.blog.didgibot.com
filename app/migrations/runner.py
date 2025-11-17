@@ -76,7 +76,7 @@ class MigrationRunner:
         applied = await self.get_applied_migrations()
         logger.info("Got applied migrations.")
         logger.info(f"Found {len(applied)} applied migration(s).")
-        logger.info(f"Now will try to get pending migrations...")
+        logger.info("Now will try to get pending migrations...")
         pending = [m for m in ALL_MIGRATIONS if m.version not in applied]
         logger.info("Got pending migrations.")
 
