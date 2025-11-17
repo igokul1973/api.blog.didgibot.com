@@ -133,7 +133,7 @@ async def main(is_rollback=False):
             if failed > 0:
                 sys.exit(1)  # Exit with error code
 
-    except Exception as e:
+    except Exception:
         logger.exception("✗✗✗ Failed to run migrations")
         sys.exit(1)
     finally:
