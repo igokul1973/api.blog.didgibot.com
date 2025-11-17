@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.26 (2025-11-17)
+
+### Bug Fixes
+
+- Linting issue
+  ([`177f113`](https://github.com/igokul1973/api.blog.didgibot.com/commit/177f113909c6c5b5905c8cc842d9005d7c0bfef2))
+
+
 ## v0.0.25 (2025-11-17)
 
 ### Bug Fixes
