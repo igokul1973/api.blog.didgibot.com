@@ -134,7 +134,7 @@ async def main(is_rollback=False):
                 sys.exit(1)  # Exit with error code
 
     except Exception as e:
-        logger.exception(f"✗✗✗ Failed to run migrations: {e.with_traceback(None)}")
+        logger.exception("✗✗✗ Failed to run migrations")
         sys.exit(1)
     finally:
         await runner.close()
