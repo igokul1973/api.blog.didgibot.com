@@ -37,7 +37,9 @@ class MigrationRunner:
 
     async def get_applied_migrations(self):
         """Get a list of already applied migrations"""
-        records = await MigrationRecord.find(MigrationRecord.success is True).to_list()
+        records = await MigrationRecord.find(
+            MigrationRecord.success == True  # noqa: E712
+        ).to_list()
 
         return {r.version for r in records}
 
