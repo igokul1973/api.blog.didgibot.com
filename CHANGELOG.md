@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.28 (2025-11-17)
+
+### Bug Fixes
+
+- /health endpoint for watcher and related fixes in docker-compose.yaml
+  ([`58197b8`](https://github.com/igokul1973/api.blog.didgibot.com/commit/58197b8d64d75225b4f6e6f739d4731772ba457e))
+
+
 ## v0.0.27 (2025-11-17)
 
 ### Bug Fixes
