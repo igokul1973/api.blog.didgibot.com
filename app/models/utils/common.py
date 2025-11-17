@@ -175,6 +175,12 @@ def generate_slug(title, suffix: str | None = None) -> str:
     # Remove all non-alphanumeric characters except hyphens
     slug = re.sub(r"[^a-z0-9-]", "", slug)
 
+    # Truncate slug to 60 characters in case it is longer
+    slug_length = 60 - (len(suffix) + 1) if suffix else 60
+
+    if len(slug) > slug_length:
+        slug = slug[:slug_length]
+
     # Add suffix if provided
     if suffix:
         slug += "-" + suffix.lower()
