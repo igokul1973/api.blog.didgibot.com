@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.27 (2025-11-17)
+
+### Bug Fixes
+
+- Trying to implement /health endpoint for watcher
+  ([`14a5961`](https://github.com/igokul1973/api.blog.didgibot.com/commit/14a5961b003c2c3fd39adf27e54b20f1f80cace1))
+
+
 ## v0.0.26 (2025-11-17)
 
 ### Bug Fixes
