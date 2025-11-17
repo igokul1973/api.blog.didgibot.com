@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.25 (2025-11-17)
+
+### Bug Fixes
+
+- Exception syntax in migrations runner.
+  ([`4ba49d4`](https://github.com/igokul1973/api.blog.didgibot.com/commit/4ba49d4b0fee0a8b26f71ce53c990ebd8feffbdf))
+
+
 ## v0.0.24 (2025-11-17)
 
 ### Bug Fixes
