@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.29 (2025-11-17)
+
+### Bug Fixes
+
+- Shortened slug length upon its creation to 60 chars.
+  ([`f7b96b2`](https://github.com/igokul1973/api.blog.didgibot.com/commit/f7b96b25e8ffe1b78087b24603431142dd73bfd5))
+
+
 ## v0.0.28 (2025-11-17)
 
 ### Bug Fixes
