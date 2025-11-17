@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.24 (2025-11-17)
+
+### Bug Fixes
+
+- Exception output in migrations runner.
+  ([`46e3776`](https://github.com/igokul1973/api.blog.didgibot.com/commit/46e37766d9ed87836d7b614a33ffc1e1caa768e6))
+
+
 ## v0.0.23 (2025-11-17)
 
 ### Bug Fixes
