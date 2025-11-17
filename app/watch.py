@@ -3,6 +3,7 @@ import sys
 from asyncio import gather, sleep
 from contextlib import asynccontextmanager
 from datetime import datetime
+from fastapi.responses import JSONResponse
 
 import pymongo
 import pymongo.errors
@@ -454,3 +455,12 @@ def create_application() -> PatchedFastAPI:
 
 
 app = create_application()
+
+
+@app.get("/health")
+async def health_check():
+    """K8S readiness/liveness probe"""
+    return JSONResponse(
+        content={"status": "ok"},
+        status_code=200,
+    )
