@@ -44,6 +44,12 @@ services:
             options:
                 max-size: "50k"
                 max-file: "3"
+        healthcheck:
+            test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:${BACKEND_PORT}/health')"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+            start_period: 20s
         networks:
             - dgb_blog_network
             - didgibot_filenet
@@ -75,7 +81,7 @@ services:
             - "--host"
             - "0.0.0.0"
             - "--port"
-            - "8889"
+            - "${BACKEND_WATCH_PORT}"
         # command:
         #     - python
         #     - "-m"
@@ -89,7 +95,7 @@ services:
         #     - "--host"
         #     - "0.0.0.0"
         #     - "--port"
-        #     - "${BACKEND_PORT}"
+        #     - "${BACKEND_WATCH_PORT}"
         #     - "--log-level"
         #     - "trace"
         #     - "--timeout-graceful-shutdown"
@@ -102,6 +108,12 @@ services:
             options:
                 max-size: "50k"
                 max-file: "3"
+        healthcheck:
+            test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:${BACKEND_PORT}/health')"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+            start_period: 20s
         networks:
             - dgb_blog_network
 

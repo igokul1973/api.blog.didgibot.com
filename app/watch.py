@@ -3,6 +3,7 @@ import sys
 from asyncio import gather, sleep
 from contextlib import asynccontextmanager
 from datetime import datetime
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 import pymongo
@@ -436,6 +437,19 @@ async def lifespan(app: PatchedFastAPI):
     app.mongo_client.close()
 
 
+# Create a health router
+health_router = APIRouter(tags=["health"])
+
+
+@health_router.get("/health")
+async def health_check():
+    """K8S readiness/liveness probe"""
+    return JSONResponse(
+        content={"status": "ok"},
+        status_code=200,
+    )
+
+
 def create_application() -> PatchedFastAPI:
     """Create the FastAPI application.
 
@@ -451,16 +465,9 @@ def create_application() -> PatchedFastAPI:
         lifespan=lifespan,
     )
 
+    # include simple router to be able to query /health rest endpoint
+
     return app
 
 
 app = create_application()
-
-
-@app.get("/health")
-async def health_check():
-    """K8S readiness/liveness probe"""
-    return JSONResponse(
-        content={"status": "ok"},
-        status_code=200,
-    )
