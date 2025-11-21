@@ -240,7 +240,7 @@ async def log_in(
 
 
 @app.post("/api/uploadFile")
-async def upload_file(image: UploadFile):
+async def upload_file(image: UploadFile, request: Request):
     from app.config.settings import settings
 
     try:

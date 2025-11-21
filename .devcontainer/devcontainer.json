@@ -34,13 +34,13 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "donjayamanne.python-extension-pack",
-                "codeium.codeium",
+                "ms-python.python",
                 "almenon.arepl",
                 "buenon.scratchpads",
                 "mongodb.mongodb-vscode",
                 "ms-python.black-formatter",
-                "ms-python.flake8"
+                "ms-python.flake8",
+                "gruntfuggly.todo-tree"
             ]
         }
     },

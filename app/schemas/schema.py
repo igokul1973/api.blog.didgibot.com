@@ -5,7 +5,8 @@ from typing import List, Optional
 
 from environs import Env
 from fastapi import HTTPException, WebSocket
-from graphql import GraphQLFormattedError
+from graphql import GraphQLFormattedError, parse
+from graphql.language.ast import OperationDefinitionNode, FieldNode
 from jose import JWTError, jwt
 from loguru import logger
 from pydantic import ValidationError
@@ -44,22 +45,18 @@ logger.add(
 class AuthorizationService:
     PROTECTED_ENDPOINTS: List[str] = [
         "/api/uploadFile",
-        "/api/fetchUrl",
         "users",
-        "get_users",
-        "set_user",
-        "update_user",
-        "delete_user",
         "set_article",
         "update_article",
         "delete_article",
-        "add_tag_to_article",
         "set_category",
+        "update_user",
         "update_category",
         "delete_category",
         "set_tag",
         "update_tag",
         "delete_tag",
+        "add_tag_to_article",
     ]
     ALGORITM: str = "HS256"
     INVALID_TOKEN_MESSAGE = "Invalid or missing JWT token."
@@ -93,24 +90,53 @@ class AuthorizationService:
             # This covers protected frontends (e.g. admin panels)
             # as well as the public ones.
         """
+
+        def get_query_fields(query_string: str) -> list[str]:
+            document = parse(query_string)
+            fields = []
+
+            for definition in document.definitions:
+                if isinstance(definition, OperationDefinitionNode):
+                    # if definition.kind == "OperationDefinition":
+                    if definition.selection_set:
+                        for selection in definition.selection_set.selections:
+                            if isinstance(selection, FieldNode):
+                                fields.append(selection.name.value)
+            return fields
+
+        def can_access_endpoint(field: str) -> bool:
+            return field not in cls.PROTECTED_ENDPOINTS
+
         # TODO: Make sure only allowed hosts can make requests.
         # This'll probably be done in the middleware or on the
         # web server level.
         try:
-            operation_name = request.url.path
-            if operation_name.startswith(settings.GRAPHQL_PREFIX):
-                graphql_query = await request.json()
-                operation_name = graphql_query["operationName"].lower()
-            if (
-                operation_name in cls.PROTECTED_ENDPOINTS
-                or "Authorization" in request.headers
-            ):
+            operation_path = request.url.path or ""
+            query_string = None
+            fields = []
+            if operation_path.startswith(settings.GRAPHQL_PREFIX):
+                body = await request.json()
+                query_string = body.get("query", "").lower()
+            if query_string:
+                fields = get_query_fields(query_string)
 
-                token = request.headers["Authorization"]
+            if not fields:
+                """This is probably a regular REST endpoint request."""
+                fields.append(operation_path)
+
+            for field in fields:
+                if (
+                    not can_access_endpoint(field)
+                    and "Authorization" not in request.headers
+                ):
+                    raise PermissionError("Not authorized!")
+
+            token = request.headers.get("Authorization", None)
+            if token:
                 return cls.get_token_payload(token)
             else:
                 return "free_ride"
-        except ConfigException as e:
+        except (ConfigException, PermissionError) as e:
             raise HTTPException(status_code=401, detail=str(e))
         except (KeyError, JWTError):
             raise HTTPException(status_code=401, detail=cls.INVALID_TOKEN_MESSAGE)
