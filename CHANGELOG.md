@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.0.30 (2025-11-23)
+
+### Bug Fixes
+
+- Removed old comments.
+  ([`218d4ab`](https://github.com/igokul1973/api.blog.didgibot.com/commit/218d4ab026259df17a6171c214812e7f262affc3))
+
+
 ## v0.0.29 (2025-11-17)
 
 ### Bug Fixes
