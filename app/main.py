@@ -401,33 +401,3 @@ async def health_check():
         content={"status": "ok"},
         status_code=200,
     )
-
-
-# @app.post("/api/fetchUrl", response_model=TokenModel)
-# async def fetchUrl(
-#     form_data: OAuth2PasswordRequestForm = Depends(), request: Request = None
-# ):
-#     from app.config.settings import settings
-
-#     # return JSON response containing settings
-#     return JSONResponse(content={"cra": "tra"}, status_code=200)
-
-
-# # Install middleware to catch all exceptions
-# @app.middleware("http")
-# async def exception_handler(request: Request, call_next):
-#     try:
-#         return await call_next(request)
-#     except Exception as e:
-#         logger.error("An unexpected error occured during request: {0}".format(str(e)))
-#         logger.info(
-#             "Traceback is: {0}".format(str(traceback.format_tb(e.__traceback__, 10)))
-#         )
-
-#         return JSONResponse(
-#             content={
-#                 "message": "Unexpected error occured during request processing. \
-# Our team has been notified."
-#             },
-#             status_code=500,
-#         )
