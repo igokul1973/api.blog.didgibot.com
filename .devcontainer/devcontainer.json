@@ -35,12 +35,13 @@
         "vscode": {
             "extensions": [
                 "ms-python.python",
+                "codeium.windsurfpyright",
                 "almenon.arepl",
                 "buenon.scratchpads",
                 "mongodb.mongodb-vscode",
                 "ms-python.black-formatter",
                 "ms-python.flake8",
-                "gruntfuggly.todo-tree"
+                "gruntfuggly.todo-tree",
             ]
         }
     },
